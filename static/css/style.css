@@ -1,19 +1,28 @@
+/* Universal Reset: Menghapus margin/padding bawaan browser & mengatur hitungan ukuran elemen */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
+/* Mengaktifkan efek pergerakan halaman yang halus saat navigasi link diklik */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Variabel Warna & Properti Global (Tema Gelap Navy) */
 :root {
-    --ink: #1c1917;
-    --paper: #faf6f0;
-    --accent: #d95d39;
-    --accent-dark: #a8442a;
-    --line: #e3d9c9;
-    --text-muted: #6b6459;
+    --ink: #f8fafc;
+    --paper: #0b132b;
+    --accent: #38bdf8;
+    --accent-dark: #7dd3fc;
+    --line: #1e293b;
+    --text-muted: #94a3b8;
+    --card-bg: #334373;
     --radius: 4px;
 }
 
+/* Pengaturan Tampilan & Tipografi Utama Seluruh Halaman */
 body {
     font-family: -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     color: var(--ink);
@@ -21,20 +30,30 @@ body {
     line-height: 1.6;
 }
 
+/* Pengaturan Jenis Font Khusus untuk Judul Utama dan Nama Brand */
 h1, .brand {
     font-family: "Space Grotesk", -apple-system, sans-serif;
 }
 
+/* Pembungkus Konten Utama agar Rapi di Tengah Layar */
 .container {
-    max-width: 960px;
+    max-width: 1000px;
     margin: 0 auto;
     padding: 0 1.5rem;
 }
 
+/* Pengaturan Bilah Navigasi Atas (Header) agar Menempel di Atas Layar saat Ditekan Scroll */
 .site-header {
     border-bottom: 1px solid var(--line);
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: var(--paper);
+    z-index: 100;
 }
 
+/* Tata Letak Konten Header (Logo Brand di Kiri, Menu Navigasi di Kanan) */
 .site-header .container {
     display: flex;
     justify-content: space-between;
@@ -42,6 +61,7 @@ h1, .brand {
     padding: 1.25rem 1.5rem;
 }
 
+/* Gaya Teks Logo/Nama Brand pada Header */
 .brand {
     font-size: 1.3rem;
     font-weight: 700;
@@ -49,21 +69,25 @@ h1, .brand {
     text-decoration: none;
 }
 
+/* Tata Letak Daftar Menu Navigasi Header */
 .site-header nav {
     display: flex;
     gap: 2rem;
 }
 
+/* Gaya Tautan/Link Menu Navigasi */
 .site-header nav a {
     color: var(--ink);
     text-decoration: none;
     font-size: 0.95rem;
 }
 
+/* Jarak Ruang Dalam Seluruh Seksi Utama (Hero/Profile/Skills) */
 .hero {
     padding: 4.5rem 0 5rem;
 }
 
+/* Tata Letak Dua Kolom Utama Seksi Profil Menggunakan CSS Grid */
 .hero-grid {
     display: grid;
     grid-template-columns: 1.3fr 1fr;
@@ -73,40 +97,57 @@ h1, .brand {
     gap: 1.5rem 3rem;
 }
 
+/* Area Identitas (Kicker & Nama) pada Grid Profil */
 .hero-identity {
     grid-area: identity;
+    gap: 0.5rem;
 }
 
+/* Area Detail (Bio & Metadata) pada Grid Profil */
 .hero-details {
     grid-area: details;
 }
 
+/* Sub-header Kecil di Atas Nama (Pembungkus Logo UI + Teks Jurusan) */
 .hero-kicker {
-    font-size: 0.85rem;
-    letter-spacing: 0.08em;
+    display: inline-flex;       
+    align-items: center;        
+    gap: 0.5rem;                
     text-transform: uppercase;
     color: var(--accent-dark);
     font-weight: 700;
     margin-bottom: 0.75rem;
+    margin-top: 1.5rem;
 }
 
+/* Pengunci Ukuran Logo Universitas Indonesia agar Tetap Kecil & Proporsional */
+.logo {
+    height: 20px;
+    width: 20px;
+    object-fit: contain;
+}
+
+/* Ukuran Font Responsif untuk Judul Nama Utama */
 .hero-identity h1 {
     font-size: clamp(3rem, 7vw, 5rem);
     line-height: 0.95;
 }
 
+/* Gaya Teks Paragraf Deskripsi Diri/Biografi */
 .bio {
     color: var(--text-muted);
     max-width: 480px;
     margin-bottom: 1.5rem;
 }
 
+/* Tata Letak Pasangan Data (NPM & Program Studi) secara Horizontal */
 .meta-list {
     display: flex;
     gap: 2rem;
     margin-bottom: 1.5rem;
 }
 
+/* Gaya Label Istilah (Label NPM/Program) */
 .meta-row dt {
     font-size: 0.75rem;
     text-transform: uppercase;
@@ -115,16 +156,19 @@ h1, .brand {
     margin-bottom: 0.15rem;
 }
 
+/* Gaya Nilai Istilah (Isi NPM/Program) */
 .meta-row dd {
     font-weight: 600;
 }
 
+/* Tata Letak Kelompok Tombol Media Sosial */
 .social-links {
     display: flex;
     gap: 0.5rem;
     flex-wrap: wrap;
 }
 
+/* Gaya Tampilan Tombol Media Sosial */
 .social-link {
     display: inline-block;
     font-size: 0.85rem;
@@ -137,16 +181,19 @@ h1, .brand {
     transition: background-color 0.2s ease;
 }
 
+/* Efek Perubahan Warna saat Tombol Media Sosial Disorot Kursor */
 .social-link:hover {
     background-color: var(--accent);
 }
 
+/* Area Pembungkus Foto Profil pada Grid */
 .hero-photo {
     grid-area: photo;
     align-self: center;
     position: relative;
 }
 
+/* Blok Aksen Warna Dekoratif di Belakang Foto Profil */
 .photo-block {
     position: absolute;
     top: 1.25rem;
@@ -158,6 +205,7 @@ h1, .brand {
     z-index: 0;
 }
 
+/* Gaya Tampilan Gambar Foto Profil Utama */
 .avatar {
     position: relative;
     z-index: 1;
@@ -169,6 +217,7 @@ h1, .brand {
     border: 3px solid var(--ink);
 }
 
+/* Gaya Area Kaki Halaman (Footer) */
 .site-footer {
     padding: 1.5rem;
     color: var(--text-muted);
@@ -176,6 +225,7 @@ h1, .brand {
     border-top: 1px solid var(--line);
 }
 
+/* Penyesuaian Tampilan Responsif untuk Layar HP/Smartphone (Maksimal 600px) */
 @media (max-width: 600px) {
     .hero-grid {
         grid-template-columns: 1fr;
@@ -191,5 +241,111 @@ h1, .brand {
 
     .social-links {
         justify-content: flex-start;
+    }
+}
+
+/* --- STYLING SECTION SKILLS --- */
+
+/* Menyembunyikan Input Checkbox Asli (Teknik Pure CSS Modal) */
+.modal-toggle {
+    display: none;
+}
+
+/* Tata Letak Tiga Kolom Sejajar untuk Kartu-Kartu Skill */
+.skills-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+    margin-top: 2.5rem;
+}
+
+/* Gaya Tampilan Kartu Keahlian/Skill */
+.skill-card {
+    display: block;
+    background-color: var(--card-bg);
+    padding: 1.5rem;
+    text-align: center;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Efek Merekah & Bayangan saat Kartu Skill Disorot Kursor */
+.skill-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 4px 4px 0px var(--ink);
+    border-color: var(--accent);
+}
+
+/* Gaya Tampilan Gambar Gambar di Dalam Kartu Skill */
+.skill-img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    border-radius: var(--radius);
+    margin-bottom: 1rem;
+    border: 1px solid var(--line);
+}
+
+/* Gaya Teks Judul Skill pada Kartu */
+.skill-card h3 {
+    font-family: "Space Grotesk", sans-serif;
+    font-size: 1.2rem;
+    color: #ffffff;
+}
+
+/* --- STYLING MODAL POP-UP --- */
+
+/* Pembungkus Latar Layar Gelap untuk Pop-up Modal (Default: Tersembunyi) */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    display: none; 
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+/* Logika Utama Pure CSS: Menampilkan Pop-up saat Checkbox Terkait Dicentang */
+.modal-toggle:checked ~ .modal {
+    display: flex;
+}
+
+/* Kotak Konten Pop-up Utama di Tengah Layar */
+.modal-content {
+    background-color: var(--card-bg);
+    padding: 2rem;
+    border: 3px solid var(--accent);
+    border-radius: var(--radius);
+    width: 90%;
+    max-width: 500px;
+    position: relative;
+    animation: popup 0.25s ease-out;
+}
+
+/* Efek Animasi Membesar saat Pop-up Modal Muncul */
+@keyframes popup {
+    from { transform: scale(0.8); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+
+/* Gaya Tombol Silang (X) Penutup Pop-up Modal */
+.close-btn {
+    position: absolute;
+    right: 1.2rem;
+    top: 0.8rem;
+    font-size: 1.8rem;
+    font-weight: bold;
+    cursor: pointer;
+    color: #ffffff;
+}
+
+/* Penyesuaian Responsif Grid Skill Menjadi 1 Kolom Vertikal di Layar HP */
+@media (max-width: 768px) {
+    .skills-grid {
+        grid-template-columns: 1fr;
     }
 }

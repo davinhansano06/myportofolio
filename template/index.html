@@ -3,27 +3,39 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Davin Tristan H - Portfolio</title>
+    <title>Davin Tristan Hansano - Portfolio</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/static/css/style.css">
 </head>
 <body>
+    <!-- Header Section -->
     <header class="site-header">
         <div class="container">
-            <a href="#profile" class="brand">Davin Tristan H</a>
+            <a href="#profile" class="brand">Davin Tristan Hansano</a>
+            <a href="#experience" class="brand"></a>
+            <a href="#contact" class="brand"></a>
+            <a href="#skill" class="brand"></a>
             <nav>
                 <a href="#profile">Profile</a>
+                <a href="#skill">Skill</a>
+                <a href="#experience">Experience</a>
+                <a href="#contact">Contact</a>
             </nav>
         </div>
     </header>
 
+    <!-- Main Content Section -->
     <main>
+        <!-- Section for Profile -->
         <section class="hero" id="profile">
             <div class="container hero-grid">
                 <div class="hero-identity">
-                    <p class="hero-kicker">Information System &middot; Universitas Indonesia</p>
+                    <p class="hero-kicker">
+                        <img class="logo" src="/static/img/logoui.png" alt="Logo Universitas Indonesia">
+                        <span>Information System &middot; Universitas Indonesia</span>
+                    </p>
                     <h1>Davin Tristan Hansano</h1>
                 </div>
                 <div class="hero-photo">
@@ -50,7 +62,102 @@
                             <dd>S1 Information System</dd>
                         </div>
                     </dl>
-                    <div class="social-links">
+                </div>
+            </div>
+        </section>
+
+        <!-- Section for Skills -->
+        <section class="hero" id="skill">
+            <div class="container">
+                <div class="hero-identity">
+                    <p class="hero-kicker">
+                        <img class="logo" src="/static/img/logoui.png" alt="Logo Universitas Indonesia">
+                        <span>Information System &middot; Universitas Indonesia</span>
+                    </p>
+                    <h1> My Skill!</h1>
+                </div>
+                <div class="skills-grid">
+                    <div class="skill-card-wrapper">
+                        <input type="checkbox" id="modal-trigger-1" class="modal-toggle">
+                        <label for="modal-trigger-1" class="skill-card">
+                            <img src="/static/img/image.jpg" alt="Data Analysis" class="skill-img">
+                            <h3>Data Analysis</h3>
+                        </label>
+                        <div class="modal">
+                            <div class="modal-content">
+                                <label for="modal-trigger-1" class="close-btn">&times;</label>
+                                <h2>Data Analysis</h2>
+                                <p>Pengalaman dalam mengolah data mentah menjadi wawasan bisnis menggunakan Python, SQL, dan visualisasi data untuk pengambilan keputusan strategis.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="skill-card-wrapper">
+                        <input type="checkbox" id="modal-trigger-2" class="modal-toggle">
+                        <label for="modal-trigger-2" class="skill-card">
+                            <img src="/static/img/dataanalis.jpg" alt="Business Strategy" class="skill-img">
+                            <h3>Business Analysis</h3>
+                        </label>
+                        <div class="modal">
+                            <div class="modal-content">
+                                <label for="modal-trigger-2" class="close-btn">&times;</label>
+                                <h2>Business Analysis</h2>
+                                <p>Memiliki kemampuan analisis kasus bisnis, menyusun strategi kampanye digital, serta merancang arsitektur proses bisnis yang efisien.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="skill-card-wrapper">
+                        <input type="checkbox" id="modal-trigger-3" class="modal-toggle">
+                        <label for="modal-trigger-3" class="skill-card">
+                            <img src="/static/img/marketing.jpg" alt="Digital Marketing" class="skill-img">
+                            <h3>Digital Marketing</h3>
+                        </label>
+                        <div class="modal">
+                            <div class="modal-content">
+                                <label for="modal-trigger-3" class="close-btn">&times;</label>
+                                <h2>Digital Marketing</h2>
+                                <p>Mampu merancang dan melaksanakan strategi pemasaran digital, serta komunikasi efektif dengan berbagai stakeholder.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section for Experience -->
+        <section class="hero" id="experience">
+            <div class="container hero-grid">
+                <div class="hero-identity">
+                    <p class="hero-kicker">Information System &middot; Universitas Indonesia</p>
+                    <h1>My Experience!</h1>
+                </div>
+                <div class="hero-photo">
+                    <div class="photo-block"></div>
+                    <img class="avatar" src="/static/img/fotoui.jpg" alt="Photo of Davin Tristan Hansano">
+                </div>
+                <div class="hero-details">
+                    <dl class="meta-list">
+                        <div class="meta-row">
+                            <dt>NPM</dt>
+                            <dd>2506620513</dd>
+                        </div>
+                        <div class="meta-row">
+                            <dt>Program</dt>
+                            <dd>S1 Information System</dd>
+                        </div>
+                    </dl>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section for Contact -->
+        <section class="hero" id="contact">
+            <div class="container hero-grid">
+                <div class="hero-identity">
+                    <p class="hero-kicker"></p>
+                    <h1>Keep on Contact!</h1>
+                    <div class="hero-contact" style="margin-top: 1.5rem;">
                         <a href="https://github.com/davinhansano06/myportofolio.git" class="social-link">GitHub</a>
                         <a href="https://www.linkedin.com/in/davin-hansano-030424380" class="social-link">LinkedIn</a>
                         <a href="mailto:davinhansano06@gmail.com" class="social-link">Email</a>
@@ -60,7 +167,8 @@
             </div>
         </section>
     </main>
-
+    
+    <!-- Footer Section -->
     <footer class="site-footer">
         <div class="container">
             <p>&copy; 2026 Davin. Fakultas Ilmu Komputer, Universitas Indonesia.</p>
