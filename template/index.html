@@ -14,13 +14,13 @@
     <header class="site-header">
         <div class="container">
             <a href="#profile" class="brand">Davin Tristan Hansano</a>
-            <a href="#experience" class="brand"></a>
+            <a href="#education" class="brand"></a>
             <a href="#contact" class="brand"></a>
             <a href="#skill" class="brand"></a>
             <nav>
                 <a href="#profile">Profile</a>
                 <a href="#skill">Skill</a>
-                <a href="#experience">Experience</a>
+                <a href="#education">Education</a>
                 <a href="#contact">Contact</a>
             </nav>
         </div>
@@ -66,87 +66,135 @@
             </div>
         </section>
 
-        <!-- Section for Skills -->
-        <section class="hero" id="skill">
-            <div class="container">
-                <div class="hero-identity">
-                    <p class="hero-kicker">
-                        <img class="logo" src="/static/img/logoui.png" alt="Logo Universitas Indonesia">
+        <!-- Section for Skill -->
+        <section class="hero-section" id="skill">
+            <div class="wadah-konten">
+                <!-- Main Section (Logo, Sub-judul, Judul) -->
+                <div class="identitas-section">
+                    <p class="teks-pembuka">
+                        <img class="logo-ui" src="/static/img/logoui.png" alt="Logo Universitas Indonesia">
                         <span>Information System &middot; Universitas Indonesia</span>
                     </p>
-                    <h1> My Skill!</h1>
+                    <h1>My Skill!</h1>
                 </div>
-                <div class="skills-grid">
-                    <div class="skill-card-wrapper">
-                        <input type="checkbox" id="modal-trigger-1" class="modal-toggle">
-                        <label for="modal-trigger-1" class="skill-card">
-                            <img src="/static/img/image.jpg" alt="Data Analysis" class="skill-img">
+
+                <!-- Letak Skill Card -->
+                <div class="grid-skill">
+
+                    <!-- Data Analysis -->
+                    <div class="cover-kartu">
+                        <!-- Menyembunyikan Pop-up -->
+                        <input type="checkbox" id="pemicu-popup-1" class="tombol-pemicu">
+                        <label for="pemicu-popup-1" class="skill-card">
+                            <img src="/static/img/image.jpg" alt="Data Analysis" class="gambar-skill">
                             <h3>Data Analysis</h3>
                         </label>
-                        <div class="modal">
-                            <div class="modal-content">
-                                <label for="modal-trigger-1" class="close-btn">&times;</label>
+                        <!-- Pop-up Modal 1 -->
+                        <div class="layar-popup">
+                            <div class="isi-popup">
+                                <label for="pemicu-popup-1" class="tombol-tutup">&times;</label>
                                 <h2>Data Analysis</h2>
-                                <p>Pengalaman dalam mengolah data mentah menjadi wawasan bisnis menggunakan Python, SQL, dan visualisasi data untuk pengambilan keputusan strategis.</p>
+                                <p> Ahli dalam mengombinasikan pemikiran analitis dan logika kuantitatif untuk 
+                                    mengubah data kompleks menjadi wawasan bisnis yang strategis. 
+                                    Berbekal latar belakang Sistem Informasi UI dan prestasi Best Team di 
+                                    Ristek Open Class Business Case 2025, saya terbiasa melakukan analisis 
+                                    peluang pasar, pemodelan data, hingga pengambilan keputusan 
+                                    berbasis data.
                             </div>
                         </div>
                     </div>
 
-                    <div class="skill-card-wrapper">
-                        <input type="checkbox" id="modal-trigger-2" class="modal-toggle">
-                        <label for="modal-trigger-2" class="skill-card">
-                            <img src="/static/img/dataanalis.jpg" alt="Business Strategy" class="skill-img">
+                    <!-- Business Analysis -->
+                    <div class="cover-kartu">
+                        <input type="checkbox" id="pemicu-popup-2" class="tombol-pemicu">
+                        <label for="pemicu-popup-2" class="skill-card">
+                            <img src="/static/img/dataanalis.jpg" alt="Business Analysis" class="gambar-skill">
                             <h3>Business Analysis</h3>
                         </label>
-                        <div class="modal">
-                            <div class="modal-content">
-                                <label for="modal-trigger-2" class="close-btn">&times;</label>
+                        <!-- Pop-up Modal 2 -->
+                        <div class="layar-popup">
+                            <div class="isi-popup">
+                                <label for="pemicu-popup-2" class="tombol-tutup">&times;</label>
                                 <h2>Business Analysis</h2>
-                                <p>Memiliki kemampuan analisis kasus bisnis, menyusun strategi kampanye digital, serta merancang arsitektur proses bisnis yang efisien.</p>
+                                <p>Memiliki kemampuan analisis kasus bisnis,merancang arsitektur 
+                                    proses bisnis yang efisien serta Memiliki rekam jejak kepemimpinan 
+                                    yang teruji dalam mengelola alokasi anggaran, eksekusi proyek, dan koordinasi tim. 
                             </div>
                         </div>
                     </div>
 
-                    <div class="skill-card-wrapper">
-                        <input type="checkbox" id="modal-trigger-3" class="modal-toggle">
-                        <label for="modal-trigger-3" class="skill-card">
-                            <img src="/static/img/marketing.jpg" alt="Digital Marketing" class="skill-img">
+                    <!-- Digital Marketing -->
+                    <div class="cover-kartu">
+                        <input type="checkbox" id="pemicu-popup-3" class="tombol-pemicu">
+                        <label for="pemicu-popup-3" class="skill-card">
+                            <img src="/static/img/marketing.jpg" alt="Digital Marketing" class="gambar-skill">
                             <h3>Digital Marketing</h3>
                         </label>
-                        <div class="modal">
-                            <div class="modal-content">
-                                <label for="modal-trigger-3" class="close-btn">&times;</label>
+                        <div class="layar-popup">
+                            <div class="isi-popup">
+                                <label for="pemicu-popup-3" class="tombol-tutup">&times;</label>
                                 <h2>Digital Marketing</h2>
-                                <p>Mampu merancang dan melaksanakan strategi pemasaran digital, serta komunikasi efektif dengan berbagai stakeholder.</p>
+                                <p>Mampu merancang dan melaksanakan strategi pemasaran digital dalam mendorong penjualan produk 
+                                    dan awareness, serta mampu berkomunikasi efektif dengan berbagai stakeholder
+                                    dengan dukungan komunikasi yang persuasif dan kemampuan negosiasi yang kuat.
+                                </p>
                             </div>
                         </div>
                     </div>
+
                 </div>
             </div>
         </section>
 
-        <!-- Section for Experience -->
-        <section class="hero" id="experience">
+        <!-- Section for Education -->
+        <section class="hero" id="education">
             <div class="container hero-grid">
                 <div class="hero-identity">
-                    <p class="hero-kicker">Information System &middot; Universitas Indonesia</p>
-                    <h1>My Experience!</h1>
-                </div>
-                <div class="hero-photo">
-                    <div class="photo-block"></div>
-                    <img class="avatar" src="/static/img/fotoui.jpg" alt="Photo of Davin Tristan Hansano">
+                    <p class="hero-kicker">Academic Background &middot; Education Journey</p>
+                    <h1>My Education!</h1>
                 </div>
                 <div class="hero-details">
-                    <dl class="meta-list">
-                        <div class="meta-row">
-                            <dt>NPM</dt>
-                            <dd>2506620513</dd>
+                    <div class="daftar-pengalaman">
+                        <div class="item-pengalaman">
+                            <img src="/static/img/uiputih.png" alt="Logo UI" class="logo-sekolah">
+                            <div class="konten-pengalaman">
+                            <h3>Universitas Indonesia</h3>
+                            <p class="sub-judul">Undergraduate Student &middot; Computer Science Major</p>
+                            <p class="periode">July 2025 - Juni 2029 &middot; On Going</p>
+                            <p class="lokasi">Depok, West Java, Indonesia</p>
+                                <div class="tag-skill">
+                                    <span><i class="icon">&#9830;</i> Bussines Analysis, Computer Sciences & Data Analysis</span>                             
+                                </div>
+                                <a href="https://maps.app.goo.gl/12mBDMJFKEommAm9A" class="social-link">Location</a>
+                            </div>
                         </div>
-                        <div class="meta-row">
-                            <dt>Program</dt>
-                            <dd>S1 Information System</dd>
+                        <div class="item-pengalaman">
+                            <img src="/static/img/logosma.jpg" alt="Logo SMAN 3 Malang" class="logo-sekolah">
+                            <div class="konten-pengalaman">
+                                <h3>SMA Negeri 3 Malang</h3>
+                                <p class="sub-judul">High School Student &middot; Science Major</p>
+                                <p class="periode">July 2022 - Juni 2025 &middot; 3 Years</p>
+                                <p class="lokasi">Malang, East Java, Indonesia</p>
+                                <div class="tag-skill">
+                                    <span><i class="icon">&#9830;</i> Mathematics, Organisation & Leadership</span>                                
+                                </div>
+                                <a href="https://maps.app.goo.gl/12mBDMJFKEommAm9A" class="social-link">Location</a>
+                            </div>
                         </div>
-                    </dl>
+                        <div class="item-pengalaman">
+                            <img src="/static/img/logokk.png" alt="Logo SMPK Kalam Kudus Malang" class="logo-sekolah">
+                            <div class="konten-pengalaman">
+                                <h3>SMP Kristen Kalam Kudus Malang</h3>
+                                <p class="sub-judul">Junior High School Student</p>
+                                <p class="periode">July 2019 - Juni 2022 &middot; 3 Years</p>
+                                <p class="lokasi">Malang, East Java, Indonesia</p>
+                                <div class="tag-skill">
+                                    <span><i class="icon">&#9830;</i> Basic Logic, Academic Competitions & Public Speaking</span>
+                                </div>
+                                <a href="https://maps.app.goo.gl/CD7U3F7hz6kSmqa59" class="social-link">Location</a>
+                            </div>
+                        </div>                       
+                    </div>
                 </div>
             </div>
         </section>
