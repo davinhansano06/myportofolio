@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Davin Tristan Hansano - Portfolio</title>
+    <title>{{ name }} - Portfolio</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
@@ -13,15 +13,13 @@
     <!-- Header Section -->
     <header class="site-header">
         <div class="container">
-            <a href="#profile" class="brand">Davin Tristan Hansano</a>
+            <a href="{% url 'main:show_main' %}" class="brand">{{ name }}</a>
             <a href="#education" class="brand"></a>
             <a href="#contact" class="brand"></a>
             <a href="#skill" class="brand"></a>
             <nav>
-                <a href="#profile">Profile</a>
-                <a href="#skill">Skill</a>
-                <a href="#education">Education</a>
-                <a href="#contact">Contact</a>
+                <a href="{% url 'main:show_main' %}">Profile</a>
+                <a href="{% url 'main:show_experience' %}">Experience</a>
             </nav>
         </div>
     </header>
@@ -36,14 +34,14 @@
                         <img class="logo" src="/static/img/logoui.png" alt="Logo Universitas Indonesia">
                         <span>Information System &middot; Universitas Indonesia</span>
                     </p>
-                    <h1>Davin Tristan Hansano</h1>
+                    <h1>{{ name }}</h1>
                 </div>
                 <div class="hero-photo">
                     <div class="photo-block"></div>
-                    <img class="avatar" src="/static/img/fotoui.jpg" alt="Photo of Davin Tristan Hansano">
+                    <img class="avatar" src="/static/img/fotoui.jpg" alt="Photo of {{ name }}">
                 </div>
                 <div class="hero-details">
-                    <p class="bio">Hi, I'm Davin!</p>
+                    <p class="bio">Hi, I'm {{ name }}!</p>
                     <p class="bio">I am an Information Systems student at Fasilkom UI with a 
                         strong focus on Business & Data Analysis. 
                         I enjoy turning complex data into actionable business insights 
@@ -55,11 +53,11 @@
                     <dl class="meta-list">
                         <div class="meta-row">
                             <dt>NPM</dt>
-                            <dd>2506620513</dd>
+                            <dd>{{ npm }}</dd>
                         </div>
                         <div class="meta-row">
                             <dt>Program</dt>
-                            <dd>S1 Information System</dd>
+                            <dd>{{ study_program }}</dd>
                         </div>
                     </dl>
                 </div>
@@ -219,7 +217,7 @@
     <!-- Footer Section -->
     <footer class="site-footer">
         <div class="container">
-            <p>&copy; 2026 Davin. Fakultas Ilmu Komputer, Universitas Indonesia.</p>
+            <p>&copy; 2026 {{ name }}. Fakultas Ilmu Komputer, Universitas Indonesia.</p>
         </div>
     </footer>
 </body>
