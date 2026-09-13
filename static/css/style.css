@@ -663,3 +663,7 @@ h1 {
         display: flex !important;
     }
 }
+
+#contact .hero-grid {
+    min-height: auto;
+}
