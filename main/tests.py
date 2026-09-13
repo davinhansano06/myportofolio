@@ -34,5 +34,5 @@ class EducationPageTest(TestCase):
 
         self.assertContains(
             response,
-            "Belum ada pendidikan yang ditambahkan."
+            "Belum ada data pendidikan."
         )

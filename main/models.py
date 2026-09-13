@@ -29,11 +29,10 @@ class Experience(models.Model):
     )
 
     title = models.CharField(max_length=255)
-    institution = models.CharField(max_length=255)
-    period = models.CharField(max_length=100)
+    institution = models.CharField(max_length=255, blank=True)
+    period = models.CharField(max_length=100, blank=True)
     description = models.TextField()
-    image = models.CharField(max_length=255)
+    image = models.CharField(max_length=255, blank=True)
 
     def __str__(self):
         return self.title
- 
