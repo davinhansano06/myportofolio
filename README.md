@@ -18,3 +18,20 @@ Saat membuat informasi pada static web, batasan utama yang paling saya rasakan a
 Dalam proses pengerjaan Tutorial dan Tugas 1 ini, saya menggunakan bantuan AI Gemini sebagai tempat diskusi saya dan tempat saya mencari referensi teknis. AI saya gunakan untuk membantu memberikan ide variasi layout, mereferensikan penggunaan struktur HTML/CSS yang efisien, serta membantu melakukan analisis kendala saat terjadi bug pada respon tata letak responsive design dan membantu membuat comment yang rapi. 
 
 Seluruh kode, penyesuaian posisi dan estetika (seperti skema warna), desain layout untuk riwayat pendidikan, penyesuaian media queries, serta logika penyusunan konten portofolio ini pada akhirnya saya eksekusi, kembangkan, dan pelajari secara mandiri sesuai dengan kreativitas dan kebutuhan desain portofolio saya. 
+
+## Tugas 2
+
+1. Alur yang saya gunakan dimulai dari URL yang mengarahkan request ke view yang sesuai. Pada project ini, ketika pengguna membuka halaman Education melalui `/education/`, URL tersebut didefinisikan di `main/urls.py` dan diarahkan ke fungsi `show_education` di `main/views.py`.
+Selanjutnya, view mengambil data Education dari database menggunakan model `Education`. Data tersebut kemudian dimasukkan ke dalam context dan dikirim ke template `education.html`. Di dalam template, Django Template Language digunakan untuk melakukan perulangan terhadap data tersebut sehingga setiap data Education dapat ditampilkan di halaman.
+
+Jadi secara sederhana, alurnya adalah:
+
+`URL → View → Model/Database → Context → Template → Halaman Web`
+
+2. Menurut saya, menggunakan model lebih baik karena data tidak tercampur dengan struktur tampilan HTML. Data Education dapat disimpan dan diubah melalui database tanpa harus mengubah kode HTML secara langsung. Selain itu, penggunaan model membuat website lebih mudah dikembangkan. Misalnya, jika saya ingin menambahkan riwayat pendidikan baru, saya cukup menambahkan data baru ke database. Template yang sama akan otomatis menampilkan data tersebut menggunakan perulangan. Kalau data ditulis langsung di HTML, setiap perubahan data mengharuskan saya mengubah kode template sehingga kurang fleksibel dan lebih sulit untuk dikelola.
+
+3. `makemigrations` digunakan untuk membuat file migration berdasarkan perubahan yang dilakukan pada model. File tersebut berisi instruksi perubahan struktur database. Sedangkan `migrate` digunakan untuk benar-benar menerapkan migration tersebut ke database. Jadi, `makemigrations` membuat atau mencatat perubahan dari model, sedangkan `migrate` menjalankan perubahan tersebut pada database.
+
+## Deklarasi Penggunaan AI
+
+Saya menggunakan AI sebagai pendamping selama mengerjakan tugas ini, terutama untuk membantu memahami konsep Django MVT, mencari penyebab error, dan memberikan arahan ketika saya mengalami kesulitan. Saya tetap mengerjakan implementasi project secara langsung dan mempelajari setiap bagian yang digunakan, sehingga AI berperan sebagai alat bantu belajar, bukan sebagai pengganti pengerjaan tugas.

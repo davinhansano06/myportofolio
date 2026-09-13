@@ -87,12 +87,28 @@ section, .hero, .hero-section {
 
 .hero-grid {
     display: grid;
-    grid-template-columns: 1fr 250px;
-    gap: 1rem;
-    align-items: start;
+    grid-template-columns: 1.1fr 0.9fr;
+    grid-template-areas:
+        "identity photo"
+        "details photo";
+    align-items: center;
+    gap: 2rem 4rem;
+    min-height: 600px;
 }
 
-.hero-identity, .identitas-section {
+.hero-identity {
+    grid-area: identity;
+}
+
+.hero-photo {
+    grid-area: photo;
+}
+
+.hero-details {
+    grid-area: details;
+}
+
+.identitas-section {
     grid-column: 1 / -1;
 }
 
@@ -122,13 +138,13 @@ h1 {
 }
 
 .hero-photo {
-    grid-column:1;
+    grid-area: photo;
     position: relative;
 }
 
 .avatar {
     width: 100%;
-    max-width: 250px;
+    max-width: 400px;
     border-radius: var(--radius);
     border: 2px solid var(--accent);
     object-fit: cover;
@@ -296,42 +312,42 @@ h1 {
 }
 
 /* ==========================================
-   6. RESPONSIVE / MOBILE LAYOUT
+   7. EDUCATION SECTION
    ========================================== */
-@media (max-width: 768px) {
-    .hero-grid {
-        grid-template-columns: 1fr;
-    }
-    .site-header .container {
-        flex-direction: column;
-        gap: 1rem;
-    }
-    nav a {
-        margin: 0 0.5rem;
-    }
-    header, nav, .navbar {
-        padding: 0rem 0rem !important;
-        gap: 0rem !important; /* Jarak antara teks Davin di atas dan menu di bawahnya */
-    }
-    .hero, #profile, .hero-section {
-        padding-top: 1.5rem !important; /* Nilai diperkecil agar rapat dengan navbar */
-        margin-top: 0 !important;
-    }
+
+#education .hero-grid {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: auto;
+    gap: 2rem;
 }
-/* ==========================================
-   7. STYLING BLOK BERTINGKAT (EDUCATION / LINKEDIN STYLE)
-   ========================================== */
+
+#education .hero-identity {
+    text-align: center;
+    width: 100%;
+}
+
+#education .hero-details {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
 .daftar-pengalaman {
     display: flex;
     flex-direction: column;
+    width: 100%;
+    max-width: 1000px;
 }
 
 .item-pengalaman {
     display: flex;
+    align-items: flex-start;
     gap: 1.2rem;
-    padding: 1.5rem 0;
+    width: 100%;
+    padding: 2rem 1rem;
     border-bottom: 1px solid var(--line);
-    transition: background-color 0.2s ease;
 }
 
 .item-pengalaman:last-child {
@@ -350,10 +366,11 @@ h1 {
     display: flex;
     flex-direction: column;
     gap: 0.25rem;
+    flex: 1;
 }
 
 .konten-pengalaman h3 {
-    font-size: 1.15rem;
+    font-size: 1.3rem;
     color: var(--text-primary);
     font-weight: 700;
     line-height: 1.2;
@@ -361,27 +378,24 @@ h1 {
 
 .sub-judul {
     color: #e0e0e0;
-    font-size: 0.95rem;
+    font-size: 1rem;
 }
 
-.periode, .lokasi {
+.periode,
+.lokasi {
     color: var(--text-secondary);
-    font-size: 0.85rem;
+    font-size: 0.9rem;
 }
 
 .tag-skill {
-    margin-top: 0.5rem;
-    font-size: 0.85rem;
+    margin-top: 0.8rem;
+    font-size: 0.95rem;
     color: var(--accent);
-    display: flex;
-    align-items: center;
-    gap: 0.4rem;
     font-weight: 500;
 }
 
 .tag-skill .icon {
     font-size: 0.75rem;
-
 }
 /* ==========================================
    8. Experience Section Styling
@@ -412,10 +426,12 @@ h1 {
 }
 
 .experience-card {
-    padding: 1.25rem;
-    background-color: #1c2541;
+    flex: 0 0 calc((100% - 1.5rem) / 2);
+    background-color: var(--card-bg);
     border: 1px solid var(--line);
     border-radius: var(--radius);
+    overflow: hidden;
+    transition: transform 0.3s ease, border-color 0.3s ease;
 }
 
 .experience-category {
@@ -439,4 +455,211 @@ h1 {
     margin-top: 1rem;
     font-size: 0.85rem;
     font-weight: 600;
+}
+
+/* ==========================================
+   EXPERIENCE CAROUSEL
+   ========================================== */
+
+.experience-section {
+    padding: 3rem 0 4rem;
+    border-bottom: 1px solid var(--line);
+}
+
+.experience-heading {
+    margin-bottom: 2rem;
+}
+
+.experience-carousel {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.experience-window {
+    width: 100%;
+    overflow: hidden;
+}
+
+.experience-track {
+    display: flex;
+    gap: 1.5rem;
+    transition: transform 0.5s ease;
+}
+
+.experience-card:hover {
+    transform: translateY(-5px);
+    border-color: var(--accent);
+}
+
+.experience-image-wrapper {
+    width: 100%;
+    height: 260px;
+    overflow: hidden;
+}
+
+.experience-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.experience-content {
+    padding: 1.5rem;
+    text-align: center;
+}
+
+.experience-content h2 {
+    color: var(--text-primary);
+    font-size: 1.25rem;
+    margin-bottom: 0.5rem;
+}
+
+.experience-institution {
+    color: var(--accent);
+    font-size: 1rem;
+    margin-bottom: 0.8rem;
+}
+
+.experience-period {
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+    margin-bottom: 1rem;
+}
+
+.experience-description {
+    color: #d1d5db;
+    line-height: 1.6;
+}
+
+.carousel-button {
+    flex-shrink: 0;
+    width: 48px;
+    height: 48px;
+    border: none;
+    border-radius: 50%;
+    background-color: var(--card-bg);
+    color: var(--text-primary);
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+
+.carousel-button:hover {
+    background-color: var(--accent);
+    color: var(--bg-main);
+}
+
+.carousel-dots {
+    display: flex;
+    justify-content: center;
+    gap: 0.7rem;
+    margin-top: 2rem;
+}
+
+.carousel-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: var(--line);
+    border: none;
+    cursor: pointer;
+}
+
+.carousel-dot.active {
+    background-color: var(--accent);
+    transform: scale(1.2);
+}
+
+/* ==========================================
+   center Education Layout
+   ========================================== */
+#education .hero-grid {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center;
+    width: 100%;
+    min-height: auto;
+}
+
+#education .hero-identity {
+    width: 100%;
+    text-align: center;
+}
+
+#education .hero-details {
+    width: 100%;
+}
+
+#education .daftar-pengalaman {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+#education .item-pengalaman {
+    width: 100%;
+    max-width: 1000px;
+}
+
+/* ==========================================
+   RESPONSIVE / MOBILE LAYOUT
+   ========================================== */
+@media (max-width: 768px) {
+    .hero-grid {
+        grid-template-columns: 1fr;
+        grid-template-areas:
+            "identity"
+            "photo"
+            "details";
+        gap: 2rem;
+        min-height: auto;
+    }
+
+    .experience-card {
+        flex: 0 0 100%;
+    }
+
+    .hero-photo {
+        justify-self: start;
+    }
+
+    .avatar {
+        max-width: 100%;
+    }
+
+    .hero-identity h1 {
+        font-size: 3.2rem;
+        line-height: 1.1;
+    }
+}
+
+/* Mobile Navbar */
+.mobile-menu-button {
+    display: none;
+}
+
+@media (max-width: 768px) {
+
+    .mobile-menu-button {
+        display: block;
+        font-size: 2rem;
+        cursor: pointer;
+        padding: 0.5rem 1rem;
+        z-index: 1000;
+    }
+
+    #main-nav {
+        display: none !important;
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+        padding: 1rem 0;
+        width: 100%;
+    }
+
+    #main-nav.active {
+        display: flex !important;
+    }
 }

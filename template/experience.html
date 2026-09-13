@@ -9,6 +9,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/static/css/style.css">
 </head>
+{% load static %}
 <body>
     <!-- Header Section -->
     <header class="site-header">
@@ -19,7 +20,10 @@
             <a href="#skill" class="brand"></a>
             <nav>
                 <a href="{% url 'main:show_main' %}">Profile</a>
+                <a href="{% url 'main:show_main' %}#skill">Skill</a>
+                <a href="{% url 'main:show_main' %}#education">Education</a>
                 <a href="{% url 'main:show_experience' %}">Experience</a>
+                <a href="{% url 'main:show_main' %}#contact">Contact</a>
             </nav>
         </div>
     </header>
@@ -28,41 +32,78 @@
     <main>
         <section class="experience-section" id="experience">
             <div class="container">
-                <p class="section-kicker">Perjalanan saya sejauh ini</p>
-                <h1>Experience</h1>
-
-                <div class="experience-grid">
-                    {% for experience in experience_list %}
-                        <article class="experience-card">
-                            <span class="experience-category">
-                                {{ experience.get_category_display }}
-                            </span>
-                            <h2>{{ experience.title }}</h2>
-                            <p class="experience-description">
-                                {{ experience.description }}
-                            </p>
-
-                            {% if experience.is_ongoing %}
-                                <p class="experience-status">Sedang berlangsung</p>
-                            {% else %}
-                                <p class="experience-status">Selesai</p>
-                            {% endif %}
-                        </article>
-                    {% empty %}
-                        <p class="empty-state">
-                            Belum ada pengalaman yang ditambahkan.
-                        </p>
-                    {% endfor %}
+                <div class="experience-heading">
+                    <p class="hero-kicker">
+                        <img
+                            class="logo"
+                            src="{% static 'img/logoui.png' %}"
+                            alt="Logo Universitas Indonesia"
+                        >
+                        <span>
+                            Information System &middot; Universitas Indonesia
+                        </span>
+                    </p>
+                    <h1>My Experience!</h1>
                 </div>
+                <div class="experience-carousel">
+                    <button
+                        class="carousel-button carousel-prev"
+                        type="button">
+                        &#10094;
+                    </button>
+                    <div class="experience-window">
+                        <div class="experience-track">
+                            {% for experience in experience_list %}
+                                <article class="experience-card">
+                                     <div class="experience-image-wrapper">
+                                        <img
+                                            src="{% static experience.image %}"
+                                            alt="{{ experience.title }}"
+                                            class="experience-image"
+                                        >
+                                    </div>
+                                    <div class="experience-content">
+                                        <h2>
+                                            {{ experience.title }}
+                                        </h2>
+                                        <p class="experience-institution">
+                                            {{ experience.institution }}
+                                        </p>
+                                        <p class="experience-period">
+                                            &#128197; {{ experience.period }}
+                                        </p>
+                                        <p class="experience-description">
+                                            {{ experience.description }}
+                                        </p>
+                                    </div>
+                                </article>
+
+                            {% empty %}
+
+                                <p class="empty-state">
+                                    Belum ada pengalaman yang ditambahkan.
+                                </p>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <button
+                        class="carousel-button carousel-next"
+                        type="button">
+                        &#10095;
+                    </button>
+                </div>
+                <div class="carousel-dots"></div>
             </div>
         </section>
     </main>
-    
+
     <!-- Footer Section -->
     <footer class="site-footer">
         <div class="container">
             <p>&copy; 2026 {{ name }}. Fakultas Ilmu Komputer, Universitas Indonesia.</p>
         </div>
     </footer>
+    <script src="{% static 'js/experience.js' %}"></script>
 </body>
 </html>

@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -17,9 +18,15 @@
             <a href="#education" class="brand"></a>
             <a href="#contact" class="brand"></a>
             <a href="#skill" class="brand"></a>
-            <nav>
+            <div class="mobile-menu-button" id="mobile-menu-button">
+                ☰
+            </div>
+            <nav id="main-nav">
                 <a href="{% url 'main:show_main' %}">Profile</a>
+                <a href="#skill">Skill</a>
+                <a href="{% url 'main:show_education' %}">Education</a>
                 <a href="{% url 'main:show_experience' %}">Experience</a>
+                <a href="#contact">Contact</a>
             </nav>
         </div>
     </header>
@@ -147,53 +154,117 @@
         <!-- Section for Education -->
         <section class="hero" id="education">
             <div class="container hero-grid">
+
                 <div class="hero-identity">
-                    <p class="hero-kicker">Academic Background &middot; Education Journey</p>
                     <h1>My Education!</h1>
                 </div>
+
                 <div class="hero-details">
                     <div class="daftar-pengalaman">
+
+                        {% for education in education_list %}
                         <div class="item-pengalaman">
-                            <img src="/static/img/uiputih.png" alt="Logo UI" class="logo-sekolah">
+
+                            <img src="{% static education.logo %}"
+                                alt="Logo {{ education.institution }}"
+                                class="logo-sekolah">
+
                             <div class="konten-pengalaman">
-                            <h3>Universitas Indonesia</h3>
-                            <p class="sub-judul">Undergraduate Student &middot; Computer Science Major</p>
-                            <p class="periode">July 2025 - Juni 2029 &middot; On Going</p>
-                            <p class="lokasi">Depok, West Java, Indonesia</p>
+                                <h3>{{ education.institution }}</h3>
+
+                                <p class="sub-judul">{{ education.degree }}
+                                </p>
+
+                                <p class="periode">
+                                    {{ education.period }}
+                                </p>
+
+                                <p class="lokasi">
+                                    {{ education.location }}
+                                </p>
+
                                 <div class="tag-skill">
-                                    <span><i class="icon">&#9830;</i> Bussines Analysis, Computer Sciences & Data Analysis</span>                             
+                                    <span>
+                                        <i class="icon">&#9830;</i>
+                                        {{ education.skills }}
+                                    </span>
                                 </div>
-                                <a href="https://share.google/NR0mpzlua55qcl7u6" class="social-link">Location</a>
                             </div>
+
                         </div>
-                        <div class="item-pengalaman">
-                            <img src="/static/img/logosma.jpg" alt="Logo SMAN 3 Malang" class="logo-sekolah">
-                            <div class="konten-pengalaman">
-                                <h3>SMA Negeri 3 Malang</h3>
-                                <p class="sub-judul">High School Student &middot; Science Major</p>
-                                <p class="periode">July 2022 - Juni 2025 &middot; 3 Years</p>
-                                <p class="lokasi">Malang, East Java, Indonesia</p>
-                                <div class="tag-skill">
-                                    <span><i class="icon">&#9830;</i> Mathematics, Organisation & Leadership</span>                                
-                                </div>
-                                <a href="https://maps.app.goo.gl/12mBDMJFKEommAm9A" class="social-link">Location</a>
-                            </div>
-                        </div>
-                        <div class="item-pengalaman">
-                            <img src="/static/img/logokk.png" alt="Logo SMPK Kalam Kudus Malang" class="logo-sekolah">
-                            <div class="konten-pengalaman">
-                                <h3>SMP Kristen Kalam Kudus Malang</h3>
-                                <p class="sub-judul">Junior High School Student</p>
-                                <p class="periode">July 2019 - Juni 2022 &middot; 3 Years</p>
-                                <p class="lokasi">Malang, East Java, Indonesia</p>
-                                <div class="tag-skill">
-                                    <span><i class="icon">&#9830;</i> Basic Logic, Academic Competitions & Public Speaking</span>
-                                </div>
-                                <a href="https://maps.app.goo.gl/CD7U3F7hz6kSmqa59" class="social-link">Location</a>
-                            </div>
-                        </div>                       
+                        {% empty %}
+                        <p>Belum ada data pendidikan.</p>
+                        {% endfor %}
+
                     </div>
                 </div>
+
+            </div>
+        </section>
+        <section class="experience-section" id="experience">
+            <div class="container">
+                <div class="experience-heading">
+                    <p class="hero-kicker">
+                        <img
+                            class="logo"
+                            src="{% static 'img/logoui.png' %}"
+                            alt="Logo Universitas Indonesia"
+                        >
+                        <span>
+                            Information System &middot; Universitas Indonesia
+                        </span>
+                    </p>
+                    <h1>My Experience!</h1>
+                </div>
+                <div class="experience-carousel">
+                    <button
+                        class="carousel-button carousel-prev"
+                        type="button">
+                        &#10094;
+                    </button>
+                    <div class="experience-window">
+                        <div class="experience-track">
+                            {% for experience in experience_list %}
+                                <article class="experience-card">
+                                     <div class="experience-image-wrapper">
+                                        <img
+                                            src="{% static experience.image %}"
+                                            alt="{{ experience.title }}"
+                                            class="experience-image"
+                                        >
+                                    </div>
+                                    <div class="experience-content">
+                                        <h2>
+                                            {{ experience.title }}
+                                        </h2>
+                                        <p class="experience-institution">
+                                            {{ experience.institution }}
+                                        </p>
+                                        <p class="experience-period">
+                                            &#128197; {{ experience.period }}
+                                        </p>
+                                        <p class="experience-description">
+                                            {{ experience.description }}
+                                        </p>
+                                    </div>
+                                </article>
+
+                            {% empty %}
+
+                                <p class="empty-state">
+                                    Belum ada pengalaman yang ditambahkan.
+                                </p>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <button
+                        class="carousel-button carousel-next"
+                        type="button">
+                        &#10095;
+                    </button>
+                </div>
+                <div class="carousel-dots"></div>
             </div>
         </section>
 
@@ -220,5 +291,6 @@
             <p>&copy; 2026 {{ name }}. Fakultas Ilmu Komputer, Universitas Indonesia.</p>
         </div>
     </footer>
+<script src="{% static 'js/navbar.js' %}"></script>
 </body>
 </html>
