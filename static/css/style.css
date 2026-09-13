@@ -642,28 +642,46 @@ h1 {
 
 @media (max-width: 768px) {
 
+    .site-header .container {
+        position: relative;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+    }
+
     .mobile-menu-button {
         display: block;
         font-size: 2rem;
         cursor: pointer;
-        padding: 0.5rem 1rem;
-        z-index: 1000;
+        padding: 0.5rem;
+        z-index: 1001;
     }
 
     #main-nav {
         display: none !important;
+        position: absolute;
+        top: 100%;
+        right: 0;
+        width: 220px;
         flex-direction: column;
-        align-items: center;
-        gap: 1rem;
-        padding: 1rem 0;
-        width: 100%;
+        align-items: flex-start;
+        gap: 0;
+        padding: 1rem;
+        background-color: var(--bg-main);
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
     }
 
     #main-nav.active {
         display: flex !important;
     }
-}
 
+    #main-nav a {
+        width: 100%;
+        margin-left: 0;
+        padding: 0.6rem 0;
+    }
+}
 #contact .hero-grid {
     min-height: auto;
 }
