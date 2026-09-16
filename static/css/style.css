@@ -1,5 +1,5 @@
 /* ==========================================
-   1. RESET & VARIABLE GLOBAL
+   1. RESET & VARIABEL GLOBAL
    ========================================== */
 :root {
     --bg-main: #0b132b;
@@ -9,6 +9,7 @@
     --text-secondary: #a3b18a;
     --line: #3a506b;
     --radius: 12px;
+    --danger: #b42318;
 }
 
 * {
@@ -28,12 +29,18 @@ body {
     line-height: 1.6;
 }
 
-/* Container Umum */
-.container, .wadah-konten {
-    width: 90%;
-    max-width: 1100px;
+/* Container umum (lebar standar 88%) */
+.container {
+    width: 88%;
+    max-width: 1500px;
     margin: 0 auto;
-    padding: 2rem 0;
+}
+
+/* Container alternatif (dipakai di area experience/education, lebar 92%) */
+.wadah-konten {
+    width: 92%;
+    max-width: 1500px;
+    margin: 0 auto;
 }
 
 /* ==========================================
@@ -73,16 +80,22 @@ nav a:hover {
     color: var(--accent);
 }
 
-/* ==========================================
-   3. HERO / PROFILE / EXPERIENCE SECTION
-   ========================================== */
-.hero, .hero-section {
-    padding: 0rem 0;
-    border-bottom: 1px solid var(--line);
+.mobile-menu-button {
+    display: none;
 }
 
-section, .hero, .hero-section {
-    scroll-margin-top: 40px; /* Sesuaikan dengan tinggi header kamu */
+/* ==========================================
+   3. HERO / PROFIL / EXPERIENCE (GRID DASAR)
+   ========================================== */
+.hero,
+.hero-section {
+    padding: 0 0;
+    border-bottom: 1px solid var(--line);
+    scroll-margin-top: 40px; /* sesuaikan dengan tinggi header */
+}
+
+section {
+    scroll-margin-top: 40px;
 }
 
 .hero-grid {
@@ -100,34 +113,33 @@ section, .hero, .hero-section {
     grid-area: identity;
 }
 
-.hero-photo {
-    grid-area: photo;
-}
-
 .hero-details {
     grid-area: details;
+    grid-column: 1;
+}
+
+.hero-photo {
+    grid-area: photo;
+    position: relative;
 }
 
 .identitas-section {
     grid-column: 1 / -1;
     text-align: center;
-
 }
 
-.hero-details {
-    grid-column: 1;
-}
-
-.hero-kicker, .teks-pembuka {
+.hero-kicker,
+.teks-pembuka {
     display: flex;
     align-items: center;
     gap: 0.5rem;
     color: var(--accent);
-    font-size: 0.95rem;
+    font-size: 1rem;
     margin-bottom: 0.5rem;
 }
 
-.logo, .logo-ui {
+.logo,
+.logo-ui {
     width: 24px;
     height: 24px;
     object-fit: contain;
@@ -137,11 +149,6 @@ h1 {
     font-size: 2.8rem;
     color: var(--text-primary);
     margin-bottom: 1rem;
-}
-
-.hero-photo {
-    grid-area: photo;
-    position: relative;
 }
 
 .avatar {
@@ -157,7 +164,7 @@ h1 {
     color: #d1d5db;
 }
 
-/* Meta Info List (NPM & Program) */
+/* Meta info (NPM & Program) */
 .meta-list {
     display: flex;
     gap: 2rem;
@@ -177,22 +184,34 @@ h1 {
     font-weight: 700;
 }
 
+/* Section yang tidak perlu tinggi minimum sebesar hero utama */
+#skill,
+#education,
+#experience,
+#contact {
+    min-height: auto;
+}
+
+#skill .hero-grid,
+#education .hero-grid,
+#contact .hero-grid {
+    min-height: auto;
+}
+
+#skill {
+    padding-top: 2rem;
+    padding-bottom: 5rem;
+}
+
 /* ==========================================
    4. KEAHLIAN / SKILL SECTION (GRID & POP-UP)
    ========================================== */
-
-/* Sembunyikan Checkbox Saklar Pop-up */
-.tombol-pemicu {
-    display: none;
-}
-
 .skill-title {
-    margin: 0 0 1.5rem 0;
-    font-size: 3rem;
+    margin-bottom: 1.5rem;
+    font-size: 4rem;
     text-align: center;
 }
 
-/* Layout Grid 3 Kolom Kartu Skill */
 .grid-skill {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -204,15 +223,15 @@ h1 {
     position: relative;
 }
 
-/* Tampilan Kartu Skill */
 .skill-card {
     display: block;
     background-color: var(--card-bg);
     border-radius: var(--radius);
-    padding: 1.5rem;
+    padding: 1rem;
     text-align: center;
     cursor: pointer;
     border: 1px solid var(--line);
+    min-height: 250px;
     transition: transform 0.3s ease, border-color 0.3s ease;
 }
 
@@ -233,13 +252,14 @@ h1 {
     color: var(--text-primary);
 }
 
-/* Pop-up Modal Styling */
+/* Pop-up modal (dipicu checkbox) */
+.tombol-pemicu {
+    display: none;
+}
+
 .layar-popup {
     position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+    inset: 0;
     background-color: rgba(0, 0, 0, 0.7);
     display: none;
     align-items: center;
@@ -247,7 +267,6 @@ h1 {
     z-index: 1000;
 }
 
-/* Logika Muncul Pop-up Saat Checkbox Dicentang */
 .tombol-pemicu:checked ~ .layar-popup {
     display: flex;
 }
@@ -265,7 +284,7 @@ h1 {
 
 @keyframes popup-animation {
     from { transform: scale(0.8); opacity: 0; }
-    to { transform: scale(1); opacity: 1; }
+    to   { transform: scale(1);   opacity: 1; }
 }
 
 .tombol-tutup {
@@ -287,57 +306,23 @@ h1 {
 }
 
 /* ==========================================
-   5. CONTACT & FOOTER
+   5. EXPERIENCE & EDUCATION — LIST ITEM
    ========================================== */
-.hero-contact {
-    display: flex;
-    gap: 1rem;
-    flex-wrap: wrap;
-}
-
-.social-link {
-    width: fit-content;
-    display: inline-block;
-    padding: 0.6rem 1.2rem;
-    background-color: var(--card-bg);
-    color: var(--accent);
-    text-decoration: none;
-    border-radius: var(--radius);
-    border: 2px solid var(--line);
-    transition: background-color 0.3s ease;
-}
-
-.social-link:hover {
-    background-color: var(--accent);
-    color: var(--bg-main);
-}
-
-.site-footer {
-    text-align: center;
-    padding: 0rem 0;
-    font-size: 0.9rem;
-    color: #6c757d;
-}
-
-/* ==========================================
-   7. EDUCATION SECTION
-   ========================================== */
-
 #education .hero-grid {
     display: flex;
     flex-direction: column;
     align-items: center;
-    min-height: auto;
+    width: 100%;
     gap: 2rem;
 }
 
-#education .hero-identity {
-    text-align: center;
+#education .hero-identity,
+#education .hero-details {
     width: 100%;
+    text-align: left;
 }
 
 #education .hero-details {
-    width: 100%;
     display: flex;
     justify-content: center;
 }
@@ -349,11 +334,16 @@ h1 {
     max-width: 1000px;
 }
 
+#education .daftar-pengalaman {
+    align-items: center;
+}
+
 .item-pengalaman {
     display: flex;
     align-items: flex-start;
     gap: 1.2rem;
     width: 100%;
+    max-width: 1000px;
     padding: 2rem 1rem;
     border-bottom: 1px solid var(--line);
 }
@@ -405,299 +395,157 @@ h1 {
 .tag-skill .icon {
     font-size: 0.75rem;
 }
-/* ==========================================
-   8. Experience Section Styling
-   ========================================== */
-
-.experience-section {
-    padding: 4rem 0;
-    border-top: 1px solid var(--line);
-}
-
-.section-kicker {
-    color: var(--accent-dark);
-    font-size: 0.8rem;
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-}
-
-.experience-section h1 {
-    margin: 0.4rem 0 1.5rem;
-    font-size: 2rem;
-}
-
-.experience-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-    gap: 1rem;
-}
-
-.experience-card {
-    flex: 0 0 calc((100% - 1.5rem) / 2);
-    background-color: var(--card-bg);
-    border: 1px solid var(--line);
-    border-radius: var(--radius);
-    overflow: hidden;
-    transition: transform 0.3s ease, border-color 0.3s ease;
-}
-
-.experience-category {
-    color: var(--accent-dark);
-    font-size: 0.75rem;
-    font-weight: 700;
-    text-transform: uppercase;
-}
-
-.experience-card h2 {
-    margin: 0.5rem 0;
-    font-size: 1.25rem;
-}
-
-.experience-description,
-.empty-state {
-    color: var(--text-muted);
-}
-
-.experience-status {
-    margin-top: 1rem;
-    font-size: 0.85rem;
-    font-weight: 600;
-}
 
 /* ==========================================
-   EXPERIENCE CAROUSEL
+   6. EXPERIENCE CAROUSEL
    ========================================== */
-
-.experience-section {
-    padding: 3rem 0 4rem;
-    border-bottom: 1px solid var(--line);
-}
-
-.experience-heading {
+.experience-topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: nowrap;
+    width: 100%;
     margin-bottom: 2rem;
-    text-align: center;
+    margin:auto;
+}
+
+.experience-topbar h1 {
+    margin: 0;
+}
+
+.add-experience-button {
+    flex-shrink: 0;
+    width: auto;
+    margin-left: auto;
 }
 
 .experience-carousel {
-    display: flex;
+    display: grid;
+    grid-template-columns: 44px minmax(0, 1fr) 44px;
     align-items: center;
-    gap: 1rem;
+    column-gap: 1rem;
+    width: 100%;
 }
 
 .experience-window {
+    grid-column: 2;
     width: 100%;
+    min-width: 0;
     overflow: hidden;
 }
 
 .experience-track {
     display: flex;
-    gap: 1.5rem;
+    gap: 1.25rem;
+    width: 100%;
     transition: transform 0.5s ease;
 }
 
-.experience-card:hover {
-    transform: translateY(-5px);
-    border-color: var(--accent);
+.carousel-prev {
+    grid-column: 1;
+}
+
+.carousel-next {
+    grid-column: 3;
+}
+
+/* Kartu experience: gabungan dari 3 definisi lama jadi satu */
+.experience-card {
+    flex: 0 0 calc(50% - 0.625rem);
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    background: var(--card-bg);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    overflow: hidden;
 }
 
 .experience-image-wrapper {
     width: 100%;
-    height: 260px;
+    height: 250px;
     overflow: hidden;
 }
 
 .experience-image {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
     display: block;
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
 }
 
 .experience-content {
-    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    padding: 1rem;
     text-align: center;
 }
 
 .experience-content h2 {
-    color: var(--text-primary);
-    font-size: 1.25rem;
-    margin-bottom: 0.5rem;
+    margin: 0 0 0.5rem;
+    font-size: 1.3rem;
 }
 
-.experience-institution {
-    color: var(--accent);
-    font-size: 1rem;
-    margin-bottom: 0.8rem;
-}
-
-.experience-period {
-    color: var(--text-secondary);
-    font-size: 0.85rem;
-    margin-bottom: 1rem;
-}
-
-.experience-description {
-    color: #d1d5db;
-    line-height: 1.6;
+.experience-actions {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: auto;
+    padding-top: 1rem;
 }
 
 .carousel-button {
-    flex-shrink: 0;
-    width: 48px;
-    height: 48px;
-    border: none;
+    display: flex;
+    width: 42px;
+    height: 42px;
+    padding: 0;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--line);
     border-radius: 50%;
-    background-color: var(--card-bg);
+    background: var(--card-bg);
     color: var(--text-primary);
-    font-size: 1.5rem;
+    font-size: 1.4rem;
     cursor: pointer;
+    z-index: 20;
 }
 
 .carousel-button:hover {
-    background-color: var(--accent);
+    background: var(--accent);
     color: var(--bg-main);
 }
 
 .carousel-dots {
     display: flex;
     justify-content: center;
-    gap: 0.7rem;
-    margin-top: 2rem;
+    align-items: center;
+    gap: 0.5rem;
+    min-height: 20px;
+    margin-top: 1.25rem;
 }
 
 .carousel-dot {
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    background-color: var(--line);
+    display: block;
+    width: 9px;
+    height: 9px;
+    padding: 0;
     border: none;
+    border-radius: 50%;
+    background: var(--line);
     cursor: pointer;
 }
 
 .carousel-dot.active {
-    background-color: var(--accent);
-    transform: scale(1.2);
+    background: var(--accent);
 }
 
 /* ==========================================
-   center Education Layout
+   7. FORM (TAMBAH/EDIT EDUCATION & EXPERIENCE)
    ========================================== */
-#education .hero-grid {
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: center;
-    width: 100%;
-    min-height: auto;
-}
-
-#education .hero-identity {
-    width: 100%;
-    text-align: center;
-}
-
-#education .hero-details {
-    width: 100%;
-}
-
-#education .daftar-pengalaman {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 100%;
-}
-
-#education .item-pengalaman {
-    width: 100%;
-    max-width: 1000px;
-}
-
-/* ==========================================
-   RESPONSIVE / MOBILE LAYOUT
-   ========================================== */
-@media (max-width: 768px) {
-    .hero-grid {
-        grid-template-columns: 1fr;
-        grid-template-areas:
-            "identity"
-            "photo"
-            "details";
-        gap: 2rem;
-        min-height: auto;
-    }
-
-    .experience-card {
-        flex: 0 0 100%;
-    }
-
-    .hero-photo {
-        justify-self: start;
-    }
-
-    .avatar {
-        max-width: 100%;
-    }
-
-    .hero-identity h1 {
-        font-size: 3.2rem;
-        line-height: 1.1;
-    }
-}
-
-/* Mobile Navbar */
-.mobile-menu-button {
-    display: none;
-}
-
-@media (max-width: 768px) {
-
-    .site-header .container {
-        position: relative;
-        flex-direction: row;
-        justify-content: space-between;
-        align-items: center;
-    }
-
-    .mobile-menu-button {
-        display: block;
-        font-size: 2rem;
-        cursor: pointer;
-        padding: 0.5rem;
-        z-index: 1001;
-    }
-
-    #main-nav {
-        display: none !important;
-        position: absolute;
-        top: 100%;
-        right: 0;
-        width: 220px;
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 0;
-        padding: 1rem;
-        background-color: var(--bg-main);
-        border: 1px solid var(--line);
-        border-radius: var(--radius);
-    }
-
-    #main-nav.active {
-        display: flex !important;
-    }
-
-    #main-nav a {
-        width: 100%;
-        margin-left: 0;
-        padding: 0.6rem 0;
-    }
-}
-#contact .hero-grid {
-    min-height: auto;
-}
-
 .education-form {
     width: 100%;
-    max-width: 100%;
     margin-top: 1.5rem;
 }
 
@@ -722,28 +570,9 @@ h1 {
 }
 
 .form-error {
-    color: #b42318;
+    color: var(--danger);
     font-size: 0.85rem;
     margin-top: 0.35rem;
-}
-
-.button {
-    display: inline-block;
-    border: 0;
-    border-radius: var(--radius);
-    padding: 0.65rem 1rem;
-    background: var(--accent);
-    color: var(--bg-main);
-    cursor: pointer;
-    font: inherit;
-    font-weight: 700;
-    text-decoration: none;
-}
-
-.button-secondary {
-    margin-left: 0.5rem;
-    background: var(--card-bg);
-    color: var(--text-primary);
 }
 
 .form-success {
@@ -756,16 +585,44 @@ h1 {
     font-weight: 700;
 }
 
-/* ==========================================
-   DELETE MODAL STYLING
-   ========================================== */
+.button {
+    display: inline-block;
+    border: 0;
+    border-radius: var(--radius);
+    padding: 0.65rem 1rem;
+    background: var(--accent);
+    color: var(--bg-main);
+    font: inherit;
+    font-weight: 700;
+    text-decoration: none;
+    cursor: pointer;
+}
 
+.button-secondary {
+    margin-left: 0.5rem;
+    background: var(--card-bg);
+    color: var(--text-primary);
+}
+
+.button-danger {
+    display: inline-block;
+    border: 0;
+    border-radius: var(--radius);
+    padding: 0.65rem 1rem;
+    background: var(--danger);
+    color: white;
+    font: inherit;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+/* Modal konfirmasi hapus */
 .delete-modal {
     border: none;
     border-radius: var(--radius);
     padding: 0;
-    max-width: 420px;
     width: 90%;
+    max-width: 420px;
 }
 
 .delete-modal::backdrop {
@@ -784,23 +641,11 @@ h1 {
     margin-bottom: 1.5rem;
 }
 
-.button-danger {
-    display: inline-block;
-    border: 0;
-    border-radius: var(--radius);
-    padding: 0.65rem 1rem;
-    background: #b42318;
-    color: white;
-    cursor: pointer;
-    font: inherit;
-    font-weight: 700;
-}
-
 /* ==========================================
-    EDUCATION SEARCH STYLING
+   8. PENCARIAN (EXPERIENCE & EDUCATION)
    ========================================== */
 .education-title {
-    margin: 0 0 1.5rem 0;
+    margin-bottom: 1.5rem;
     font-size: 3rem;
     text-align: center;
 }
@@ -834,7 +679,126 @@ h1 {
     white-space: nowrap;
 }
 
+/* ==========================================
+   9. CONTACT & FOOTER
+   ========================================== */
+.hero-contact {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.social-link {
+    width: fit-content;
+    display: inline-block;
+    padding: 0.6rem 1.2rem;
+    background-color: var(--card-bg);
+    color: var(--accent);
+    text-decoration: none;
+    border-radius: var(--radius);
+    border: 2px solid var(--line);
+    transition: background-color 0.3s ease;
+}
+
+.social-link:hover {
+    background-color: var(--accent);
+    color: var(--bg-main);
+}
+
+.site-footer {
+    text-align: center;
+    padding: 0 0;
+    font-size: 0.9rem;
+    color: #6c757d;
+}
+
+/* ==========================================
+   10. RESPONSIVE / MOBILE (semua breakpoint
+       digabung di satu tempat, tanpa duplikasi)
+   ========================================== */
 @media (max-width: 768px) {
+    /* Hero */
+    .hero-grid {
+        grid-template-columns: 1fr;
+        grid-template-areas:
+            "identity"
+            "photo"
+            "details";
+        gap: 2rem;
+        min-height: auto;
+    }
+
+    .hero-photo {
+        justify-self: start;
+    }
+
+    .avatar {
+        max-width: 100%;
+    }
+
+    .hero-identity h1 {
+        font-size: 3.2rem;
+        line-height: 1.1;
+    }
+
+    /* Navbar mobile */
+    .site-header .container {
+        position: relative;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .mobile-menu-button {
+        display: block;
+        font-size: 2rem;
+        cursor: pointer;
+        padding: 0.5rem;
+        z-index: 1001;
+    }
+
+    #main-nav {
+        display: none;
+        position: absolute;
+        top: 100%;
+        right: 0;
+        width: 220px;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0;
+        padding: 1rem;
+        background-color: var(--bg-main);
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+    }
+
+    #main-nav.active {
+        display: flex;
+    }
+
+    #main-nav a {
+        width: 100%;
+        margin-left: 0;
+        padding: 0.6rem 0;
+    }
+
+    /* Experience carousel */
+    .experience-card {
+        flex: 0 0 100%;
+    }
+
+    .experience-image-wrapper,
+    .experience-image {
+        height: 180px;
+    }
+
+    .carousel-button {
+        flex: 0 0 36px;
+        width: 36px;
+        height: 36px;
+        font-size: 1.1rem;
+    }
+
+    /* Search & title */
     .education-title {
         font-size: 2.2rem;
     }
@@ -849,7 +813,49 @@ h1 {
     }
 
     .education-search input {
-        flex: 1;
         width: auto;
+        flex: 1;
     }
+}
+
+/* =========================================================
+   EXPERIENCE HEADING
+   ========================================================= */
+
+.experience-heading {
+    width: 100%;
+    margin-bottom: 2rem;
+}
+
+.experience-kicker {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+
+    width: 100%;
+
+    color: var(--accent);
+    font-size: 1rem;
+
+    margin-bottom: 0.5rem;
+}
+
+.experience-title-row {
+    position: relative;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    width: 100%;
+}
+
+.experience-title-row h1 {
+    margin: 0;
+    text-align: center;
+}
+
+.experience-title-row .add-experience-button {
+    position: absolute;
+    right: 0;
 }

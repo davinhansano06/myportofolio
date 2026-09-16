@@ -221,7 +221,14 @@
                                 </div>
 
 
-                                <!-- Delete Button -->
+                                <!-- Delete & Update Button -->
+                                <a
+                                    href="{% url 'main:update_education' education.id %}"
+                                    class="button"
+                                >
+                                    Update
+                                </a>
+
                                 <button
                                     type="button"
                                     class="button button-secondary"
@@ -230,7 +237,7 @@
                                     Delete
                                 </button>
 
-                                {% include "components/education_delete_modal.html" %}
+                                {% include "components/education_delete_modal.html" %}                            
                             </div>
 
                             {% empty %}
@@ -253,70 +260,105 @@
         <section class="experience-section" id="experience">
             <div class="container">
                 <div class="experience-heading">
-                    <p class="hero-kicker">
+
+                    <p class="teks-pembuka experience-kicker">
                         <img
-                            class="logo"
+                            class="logo-ui"
                             src="{% static 'img/logoui.png' %}"
                             alt="Logo Universitas Indonesia"
                         >
-                        <span>
-                            Information System &middot; Universitas Indonesia
-                        </span>
+                        <span>Information System &middot; Universitas Indonesia</span>
                     </p>
-                    <h1>My Experience!</h1>
-                </div>
+
+                    <div class="experience-title-row">
+
+                        <h1>My Experience!</h1>
+
+                        <a
+                            href="{% url 'main:create_experience' %}"
+                            class="button add-experience-button"
+                        >
+                            + Add Experience
+                        </a>
+
+                    </div>
+
+                </div>                
                 <div class="experience-carousel">
                     <button
+                        type="button"
                         class="carousel-button carousel-prev"
-                        type="button">
+                        aria-label="Previous experience"
+                    >
                         &#10094;
                     </button>
                     <div class="experience-window">
                         <div class="experience-track">
                             {% for experience in experience_list %}
                                 <article class="experience-card">
-                                     <div class="experience-image-wrapper">
+                                    <div class="experience-image-wrapper">
                                         <img
                                             src="{% static experience.image %}"
                                             alt="{{ experience.title }}"
                                             class="experience-image"
                                         >
                                     </div>
+
                                     <div class="experience-content">
+
                                         <h2>
                                             {{ experience.title }}
                                         </h2>
+
                                         <p class="experience-institution">
                                             {{ experience.institution }}
                                         </p>
+
                                         <p class="experience-period">
                                             &#128197; {{ experience.period }}
                                         </p>
+
                                         <p class="experience-description">
                                             {{ experience.description }}
                                         </p>
+
+
+                                        <div class="experience-actions">
+                                            <a
+                                                href="{% url 'main:update_experience' experience.id %}"
+                                                class="button button-update"
+                                            >
+                                                Update
+                                            </a>
+                                            <button
+                                                type="button"
+                                                class="button button-delete"
+                                                onclick="document.getElementById('delete-modal-{{ experience.id }}').showModal()"
+                                            >
+                                                Delete
+                                            </button>
+                                        </div>
                                     </div>
+
+                                    {% include "components/experience_delete_modal.html" %}
                                 </article>
-
                             {% empty %}
+                                <p>Belum ada data experience.</p>
 
-                                <p class="empty-state">
-                                    Belum ada pengalaman yang ditambahkan.
-                                </p>
                             {% endfor %}
                         </div>
                     </div>
-
                     <button
+                        type="button"
                         class="carousel-button carousel-next"
-                        type="button">
+                        aria-label="Next experience"
+                    >
                         &#10095;
                     </button>
                 </div>
                 <div class="carousel-dots"></div>
             </div>
         </section>
-
         <!-- Section for Contact -->
         <section class="hero" id="contact">
             <div class="container hero-grid">
@@ -333,15 +375,8 @@
             </div>
         </section>
     </main>
-    {% endblock content %}
+{% endblock content %}
 
-    <!-- Footer Section -->
-    <footer class="site-footer">
-        <div class="container">
-            <p>&copy; 2026 {{ name }}. Fakultas Ilmu Komputer, Universitas Indonesia.</p>
-        </div>
-    </footer>
-<script src="{% static 'js/navbar.js' %}"></script>
+{% block extra_scripts %}
 <script src="{% static 'js/experience.js' %}"></script>
-</body>
-</html>
+{% endblock extra_scripts %}

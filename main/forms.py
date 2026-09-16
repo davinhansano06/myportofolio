@@ -1,7 +1,57 @@
-from django.forms import ModelForm, TextInput
-from main.models import Education
+from django.forms import ModelForm, TextInput, CheckboxInput
+from main.models import Education, Experience
 
+class ExperienceForm(ModelForm):
+    class Meta:
+        model = Experience
+        fields = [
+            "title",
+            "institution",
+            "period",
+            "description",
+            "image",
+        ]
 
+        labels = {
+            "title": "Judul",
+            "institution": "Institusi",
+            "period": "Periode",
+            "description": "Deskripsi",
+            "image": "Gambar",
+        }
+
+        widgets = {
+            "title": TextInput(
+                attrs={
+                    "placeholder": "Staff Sponsorship",
+                    "maxlength": 255,
+                }
+            ),
+            "institution": TextInput(
+                attrs={
+                    "placeholder": "Universitas Indonesia",
+                    "maxlength": 255,
+                }
+            ),
+            "period": TextInput(
+                attrs={
+                    "placeholder": "2025 - Present",
+                    "maxlength": 100,
+                }
+            ),
+            "description": TextInput(
+                attrs={
+                    "placeholder": "Deskripsi pengalaman...",
+                }
+            ),
+            "image": TextInput(
+                attrs={
+                    "placeholder": "img/experience.jpg",
+                    "maxlength": 255,
+                }
+            ),
+        }
+            
 class EducationForm(ModelForm):
     class Meta:
         model = Education
@@ -54,6 +104,7 @@ class EducationForm(ModelForm):
                     "maxlength": 255,
                 }
             ),
+            "is_current": CheckboxInput(),
             "logo": TextInput(
                 attrs={
                     "placeholder": "img/uiputih.png",

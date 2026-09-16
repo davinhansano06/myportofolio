@@ -15,7 +15,8 @@ class Education(models.Model):
     degree = models.CharField(max_length=255)
     period = models.CharField(max_length=100)
     location = models.CharField(max_length=255)
-    skills = models.CharField(max_length=255)
+    skills = models.TextField()
+    is_current = models.BooleanField(default=False)
     logo = models.CharField(max_length=255)
 
     def __str__(self):
