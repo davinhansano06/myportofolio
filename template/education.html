@@ -15,7 +15,7 @@
         rel="stylesheet"
     >
 
-    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
 
 <body>
@@ -23,10 +23,14 @@
     <!-- Header Section -->
     <header class="site-header">
         <div class="container">
-            <a href="{% url 'main:show_main' %}" class="brand">{{ name }}</a>
+            <a href="{% url 'main:show_main' %}" class="brand">
+                {{ name }}
+            </a>
+
             <div class="mobile-menu-button" id="mobile-menu-button">
                 ☰
             </div>
+
             <nav id="main-nav">
                 <a href="{% url 'main:show_main' %}">Profile</a>
                 <a href="{% url 'main:show_main' %}#skill">Skill</a>
@@ -34,67 +38,108 @@
                 <a href="{% url 'main:show_main' %}#experience">Experience</a>
                 <a href="{% url 'main:show_main' %}#contact">Contact</a>
             </nav>
-
         </div>
     </header>
 
 
     <!-- Education Section -->
     <main>
+        {% if messages %}
+            {% for message in messages %}
+                <p class="form-success">
+                    {{ message }}
+                </p>
+            {% endfor %}
+        {% endif %}
+
         <section class="hero" id="education">
-            <div class="container hero-grid">
-                <div class="hero-identity">
-                    <p class="hero-kicker">
-                        <img
-                            class="logo"
-                            src="{% static 'img/logoui.png' %}"
-                            alt="Logo Universitas Indonesia"
+            <div class="container">
+                <h1 class="education-title">My Education!</h1>
+                <div class="education-topbar">
+                    <a
+                        href="{% url 'main:create_education' %}"
+                        class="button"
+                    >
+                        Add Education
+                    </a>
+
+                    <form method="GET" class="education-search">
+                        <input
+                            type="text"
+                            name="institution"
+                            placeholder="Cari institusi..."
+                            value="{{ institution_query }}"
                         >
-                        <span>
-                            Information System &middot; Universitas Indonesia
-                        </span>
-                    </p>
-                    <h1>My Education!</h1>
+
+                        <button type="submit" class="button">
+                            Cari
+                        </button>
+                    </form>
                 </div>
 
+              <!-- Education Content -->
+                <div class="hero-grid">
+                    <div class="hero-details">
+                        <div class="daftar-pengalaman">
+                            {% for education in education_list %}
+                            <div class="item-pengalaman">
+                                <img
+                                    src="{% static education.logo %}"
+                                    alt="Logo {{ education.institution }}"
+                                    class="logo-sekolah"
+                                >
+                                <div class="konten-pengalaman">
+                                    <h3>
+                                        {{ education.institution }}
+                                    </h3>
 
-                <div class="hero-details">
-                    <div class="daftar-pengalaman">
-                        {% for education in education_list %}
-                        <div class="item-pengalaman">
-                            <img
-                                src="{% static education.logo %}"
-                                alt="Logo {{ education.institution }}"
-                                class="logo-sekolah"
-                            >
-                            <div class="konten-pengalaman">
-                                <h3>
-                                    {{ education.institution }}
-                                </h3>
-                                <p class="sub-judul">
-                                    {{ education.degree }}
-                                </p>
-                                <p class="periode">
-                                    {{ education.period }}
-                                </p>
-                                <p class="lokasi">
-                                    {{ education.location }}
-                                </p>
-                                <div class="tag-skill">
-                                    <span>
-                                        <i class="icon">&#9830;</i>
-                                        {{ education.skills }}
-                                    </span>
+                                    <p class="sub-judul">
+                                        {{ education.degree }}
+                                    </p>
+
+                                    <p class="periode">
+                                        {{ education.period }}
+                                    </p>
+
+                                    <p class="lokasi">
+                                        {{ education.location }}
+                                    </p>
+
+                                    <div class="tag-skill">
+                                        <span>
+                                            <i class="icon">&#9830;</i>
+                                            {{ education.skills }}
+                                        </span>
+                                    </div>
+
                                 </div>
 
+
+                                <!-- Delete Button -->
+                                <button
+                                    type="button"
+                                    class="button button-secondary"
+                                    onclick="document.getElementById('delete-modal-{{ education.id }}').showModal()"
+                                >
+                                    Delete
+                                </button>
+
+                                {% include "components/education_delete_modal.html" %}
                             </div>
 
+                            {% empty %}
+                                {% if institution_query %}
+                                    <p>
+                                        Tidak ada pendidikan dengan institusi
+                                        "{{ institution_query }}".
+                                    </p>
+                                {% else %}
+                                    <p>
+                                        Belum ada data pendidikan.
+                                    </p>
+                                {% endif %}
+                            {% endfor %}
                         </div>
-                        {% empty %}
-                        <p>
-                            Belum ada data pendidikan.
-                        </p>
-                        {% endfor %}
                     </div>
                 </div>
             </div>
@@ -111,7 +156,10 @@
             </p>
         </div>
     </footer>
-<script src="{% static 'js/experience.js' %}"></script>
-<script src="{% static 'js/navbar.js' %}"></script>
+
+
+    <script src="{% static 'js/experience.js' %}"></script>
+    <script src="{% static 'js/navbar.js' %}"></script>
+
 </body>
 </html>

@@ -32,6 +32,7 @@ SECRET_KEY = 'django-insecure-$it_6wmgyaqnb8_11e7vy4wh-a%#xu)d*n7_i*#pyw&he$-ryr
 DEBUG = True
 
 ALLOWED_HOSTS = ["localhost", "127.0.0.1", "davin-tristan-myportofolio.pws.cs.ui.ac.id", "*.pws.cs.ui.ac.id"]
+CSRF_TRUSTED_ORIGINS = ["https://davin-tristan-myportofolio.pws.cs.ui.ac.id"]
 
 # Application definition
 
@@ -151,3 +152,4 @@ MAILERS = {
         'BACKEND': 'django.core.mail.backends.console.EmailBackend',
     },
 }
+

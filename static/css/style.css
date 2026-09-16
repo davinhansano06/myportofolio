@@ -110,6 +110,8 @@ section, .hero, .hero-section {
 
 .identitas-section {
     grid-column: 1 / -1;
+    text-align: center;
+
 }
 
 .hero-details {
@@ -182,6 +184,12 @@ h1 {
 /* Sembunyikan Checkbox Saklar Pop-up */
 .tombol-pemicu {
     display: none;
+}
+
+.skill-title {
+    margin: 0 0 1.5rem 0;
+    font-size: 3rem;
+    text-align: center;
 }
 
 /* Layout Grid 3 Kolom Kartu Skill */
@@ -468,6 +476,7 @@ h1 {
 
 .experience-heading {
     margin-bottom: 2rem;
+    text-align: center;
 }
 
 .experience-carousel {
@@ -684,4 +693,163 @@ h1 {
 }
 #contact .hero-grid {
     min-height: auto;
+}
+
+.education-form {
+    width: 100%;
+    max-width: 100%;
+    margin-top: 1.5rem;
+}
+
+.form-group {
+    margin-bottom: 0.5rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.4rem;
+    font-weight: 700;
+}
+
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0.7rem;
+    border: 1px solid var(--accent);
+    border-radius: var(--radius);
+    font: inherit;
+}
+
+.form-error {
+    color: #b42318;
+    font-size: 0.85rem;
+    margin-top: 0.35rem;
+}
+
+.button {
+    display: inline-block;
+    border: 0;
+    border-radius: var(--radius);
+    padding: 0.65rem 1rem;
+    background: var(--accent);
+    color: var(--bg-main);
+    cursor: pointer;
+    font: inherit;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.button-secondary {
+    margin-left: 0.5rem;
+    background: var(--card-bg);
+    color: var(--text-primary);
+}
+
+.form-success {
+    width: 90%;
+    max-width: 1100px;
+    margin: 1rem auto;
+    padding: 0.75rem 1rem;
+    border-radius: var(--radius);
+    background: var(--card-bg);
+    font-weight: 700;
+}
+
+/* ==========================================
+   DELETE MODAL STYLING
+   ========================================== */
+
+.delete-modal {
+    border: none;
+    border-radius: var(--radius);
+    padding: 0;
+    max-width: 420px;
+    width: 90%;
+}
+
+.delete-modal::backdrop {
+    background: rgba(0, 0, 0, 0.5);
+}
+
+.delete-modal-content {
+    padding: 2rem;
+}
+
+.delete-modal-content h2 {
+    margin-top: 0;
+}
+
+.delete-modal-content p {
+    margin-bottom: 1.5rem;
+}
+
+.button-danger {
+    display: inline-block;
+    border: 0;
+    border-radius: var(--radius);
+    padding: 0.65rem 1rem;
+    background: #b42318;
+    color: white;
+    cursor: pointer;
+    font: inherit;
+    font-weight: 700;
+}
+
+/* ==========================================
+    EDUCATION SEARCH STYLING
+   ========================================== */
+.education-title {
+    margin: 0 0 1.5rem 0;
+    font-size: 3rem;
+    text-align: center;
+}
+
+.education-topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.education-search {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    width: 320px;
+}
+
+.education-search input {
+    width: 220px;
+    padding: 0.6rem 0.8rem;
+    border: 1px solid var(--accent);
+    border-radius: var(--radius);
+    font: inherit;
+    box-sizing: border-box;
+}
+
+.education-search button {
+    padding: 0.6rem 0.9rem;
+    white-space: nowrap;
+}
+
+@media (max-width: 768px) {
+    .education-title {
+        font-size: 2.2rem;
+    }
+
+    .education-topbar {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .education-search {
+        width: 100%;
+    }
+
+    .education-search input {
+        flex: 1;
+        width: auto;
+    }
 }

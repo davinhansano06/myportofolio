@@ -1,3 +1,4 @@
+{% extends 'base.html' %}
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
@@ -27,9 +28,17 @@
             </nav>
         </div>
     </header>
-
+    {% block content %}
     <!-- Main Content Section -->
     <main>
+        {% if messages %}
+            {% for message in messages %}
+                <p class="form-success">
+                    {{ message }}
+                </p>
+            {% endfor %}
+        {% endif %}
+
         <!-- Section for Profile -->
         <section class="hero" id="profile">
             <div class="container hero-grid">
@@ -150,52 +159,95 @@
 
         <!-- Section for Education -->
         <section class="hero" id="education">
-            <div class="container hero-grid">
+            <div class="container">
+                <h1 class="education-title">My Education!</h1>
+                <div class="education-topbar">
+                    <a
+                        href="{% url 'main:create_education' %}"
+                        class="button"
+                    >
+                        Add Education
+                    </a>
 
-                <div class="hero-identity">
-                    <h1>My Education!</h1>
+                    <form method="GET" class="education-search">
+                        <input
+                            type="text"
+                            name="institution"
+                            placeholder="Cari institusi..."
+                            value="{{ institution_query }}"
+                        >
+
+                        <button type="submit" class="button">
+                            Cari
+                        </button>
+                    </form>
                 </div>
 
-                <div class="hero-details">
-                    <div class="daftar-pengalaman">
+              <!-- Education Content -->
+                <div class="hero-grid">
+                    <div class="hero-details">
+                        <div class="daftar-pengalaman">
+                            {% for education in education_list %}
+                            <div class="item-pengalaman">
+                                <img
+                                    src="{% static education.logo %}"
+                                    alt="Logo {{ education.institution }}"
+                                    class="logo-sekolah"
+                                >
+                                <div class="konten-pengalaman">
+                                    <h3>
+                                        {{ education.institution }}
+                                    </h3>
 
-                        {% for education in education_list %}
-                        <div class="item-pengalaman">
+                                    <p class="sub-judul">
+                                        {{ education.degree }}
+                                    </p>
 
-                            <img src="{% static education.logo %}"
-                                alt="Logo {{ education.institution }}"
-                                class="logo-sekolah">
+                                    <p class="periode">
+                                        {{ education.period }}
+                                    </p>
 
-                            <div class="konten-pengalaman">
-                                <h3>{{ education.institution }}</h3>
+                                    <p class="lokasi">
+                                        {{ education.location }}
+                                    </p>
 
-                                <p class="sub-judul">{{ education.degree }}
-                                </p>
+                                    <div class="tag-skill">
+                                        <span>
+                                            <i class="icon">&#9830;</i>
+                                            {{ education.skills }}
+                                        </span>
+                                    </div>
 
-                                <p class="periode">
-                                    {{ education.period }}
-                                </p>
-
-                                <p class="lokasi">
-                                    {{ education.location }}
-                                </p>
-
-                                <div class="tag-skill">
-                                    <span>
-                                        <i class="icon">&#9830;</i>
-                                        {{ education.skills }}
-                                    </span>
                                 </div>
+
+
+                                <!-- Delete Button -->
+                                <button
+                                    type="button"
+                                    class="button button-secondary"
+                                    onclick="document.getElementById('delete-modal-{{ education.id }}').showModal()"
+                                >
+                                    Delete
+                                </button>
+
+                                {% include "components/education_delete_modal.html" %}
                             </div>
 
+                            {% empty %}
+                                {% if institution_query %}
+                                    <p>
+                                        Tidak ada pendidikan dengan institusi
+                                        "{{ institution_query }}".
+                                    </p>
+                                {% else %}
+                                    <p>
+                                        Belum ada data pendidikan.
+                                    </p>
+                                {% endif %}
+                            {% endfor %}
                         </div>
-                        {% empty %}
-                        <p>Belum ada data pendidikan.</p>
-                        {% endfor %}
-
                     </div>
                 </div>
-
             </div>
         </section>
         <section class="experience-section" id="experience">
@@ -281,7 +333,8 @@
             </div>
         </section>
     </main>
-    
+    {% endblock content %}
+
     <!-- Footer Section -->
     <footer class="site-footer">
         <div class="container">
