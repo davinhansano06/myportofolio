@@ -222,20 +222,10 @@
 
 
                                 <!-- Delete & Update Button -->
-                                <a
-                                    href="{% url 'main:update_education' education.id %}"
-                                    class="button"
-                                >
-                                    Update
-                                </a>
-
-                                <button
-                                    type="button"
-                                    class="button button-secondary"
-                                    onclick="document.getElementById('delete-modal-{{ education.id }}').showModal()"
-                                >
-                                    Delete
-                                </button>
+                                <div class="education-actions">
+                                    <a href="{% url 'main:update_education' education.id %}" class="button">Update</a>
+                                    <button type="button" class="button button-secondary" onclick="document.getElementById('delete-modal-{{ education.id }}').showModal()">Delete</button>
+                                </div>
 
                                 {% include "components/education_delete_modal.html" %}                            
                             </div>
