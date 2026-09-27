@@ -72,6 +72,10 @@
                             <dt>Program</dt>
                             <dd>{{ study_program }}</dd>
                         </div>
+                        <div class="meta-row">
+                            <dt>Sesi Terakhir Login</dt>
+                            <dd>{{ last_login }}</dd>
+                        </div>
                     </dl>
                 </div>
             </div>
@@ -162,12 +166,14 @@
             <div class="container">
                 <h1 class="education-title">My Education!</h1>
                 <div class="education-topbar">
+                    {% if user.is_authenticated %}
                     <a
                         href="{% url 'main:create_education' %}"
                         class="button"
                     >
-                        Add Education
+                        + Add Education
                     </a>
+                    {% endif %}
 
                     <form method="GET" class="education-search">
                         <input
@@ -222,10 +228,12 @@
 
 
                                 <!-- Delete & Update Button -->
+                                 {% if user.is_authenticated %}
                                 <div class="education-actions">
                                     <a href="{% url 'main:update_education' education.id %}" class="button">Update</a>
                                     <button type="button" class="button button-secondary" onclick="document.getElementById('delete-modal-{{ education.id }}').showModal()">Delete</button>
                                 </div>
+                                {% endif %}
 
                                 {% include "components/education_delete_modal.html" %}                            
                             </div>
@@ -263,13 +271,15 @@
                     <div class="experience-title-row">
 
                         <h1>My Experience!</h1>
-
+                        
+                        {% if user.is_authenticated %}
                         <a
                             href="{% url 'main:create_experience' %}"
                             class="button add-experience-button"
                         >
                             + Add Experience
                         </a>
+                        {% endif %}
 
                     </div>
 
@@ -312,7 +322,7 @@
                                             {{ experience.description }}
                                         </p>
 
-
+                                        {% if user.is_authenticated %}
                                         <div class="experience-actions">
                                             <a
                                                 href="{% url 'main:update_experience' experience.id %}"
@@ -328,6 +338,7 @@
                                                 Delete
                                             </button>
                                         </div>
+                                        {% endif %}
                                     </div>
 
                                     {% include "components/experience_delete_modal.html" %}
