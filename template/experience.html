@@ -114,6 +114,7 @@
                                             >
                                                 Update
                                             </a>
+                                            {% if user.is_superuser %}
                                             <button
                                                 type="button"
                                                 class="button button-delete"
@@ -121,8 +122,21 @@
                                             >
                                                 Delete
                                             </button>
+                                            {% endif %}
+                                            <form method="POST" action="{% url 'main:toggle_star' 'experience' experience.id %}">
+                                                {% csrf_token %}
+                                                <button type="submit" class="star-button">
+                                                    {% if user in experience.starred_by.all %}
+                                                        ★ 
+                                                    {% else %}
+                                                        ☆ 
+                                                    {% endif %}
+                                                </button>
+                                            </form>
                                         </div>
                                         {% endif %}
+                                        <span>{{ experience.starred_by.count }} Star</span>
+
                                     </div>
 
                                     {% include "components/experience_delete_modal.html" %}
