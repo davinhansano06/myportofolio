@@ -1,5 +1,4 @@
-document.addEventListener("DOMContentLoaded", function () {
-
+function initializeExperienceCarousel() {
     const carousel = document.querySelector(".experience-carousel");
 
     if (!carousel) {
@@ -22,11 +21,7 @@ document.addEventListener("DOMContentLoaded", function () {
         return;
     }
 
-    // lanjutkan kode JS kamu yang sekarang...
-
-
     let currentIndex = 0;
-
 
     function getVisibleCards() {
         if (window.innerWidth <= 768) {
@@ -36,7 +31,6 @@ document.addEventListener("DOMContentLoaded", function () {
         return 2;
     }
 
-
     function getMaxIndex() {
         return Math.max(
             0,
@@ -44,9 +38,7 @@ document.addEventListener("DOMContentLoaded", function () {
         );
     }
 
-
     function updateCarousel() {
-
         const cardWidth = cards[0].getBoundingClientRect().width;
 
         const gap = parseFloat(
@@ -61,15 +53,12 @@ document.addEventListener("DOMContentLoaded", function () {
         updateDots();
     }
 
-
     function createDots() {
-
         dotsContainer.innerHTML = "";
 
         const maxIndex = getMaxIndex();
 
         for (let i = 0; i <= maxIndex; i++) {
-
             const dot = document.createElement("button");
 
             dot.type = "button";
@@ -81,11 +70,8 @@ document.addEventListener("DOMContentLoaded", function () {
             );
 
             dot.addEventListener("click", function () {
-
                 currentIndex = i;
-
                 updateCarousel();
-
             });
 
             dotsContainer.appendChild(dot);
@@ -94,72 +80,42 @@ document.addEventListener("DOMContentLoaded", function () {
         updateDots();
     }
 
-
     function updateDots() {
-
         const dots =
             document.querySelectorAll(".carousel-dot");
 
         dots.forEach(function (dot, index) {
-
             dot.classList.toggle(
                 "active",
                 index === currentIndex
             );
-
         });
     }
 
-
-    previousButton.addEventListener(
-        "click",
-        function () {
-
-            if (currentIndex > 0) {
-
-                currentIndex--;
-
-                updateCarousel();
-
-            }
-
-        }
-    );
-
-
-    nextButton.addEventListener(
-        "click",
-        function () {
-
-            if (currentIndex < getMaxIndex()) {
-
-                currentIndex++;
-
-                updateCarousel();
-
-            }
-
-        }
-    );
-
-
-    window.addEventListener(
-        "resize",
-        function () {
-
-            currentIndex = Math.min(
-                currentIndex,
-                getMaxIndex()
-            );
-
-            createDots();
+    previousButton.addEventListener("click", function () {
+        if (currentIndex > 0) {
+            currentIndex--;
             updateCarousel();
-
         }
-    );
+    });
 
+    nextButton.addEventListener("click", function () {
+        if (currentIndex < getMaxIndex()) {
+            currentIndex++;
+            updateCarousel();
+        }
+    });
+
+    window.addEventListener("resize", function () {
+        currentIndex = Math.min(
+            currentIndex,
+            getMaxIndex()
+        );
+
+        createDots();
+        updateCarousel();
+    });
 
     createDots();
     updateCarousel();
-
-});
+}

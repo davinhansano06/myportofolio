@@ -67,7 +67,18 @@
 
                     </div>
 
-                </div>                
+                </div> 
+                <div id="experience-loading" class="empty-state">
+                    <p>Memuat experience...</p>
+                </div>
+
+                <div id="experience-error" class="empty-state hide">
+                    <p>Gagal memuat experience.</p>
+                </div>
+
+                <div id="experience-empty" class="empty-state hide">
+                    <p>Belum ada data experience.</p>
+                </div>               
                 <div class="experience-carousel">
                     <button
                         type="button"
@@ -77,74 +88,7 @@
                         &#10094;
                     </button>
                     <div class="experience-window">
-                        <div class="experience-track">
-                            {% for experience in experience_list %}
-                                <article class="experience-card">
-                                    <div class="experience-image-wrapper">
-                                        <img
-                                            src="{% static experience.image %}"
-                                            alt="{{ experience.title }}"
-                                            class="experience-image"
-                                        >
-                                    </div>
-
-                                    <div class="experience-content">
-
-                                        <h2>
-                                            {{ experience.title }}
-                                        </h2>
-
-                                        <p class="experience-institution">
-                                            {{ experience.institution }}
-                                        </p>
-
-                                        <p class="experience-period">
-                                            &#128197; {{ experience.period }}
-                                        </p>
-
-                                        <p class="experience-description">
-                                            {{ experience.description }}
-                                        </p>
-
-                                        {% if user.is_authenticated %}
-                                        <div class="experience-actions">
-                                            <a
-                                                href="{% url 'main:update_experience' experience.id %}"
-                                                class="button button-update"
-                                            >
-                                                Update
-                                            </a>
-                                            {% if user.is_superuser %}
-                                            <button
-                                                type="button"
-                                                class="button button-delete"
-                                                onclick="document.getElementById('delete-modal-{{ experience.id }}').showModal()"
-                                            >
-                                                Delete
-                                            </button>
-                                            {% endif %}
-                                            <form method="POST" action="{% url 'main:toggle_star' 'experience' experience.id %}">
-                                                {% csrf_token %}
-                                                <button type="submit" class="star-button">
-                                                    {% if user in experience.starred_by.all %}
-                                                        ★ 
-                                                    {% else %}
-                                                        ☆ 
-                                                    {% endif %}
-                                                </button>
-                                            </form>
-                                        </div>
-                                        {% endif %}
-                                        <span>{{ experience.starred_by.count }} Star</span>
-
-                                    </div>
-
-                                    {% include "components/experience_delete_modal.html" %}
-                                </article>
-                            {% empty %}
-                                <p>Belum ada data experience.</p>
-
-                            {% endfor %}
+                        <div class="experience-track" id="experience-track">
                         </div>
                     </div>
                     <button
@@ -174,9 +118,96 @@
 
     </footer>
 
-
     <script src="{% static 'js/navbar.js' %}"></script>
-    <script src="{% static 'js/experience.js' %}"></script>
+    <script>
+        const EXPERIENCE_ENDPOINT = "{% url 'main:get_experience_json' %}";
 
+        const experienceTrack =
+            document.getElementById("experience-track");
+
+        const loadingState =
+            document.getElementById("experience-loading");
+
+        const errorState =
+            document.getElementById("experience-error");
+
+        const emptyState =
+            document.getElementById("experience-empty");
+
+        async function fetchExperiences() {
+            try {
+                const response = await fetch(EXPERIENCE_ENDPOINT, {
+                    headers: {
+                        "Accept": "application/json"
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error("Failed to fetch experience");
+                }
+
+                const data = await response.json();
+
+                loadingState.classList.add("hide");
+
+                if (data.length === 0) {
+                    emptyState.classList.remove("hide");
+                    return;
+                }
+
+                experienceTrack.innerHTML = "";
+
+                data.forEach(function (item) {
+                    const experience = item.fields;
+
+                    const card = document.createElement("article");
+                    card.className = "experience-card";
+
+                    card.innerHTML = `
+                        <div class="experience-image-wrapper">
+                            <img
+                                src="{% static '' %}${experience.image}"
+                                alt="${experience.title}"
+                                class="experience-image"
+                            >
+                        </div>
+
+                        <div class="experience-content">
+                            <h2>${experience.title}</h2>
+
+                            <p class="experience-institution">
+                                ${experience.institution}
+                            </p>
+
+                            <p class="experience-period">
+                                &#128197; ${experience.period}
+                            </p>
+
+                            <p class="experience-description">
+                                ${experience.description}
+                            </p>
+
+                            <span>
+                                ${experience.star_count} Star
+                            </span>
+                        </div>
+                    `;
+
+                    experienceTrack.appendChild(card);
+                });
+                initializeExperienceCarousel();
+
+            } catch (error) {
+                console.error("Error loading experiences:", error);
+
+                loadingState.classList.add("hide");
+                errorState.classList.remove("hide");
+            }
+        }
+
+        fetchExperiences();
+    </script>
+
+    <script src="{% static 'js/experience.js' %}"></script>
 </body>
 </html>

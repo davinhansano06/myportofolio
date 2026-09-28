@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.core import serializers
-from django.http import HttpResponse
+from django.http import HttpResponse,JsonResponse
 from main.models import Experience, Education
 from main.forms import EducationForm, ExperienceForm
 from django.contrib.auth.decorators import login_required
@@ -26,6 +26,7 @@ def show_main(request):
             "Mahasiswa Ilmu Komputer Universitas Indonesia yang tertarik "
             "pada pengembangan perangkat lunak dan pendidikan."
         ),
+        "last_login": last_login,
         "education_list": Education.objects.all(),
         "experience_list": Experience.objects.all(),
     }
@@ -80,38 +81,44 @@ def logout_user(request):
     return response
 
 def show_experience(request):
-    json_response = get_experience_json(request)
-
-    experience_list = list(
-        serializers.deserialize(
-            "json",
-            json_response.content.decode("utf-8")
-        )
-    )
-
-    experience_list = [
-        item.object for item in experience_list
-    ]
-
     context = {
         "name": "Davin Tristan Hansano",
-        "experience_list": experience_list,
     }
-
     return render(request, "experience.html", context)
 
 def get_experience_json(request):
-    experience = Experience.objects.all()
+    experience_list = Experience.objects.prefetch_related("starred_by").all()
 
-    experience_json = serializers.serialize(
-        "json",
-        experience
-    )
+    data = []
 
-    return HttpResponse(
-        experience_json,
-        content_type="application/json"
-    )
+    for experience in experience_list:
+        starred_users = experience.starred_by.all()
+
+        is_starred = (
+            request.user in starred_users
+            if request.user.is_authenticated
+            else False
+        )
+
+        starred_by_names = ", ".join(
+            [user.username for user in starred_users]
+        )
+
+        data.append({
+            "pk": str(experience.id),
+            "fields": {
+                "title": experience.title,
+                "institution": experience.institution,
+                "period": experience.period,
+                "description": experience.description,
+                "image": experience.image,
+                "star_count": starred_users.count(),
+                "is_starred": is_starred,
+                "starred_by_names": starred_by_names,
+            }
+        })
+
+    return JsonResponse(data, safe=False)
 
 def show_education(request):
     json_response = get_education_json(request)
