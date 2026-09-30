@@ -64,3 +64,22 @@ Saya menggunakan AI sebagai pendamping selama mengerjakan tugas ini, terutama un
    Serialization diperlukan karena data yang diperoleh dari Django masih berupa object atau QuerySet, bukan data JSON yang bisa langsung dikirim melalui HTTP. Dengan serialization, data tersebut diubah menjadi format JSON sehingga dapat dikirim dan dibaca oleh client.
 
    Pada halaman Education, JSON yang sudah dibuat tersebut juga saya deserialize kembali menjadi object Django sebelum ditampilkan di halaman.
+
+
+### Tugas 5
+
+1. **Apa itu debouncing dan mengapa teknik ini penting diterapkan pada fitur pencarian yang menggunakan AJAX?**
+
+   Debouncing adalah teknik untuk menunda eksekusi suatu fungsi sampai pengguna berhenti melakukan input selama waktu tertentu. Pada fitur pencarian menggunakan AJAX, debouncing penting agar request ke server tidak dikirim pada setiap karakter yang diketik pengguna. Dengan memberikan jeda, misalnya 300 milidetik, request hanya dikirim setelah pengguna berhenti mengetik. Hal ini dapat mengurangi jumlah request ke server dan membuat penggunaan resource menjadi lebih efisien.
+
+2. **Apa fungsi penggunaan `await` ketika menggunakan `fetch()`? Apa yang akan terjadi jika tidak menggunakan `await`?**
+
+   `await` digunakan untuk menunggu hasil dari operasi asynchronous seperti `fetch()` sebelum kode berikutnya dijalankan. Dengan menggunakan `await`, kita dapat memperoleh objek `Response` dari request terlebih dahulu dan kemudian memproses hasilnya, misalnya menggunakan `response.json()`. Jika tidak menggunakan `await`, `fetch()` akan langsung menghasilkan sebuah Promise sehingga kode berikutnya dapat berjalan sebelum response dari server tersedia. Akibatnya, kita perlu menangani Promise tersebut menggunakan cara asynchronous lainnya seperti `.then()`.
+
+3. **Apa itu serangan XSS (Cross-Site Scripting) dan mengapa data yang ditampilkan melalui AJAX/JavaScript lebih rentan terhadap serangan ini daripada data yang ditampilkan langsung melalui template Django?**
+
+   XSS (Cross-Site Scripting) adalah serangan ketika input atau data berbahaya disisipkan ke halaman web sehingga dapat dijalankan sebagai script di browser pengguna lain. Data yang ditampilkan melalui AJAX/JavaScript perlu mendapatkan perhatian khusus karena data dari server sering disisipkan secara dinamis ke dalam HTML menggunakan JavaScript. Jika nilai tersebut langsung dimasukkan menggunakan `innerHTML` tanpa escaping, HTML atau script berbahaya dapat ikut diinterpretasikan oleh browser. Oleh karena itu, pada implementasi ini digunakan `escapeHtml()` untuk melakukan escaping terhadap nilai teks sebelum dimasukkan ke HTML. Selain itu, input juga dibersihkan di sisi server menggunakan `strip_tags` melalui method `clean_<field>` pada ModelForm.
+
+## Deklarasi Penggunaan AI
+
+Saya menggunakan AI sebagai pendamping selama mengerjakan tugas ini, terutama untuk membantu memahami konsep Django MVT, mencari penyebab error, dan memberikan arahan ketika saya mengalami kesulitan. Saya tetap mengerjakan implementasi project secara langsung dan mempelajari setiap bagian yang digunakan, sehingga AI berperan sebagai alat bantu belajar, bukan sebagai pengganti 
