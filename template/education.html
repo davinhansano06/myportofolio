@@ -65,12 +65,12 @@
                     </a>
                     {% endif %}
 
-                    <form method="GET" class="education-search">
+                    <form id="education-search-form" class="education-search">
                         <input
                             type="text"
-                            name="institution"
+                            id="education-search-input"
                             placeholder="Cari institusi..."
-                            value="{{ institution_query }}"
+                            aria-label="Cari institusi"
                         >
 
                         <button type="submit" class="button">
@@ -109,7 +109,7 @@
     <script src="{% static 'js/navbar.js' %}"></script>
 
     <script>
-        async function fetchEducation() {
+        async function fetchEducation(searchQuery = "") {
             const educationList = document.getElementById("education-list");
 
             educationList.innerHTML = `
@@ -117,7 +117,11 @@
             `;
 
             try {
-                const response = await fetch("/api/education/");
+                const url = searchQuery
+                    ? `/api/education/?institution=${encodeURIComponent(searchQuery)}`
+                    : "/api/education/";
+
+                const response = await fetch(url);
 
                 if (!response.ok) {
                     throw new Error("Gagal mengambil data education.");
@@ -184,6 +188,27 @@
                 `;
             }
         }
+        const searchForm = document.getElementById("education-search-form");
+        const searchInput = document.getElementById("education-search-input");
+
+        const SEARCH_DEBOUNCE_DELAY = 300;
+        let searchDebounceTimer;
+
+        searchInput.addEventListener("input", function () {
+            clearTimeout(searchDebounceTimer);
+
+            searchDebounceTimer = setTimeout(function () {
+                fetchEducation(searchInput.value.trim());
+            }, SEARCH_DEBOUNCE_DELAY);
+        });
+
+        searchForm.addEventListener("submit", function (event) {
+            event.preventDefault();
+
+            clearTimeout(searchDebounceTimer);
+
+            fetchEducation(searchInput.value.trim());
+        });
 
         fetchEducation();
     </script>
