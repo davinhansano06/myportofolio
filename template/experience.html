@@ -115,6 +115,42 @@
         </section>
     </main>
 
+{% if user.is_superuser %}
+<dialog id="experience-delete-modal" class="delete-modal">
+    <div class="delete-modal-content">
+
+        <h2>Hapus Experience?</h2>
+
+        <p>
+            Apakah kamu yakin ingin menghapus
+            <strong id="delete-experience-title"></strong>?
+        </p>
+
+        <form
+            id="experience-delete-form"
+            method="POST"
+        >
+            {% csrf_token %}
+
+            <button
+                type="submit"
+                class="button button-danger"
+            >
+                Ya, Hapus
+            </button>
+
+            <button
+                type="button"
+                class="button button-secondary"
+                onclick="document.getElementById('experience-delete-modal').close()"
+            >
+                Batal
+            </button>
+        </form>
+
+    </div>
+</dialog>
+{% endif %}
 
     <footer class="site-footer">
 
@@ -247,13 +283,13 @@
                                         Update
                                     </a>
 
-                                    <a
-                                        href="/experience/delete/${item.pk}"
+                                    <button
+                                        href="button"
                                         class="button button-secondary"
-                                        onclick="return confirm('Apakah kamu yakin ingin menghapus experience ini?');"
+                                        onclick="openExperienceDeleteModal('${item.pk}', '${escapeHtml(experience.title)}')"
                                     >
                                         Delete
-                                    </a>
+                                    </button>
                                 </div>
                             {% endif %}
                         </div>
@@ -290,6 +326,17 @@
                 );
             }, SEARCH_DEBOUNCE_DELAY);
         });
+        function openExperienceDeleteModal(id, title) {
+            const modal = document.getElementById("experience-delete-modal");
+            const form = document.getElementById("experience-delete-form");
+            const titleElement = document.getElementById("delete-experience-title");
+
+            titleElement.textContent = title;
+
+            form.action = `/experience/delete/${id}/`;
+
+            modal.showModal();
+        }
 
         fetchExperiences();
     </script>
