@@ -126,21 +126,19 @@ def get_experience_json(request):
     return JsonResponse(data, safe=False)
 
 def show_education(request):
-    json_response = get_education_json(request)
+    institution_query = request.GET.get("institution", "")
 
-    education_list = list(
-        serializers.deserialize(
-            "json",
-            json_response.content.decode("utf-8")
+    education_list = Education.objects.all()
+
+    if institution_query:
+        education_list = education_list.filter(
+            institution__icontains=institution_query
         )
-    )
-
-    education_list = [item.object for item in education_list]
 
     context = {
         "name": "Davin Tristan Hansano",
         "education_list": education_list,
-        "institution_query": request.GET.get("institution", ""),
+        "institution_query": institution_query,
     }
 
     return render(request, "education.html", context)
@@ -148,19 +146,42 @@ def show_education(request):
 def get_education_json(request):
     institution_query = request.GET.get("institution", "")
 
-    education = Education.objects.all()
+    education_list = Education.objects.prefetch_related(
+        "starred_by"
+    )
 
     if institution_query:
-        education = education.filter(
+        education_list = education_list.filter(
             institution__icontains=institution_query
         )
 
-    education_json = serializers.serialize("json", education)
+    data = []
 
-    return HttpResponse(
-        education_json,
-        content_type="application/json"
-    )
+    for education in education_list:
+        starred_users = education.starred_by.all()
+
+        is_starred = (
+            request.user in starred_users
+            if request.user.is_authenticated
+            else False
+        )
+
+        data.append({
+            "pk": str(education.id),
+            "fields": {
+                "institution": education.institution,
+                "degree": education.degree,
+                "period": education.period,
+                "location": education.location,
+                "skills": education.skills,
+                "is_current": education.is_current,
+                "logo": education.logo,
+                "star_count": starred_users.count(),
+                "is_starred": is_starred,
+            }
+        })
+
+    return JsonResponse(data, safe=False)
 
 def is_editor(user):
     return user.groups.filter(name="Editor").exists()
