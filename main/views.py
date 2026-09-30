@@ -139,6 +139,7 @@ def show_education(request):
         "name": "Davin Tristan Hansano",
         "education_list": education_list,
         "institution_query": institution_query,
+        "form": EducationForm(),
     }
 
     return render(request, "education.html", context)
@@ -204,6 +205,44 @@ def create_education(request):
     }
 
     return render(request, "create_education.html", context)
+
+@require_POST
+def create_education_ajax(request):
+    if not request.user.is_superuser:
+        return JsonResponse(
+            {
+                "message": "Kamu tidak memiliki izin untuk menambahkan education."
+            },
+            status=403,
+        )
+
+    form = EducationForm(request.POST)
+
+    if form.is_valid():
+        education = form.save()
+
+        return JsonResponse(
+            {
+                "message": "Education berhasil ditambahkan!",
+                "pk": str(education.id),
+            },
+            status=201,
+        )
+
+    errors = {}
+
+    for field, field_errors in form.errors.items():
+        errors[field] = [
+            {"message": error}
+            for error in field_errors
+        ]
+
+    return JsonResponse(
+        {
+            "errors": errors
+        },
+        status=400,
+    )
 
 @login_required
 def create_experience(request):

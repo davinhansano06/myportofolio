@@ -56,13 +56,14 @@
             <div class="container">
                 <h1 class="education-title">My Education!</h1>
                 <div class="education-topbar">
-                    {% if user.is_authenticated %}
-                    <a
-                        href="{% url 'main:create_education' %}"
+                    {% if user.is_superuser %}
+                    <button
+                        type="button"
                         class="button"
+                        onclick="document.getElementById('education-add-modal').showModal()"
                     >
                         + Add Education
-                    </a>
+                    </button>
                     {% endif %}
 
                     <form id="education-search-form" class="education-search">
@@ -92,7 +93,107 @@
             </div>
         </section>
     </main>
+    {% if user.is_superuser %}
+    <dialog id="education-add-modal" class="delete-modal">
+        <div class="delete-modal-content">
+            <h2>Tambah Education</h2>
 
+            <form id="education-add-form">
+                {% csrf_token %}
+
+                <div>
+                    <label for="id_institution">Institution</label>
+                    {{ form.institution }}
+                </div>
+
+                <div>
+                    <label for="id_degree">Degree</label>
+                    {{ form.degree }}
+                </div>
+
+                <div>
+                    <label for="id_period">Period</label>
+                    {{ form.period }}
+                </div>
+
+                <div>
+                    <label for="id_location">Location</label>
+                    {{ form.location }}
+                </div>
+
+                <div>
+                    <label for="id_skills">Skills</label>
+                    {{ form.skills }}
+                </div>
+
+                <div>
+                    <label for="id_logo">Logo</label>
+                    {{ form.logo }}
+                </div>
+
+                <div>
+                    <label for="id_is_current">
+                        {{ form.is_current }}
+                        Currently studying
+                    </label>
+                </div>
+
+                <div>
+                    <button
+                        type="submit"
+                        class="button"
+                    >
+                        Simpan
+                    </button>
+
+                    <button
+                        type="button"
+                        class="button button-secondary"
+                        onclick="document.getElementById('education-add-modal').close()"
+                    >
+                        Batal
+                    </button>
+                </div>
+            </form>
+        </div>
+    </dialog>
+    {% if user.is_superuser %}
+    <dialog id="education-delete-modal" class="delete-modal">
+        <div class="delete-modal-content">
+
+            <h2>Hapus Education?</h2>
+
+            <p>
+                Apakah kamu yakin ingin menghapus
+                <strong id="delete-education-title"></strong>?
+            </p>
+
+            <form
+                id="education-delete-form"
+                method="POST"
+            >
+                {% csrf_token %}
+
+                <button
+                    type="submit"
+                    class="button button-danger"
+                >
+                    Ya, Hapus
+                </button>
+
+                <button
+                    type="button"
+                    class="button button-secondary"
+                    onclick="document.getElementById('education-delete-modal').close()"
+                >
+                    Batal
+                </button>
+            </form>
+
+        </div>
+    </dialog>
+    {% endif %}
+    {% endif %}
 
     <!-- Footer Section -->
     <footer class="site-footer">
@@ -109,6 +210,24 @@
     <script src="{% static 'js/navbar.js' %}"></script>
 
     <script>
+        function escapeHtml(value) {
+            return String(value ?? "")
+                .replaceAll("&", "&amp;")
+                .replaceAll("<", "&lt;")
+                .replaceAll(">", "&gt;")
+                .replaceAll('"', "&quot;")
+                .replaceAll("'", "&#39;");
+        }
+        function openEducationDeleteModal(id, institution) {
+            const modal = document.getElementById("education-delete-modal");
+            const form = document.getElementById("education-delete-form");
+            const titleElement = document.getElementById("delete-education-title");
+
+            titleElement.textContent = institution;
+            form.action = `/education/delete/${id}/`;
+
+            modal.showModal();
+        }
         async function fetchEducation(searchQuery = "") {
             const educationList = document.getElementById("education-list");
 
@@ -146,33 +265,75 @@
 
                     educationCard.innerHTML = `
                         <img
-                            src="/static/${education.logo}"
-                            alt="Logo ${education.institution}"
+                            src="/static/${escapeHtml(education.logo)}"
+                            alt="Logo ${escapeHtml(education.institution)}"
                             class="logo-sekolah"
                         >
 
                         <div class="konten-pengalaman">
-                            <h3>${education.institution}</h3>
+                            <h3>
+                                ${escapeHtml(education.institution)}
+                            </h3>
 
                             <p class="sub-judul">
-                                ${education.degree}
+                                ${escapeHtml(education.degree)}
                             </p>
 
                             <p class="periode">
-                                ${education.period}
+                                ${escapeHtml(education.period)}
                             </p>
 
                             <p class="lokasi">
-                                ${education.location}
+                                ${escapeHtml(education.location)}
                             </p>
 
                             <div class="tag-skill">
                                 <span>
                                     <i class="icon">&#9830;</i>
-                                    ${education.skills}
+                                    ${escapeHtml(education.skills)}
                                 </span>
                             </div>
                         </div>
+
+                        {% if user.is_authenticated %}
+                        <div class="education-actions">
+
+                            <a
+                                href="/education/update/${item.pk}/"
+                                class="button"
+                            >
+                                Update
+                            </a>
+
+                            {% if user.is_superuser %}
+                            <button
+                                type="button"
+                                class="button button-secondary"
+                                onclick="openEducationDeleteModal(
+                                    '${item.pk}',
+                                    '${escapeHtml(education.institution)}'
+                                )"
+                            >
+                                Delete
+                            </button>
+                            {% endif %}
+
+                            <form
+                                method="POST"
+                                action="/star/education/${item.pk}/"
+                            >
+                                {% csrf_token %}
+
+                                <button
+                                    type="submit"
+                                    class="star-button"
+                                >
+                                    ${education.is_starred ? "★" : "☆"}
+                                </button>
+                            </form>
+
+                        </div>
+                        {% endif %}
 
                         <span>
                             ${education.star_count} Star
@@ -211,6 +372,58 @@
         });
 
         fetchEducation();
+        const educationAddForm =
+        document.getElementById("education-add-form");
+
+        educationAddForm.addEventListener("submit", async function (event) {event.preventDefault();
+
+            const formData = new FormData(educationAddForm);
+
+            try {
+                const response = await fetch(
+                    "/api/education/create/",
+                    {
+                        method: "POST",
+                        body: formData,
+                        headers: {
+                            "X-CSRFToken": formData.get("csrfmiddlewaretoken")
+                        }
+                    }
+                );
+
+                const data = await response.json();
+
+                if (response.status === 201) {
+                    alert(data.message);
+
+                    educationAddForm.reset();
+
+                    document
+                        .getElementById("education-add-modal")
+                        .close();
+
+                    fetchEducation();
+                    return;
+                }
+
+                if (response.status === 400) {
+                    console.log("Validation errors:", data.errors);
+                    alert("Data yang dimasukkan tidak valid.");
+                    return;
+                }
+
+                if (response.status === 403) {
+                    alert(data.message);
+                    return;
+                }
+
+                alert("Terjadi kesalahan.");
+                
+            } catch (error) {
+                console.error("Error:", error);
+                alert("Gagal menghubungi server.");
+            }
+        });
     </script>
 </body>
 </html>
