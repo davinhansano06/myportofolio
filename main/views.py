@@ -29,6 +29,7 @@ def show_main(request):
         "last_login": last_login,
         "education_list": Education.objects.all(),
         "experience_list": Experience.objects.all(),
+        "form": ExperienceForm(),
     }
     return render(request, "index.html", context)
 
@@ -83,6 +84,7 @@ def logout_user(request):
 def show_experience(request):
     context = {
         "name": "Davin Tristan Hansano",
+        "form": ExperienceForm(),
     }
     return render(request, "experience.html", context)
 
