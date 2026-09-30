@@ -87,8 +87,13 @@ def show_experience(request):
     return render(request, "experience.html", context)
 
 def get_experience_json(request):
-    experience_list = Experience.objects.prefetch_related("starred_by").all()
+    search_query = request.GET.get("title", "")
 
+    experience_list = Experience.objects.prefetch_related(
+        "starred_by"
+    ).filter(
+        title__icontains=search_query
+    )
     data = []
 
     for experience in experience_list:
@@ -297,3 +302,42 @@ def toggle_star(request, model, id):
         item.starred_by.add(request.user)
 
     return redirect(request.META.get("HTTP_REFERER", "/"))
+
+
+@require_POST
+def create_experience_ajax(request):
+    if not request.user.is_superuser:
+        return JsonResponse(
+            {
+                "message": "Kamu tidak memiliki izin untuk menambahkan experience."
+            },
+            status=403,
+        )
+
+    form = ExperienceForm(request.POST)
+
+    if form.is_valid():
+        experience = form.save()
+
+        return JsonResponse(
+            {
+                "message": "Experience berhasil ditambahkan!",
+                "pk": str(experience.id),
+            },
+            status=201,
+        )
+
+    errors = {}
+
+    for field, field_errors in form.errors.items():
+        errors[field] = [
+            {"message": error}
+            for error in field_errors
+        ]
+
+    return JsonResponse(
+        {
+            "errors": errors
+        },
+        status=400,
+    )

@@ -904,6 +904,21 @@ h1 {
     .item-pengalaman > .button {
         grid-column: 2;
     }
+    .experience-search {
+    display: flex;
+    gap: 0.5rem;
+    width: 100%;
+    margin-top: 1rem;
+    }
+
+    .experience-search input {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .experience-search button {
+        flex-shrink: 0;
+    }
 
 }
 .education-actions {

@@ -52,8 +52,9 @@
 
         <form
             method="POST"
-            action="{% url 'main:create_experience' %}"
+            action="{% url 'main:create_experience_ajax' %}"
             class="education-form"
+            id="experience-form"
         >
 
             {% csrf_token %}
@@ -104,6 +105,59 @@
 </footer>
 
 <script src="{% static 'js/navbar.js' %}"></script>
+<script>
+    const EXPERIENCE_FORM_ENDPOINT =
+        "{% url 'main:create_experience_ajax' %}";
 
+    const experienceForm =
+        document.getElementById("experience-form");
+
+    experienceForm.addEventListener("submit", async function (event) {
+        event.preventDefault();
+
+        const formData = new FormData(experienceForm);
+
+        try {
+            const response = await fetch(EXPERIENCE_FORM_ENDPOINT, {
+                method: "POST",
+                headers: {
+                    "X-CSRFToken": document.querySelector(
+                        "[name=csrfmiddlewaretoken]"
+                    ).value
+                },
+                body: formData
+            });
+
+            const result = await response.json();
+
+            if (response.ok) {
+                alert(result.message);
+
+                experienceForm.reset();
+
+                window.location.href =
+                    "{% url 'main:show_experience' %}";
+
+                return;
+            }
+
+            if (response.status === 400) {
+                alert("Data yang dimasukkan tidak valid.");
+                console.log(result.errors);
+                return;
+            }
+
+            if (response.status === 403) {
+                alert(result.message);
+                return;
+            }
+
+            alert("Terjadi kesalahan.");
+        } catch (error) {
+            console.error(error);
+            alert("Gagal mengirim data.");
+        }
+    });
+</script>
 </body>
 </html>

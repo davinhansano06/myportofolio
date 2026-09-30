@@ -56,7 +56,7 @@
 
                         <h1>My Experience!</h1>
                         
-                        {% if user.is_authenticated %}
+                        {% if user.is_superuser %}
                         <a
                             href="{% url 'main:create_experience' %}"
                             class="button add-experience-button"
@@ -66,6 +66,17 @@
                         {% endif %}
 
                     </div>
+                    <form id="experience-search-form" class="experience-search">
+                        <input
+                            type="search"
+                            id="experience-search-input"
+                            placeholder="Cari experience..."
+                            aria-label="Cari experience"
+                        >
+                        <button type="submit" class="button">
+                            Cari
+                        </button>
+                    </form>
 
                 </div> 
                 <div id="experience-loading" class="empty-state">
@@ -133,10 +144,30 @@
 
         const emptyState =
             document.getElementById("experience-empty");
+            const searchForm =
+                document.getElementById("experience-search-form");
 
-        async function fetchExperiences() {
+            const searchInput =
+                document.getElementById("experience-search-input");
+
+            const SEARCH_DEBOUNCE_DELAY = 300;
+            let searchDebounceTimer;
+        
+        function escapeHtml(value) {
+            return String(value ?? "")
+                .replaceAll("&", "&amp;")
+                .replaceAll("<", "&lt;")
+                .replaceAll(">", "&gt;")
+                .replaceAll('"', "&quot;")
+                .replaceAll("'", "&#39;");
+        }
+        async function fetchExperiences(searchQuery = "") {
             try {
-                const response = await fetch(EXPERIENCE_ENDPOINT, {
+                const url = searchQuery
+                    ? `${EXPERIENCE_ENDPOINT}?title=${encodeURIComponent(searchQuery)}`
+                    : EXPERIENCE_ENDPOINT;
+
+                const response = await fetch(url, {
                     headers: {
                         "Accept": "application/json"
                     }
@@ -166,30 +197,65 @@
                     card.innerHTML = `
                         <div class="experience-image-wrapper">
                             <img
-                                src="{% static '' %}${experience.image}"
-                                alt="${experience.title}"
+                                src="{% static '' %}${escapeHtml(experience.image)}"
+                                alt="${escapeHtml(experience.title)}"
                                 class="experience-image"
                             >
                         </div>
 
                         <div class="experience-content">
-                            <h2>${experience.title}</h2>
+                            <h2>${escapeHtml(experience.title)}</h2>
 
                             <p class="experience-institution">
-                                ${experience.institution}
+                                ${escapeHtml(experience.institution)}
                             </p>
 
                             <p class="experience-period">
-                                &#128197; ${experience.period}
+                                &#128197; ${escapeHtml(experience.period)}
                             </p>
 
                             <p class="experience-description">
-                                ${experience.description}
+                                ${escapeHtml(experience.description)}
                             </p>
 
-                            <span>
-                                ${experience.star_count} Star
-                            </span>
+                            {% if user.is_authenticated %}
+                                <form
+                                    method="POST"
+                                    action="/star/experience/${item.pk}/"
+                                    class="experience-star-form"
+                                >
+                                    {% csrf_token %}
+                                    <button type="submit" class="star-button">
+                                        ${experience.is_starred ? "★" : "☆"}
+                                    </button>
+
+                                    <span>
+                                        ${experience.star_count} Star
+                                    </span>
+                                </form>
+                                {% else %}
+                                <span>
+                                    ${experience.star_count} Star
+                                </span>
+                                {% endif %}
+                                {% if user.is_superuser %}
+                                <div class="experience-actions">
+                                    <a
+                                        href="/experience/update/${item.pk}/"
+                                        class="button"
+                                    >
+                                        Update
+                                    </a>
+
+                                    <a
+                                        href="/experience/delete/${item.pk}"
+                                        class="button button-secondary"
+                                        onclick="return confirm('Apakah kamu yakin ingin menghapus experience ini?');"
+                                    >
+                                        Delete
+                                    </a>
+                                </div>
+                            {% endif %}
                         </div>
                     `;
 
@@ -204,6 +270,26 @@
                 errorState.classList.remove("hide");
             }
         }
+
+        searchForm.addEventListener("submit", function (event) {
+            event.preventDefault();
+
+            clearTimeout(searchDebounceTimer);
+
+            fetchExperiences(
+                searchInput.value.trim()
+            );
+        });
+
+        searchInput.addEventListener("input", function () {
+            clearTimeout(searchDebounceTimer);
+
+            searchDebounceTimer = setTimeout(function () {
+                fetchExperiences(
+                    searchInput.value.trim()
+                );
+            }, SEARCH_DEBOUNCE_DELAY);
+        });
 
         fetchExperiences();
     </script>

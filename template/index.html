@@ -1,33 +1,5 @@
 {% extends 'base.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ name }} - Portfolio</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/static/css/style.css">
-</head>
-<body>
-    <!-- Header Section -->
-    <header class="site-header">
-        <div class="container">
-            <a href="{% url 'main:show_main' %}" class="brand">{{ name }}</a>
-            <div class="mobile-menu-button" id="mobile-menu-button">
-                ☰
-            </div>
-            <nav id="main-nav">
-                <a href="{% url 'main:show_main' %}">Profile</a>
-                <a href="#skill">Skill</a>
-                <a href="{% url 'main:show_education' %}">Education</a>
-                <a href="{% url 'main:show_experience' %}">Experience</a>
-                <a href="#contact">Contact</a>
-            </nav>
-        </div>
-    </header>
     {% block content %}
     <!-- Main Content Section -->
     <main>
@@ -316,10 +288,12 @@
                     >
                         &#10094;
                     </button>
-                        <div class="experience-window">
-                            <div class="experience-track" id="experience-track">
-                            </div>
-                        </div>                    
+
+                    <div class="experience-window">
+                        <div class="experience-track" id="experience-track">
+                        </div>
+                    </div>
+
                     <button
                         type="button"
                         class="carousel-button carousel-next"
@@ -328,6 +302,7 @@
                         &#10095;
                     </button>
                 </div>
+
                 <div class="carousel-dots"></div>
             </div>
         </section>
@@ -350,9 +325,9 @@
 {% endblock content %}
 
 {% block extra_scripts %}
-<script src="{% static 'js/experience.js' %}"></script>
-{% endblock extra_scripts %}
 <script src="{% static 'js/navbar.js' %}"></script>
+<script src="{% static 'js/experience.js' %}"></script>
+
 <script>
     const EXPERIENCE_ENDPOINT = "{% url 'main:get_experience_json' %}";
 
@@ -421,14 +396,50 @@
                             ${experience.description}
                         </p>
 
+                        {% if user.is_authenticated %}
+                        <form
+                            method="POST"
+                            action="/star/experience/${item.pk}/"
+                            class="experience-star-form"
+                        >
+                            {% csrf_token %}
+                            <button type="submit" class="star-button">
+                                ${experience.is_starred ? "★" : "☆"}
+                            </button>
+
+                            <span>
+                                ${experience.star_count} Star
+                            </span>
+                        </form>
+                        {% else %}
                         <span>
                             ${experience.star_count} Star
                         </span>
+                        {% endif %}
+                        {% if user.is_superuser %}
+                            <div class="experience-actions">
+                                <a
+                                    href="/experience/update/${item.pk}/"
+                                    class="button"
+                                >
+                                    Update
+                                </a>
+
+                                <a
+                                    href="/experience/delete/${item.pk}/"
+                                    class="button button-secondary"
+                                    onclick="return confirm('Apakah kamu yakin ingin menghapus experience ini?');"
+                                >
+                                    Delete
+                                </a>
+                            </div>
+                        {% endif %}
                     </div>
                 `;
 
                 experienceTrack.appendChild(card);
             });
+
             initializeExperienceCarousel();
 
         } catch (error) {
@@ -441,5 +452,4 @@
 
     fetchExperiences();
 </script>
-
-<script src="{% static 'js/experience.js' %}"></script>
+{% endblock extra_scripts %}

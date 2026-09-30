@@ -1,5 +1,7 @@
 from django.forms import ModelForm, TextInput, CheckboxInput
 from main.models import Education, Experience
+from django.core.exceptions import ValidationError
+from django.utils.html import strip_tags
 
 class ExperienceForm(ModelForm):
     class Meta:
@@ -51,6 +53,42 @@ class ExperienceForm(ModelForm):
                 }
             ),
         }
+    def clean_title(self):
+        title = strip_tags(self.cleaned_data["title"]).strip()
+
+        if not title:
+            raise ValidationError(
+                "Judul tidak boleh hanya berisi tag HTML."
+            )
+
+        return title
+
+    def clean_institution(self):
+        return strip_tags(
+            self.cleaned_data["institution"]
+        ).strip()
+
+    def clean_period(self):
+        return strip_tags(
+            self.cleaned_data["period"]
+        ).strip()
+
+    def clean_description(self):
+        description = strip_tags(
+            self.cleaned_data["description"]
+        ).strip()
+
+        if not description:
+            raise ValidationError(
+                "Deskripsi tidak boleh hanya berisi tag HTML."
+            )
+
+        return description
+
+    def clean_image(self):
+        return strip_tags(
+            self.cleaned_data["image"]
+        ).strip()
             
 class EducationForm(ModelForm):
     class Meta:
