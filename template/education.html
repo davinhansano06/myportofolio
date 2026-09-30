@@ -394,7 +394,11 @@
                 const data = await response.json();
 
                 if (response.status === 201) {
-                    alert(data.message);
+                    showToast(
+                        "Berhasil",
+                        data.message,
+                        "success"
+                    );
 
                     educationAddForm.reset();
 
@@ -407,17 +411,36 @@
                 }
 
                 if (response.status === 400) {
-                    console.log("Validation errors:", data.errors);
-                    alert("Data yang dimasukkan tidak valid.");
+                    const errorMessages = data.errors
+                        ? Object.values(data.errors)
+                            .flat()
+                            .map(error => error.message)
+                        : ["Data yang dimasukkan tidak valid."];
+
+                    showToast(
+                        "Gagal menambahkan education",
+                        errorMessages.join(" "),
+                        "error"
+                    );
+
                     return;
                 }
 
                 if (response.status === 403) {
-                    alert(data.message);
+                    showToast(
+                        "Akses ditolak",
+                        data.message,
+                        "error"
+                    );
+
                     return;
                 }
 
-                alert("Terjadi kesalahan.");
+                showToast(
+                    "Terjadi kesalahan",
+                    `Terjadi kesalahan (status ${response.status}).`,
+                    "error"
+                );
                 
             } catch (error) {
                 console.error("Error:", error);
@@ -425,5 +448,8 @@
             }
         });
     </script>
+    <script src="{% static 'js/experience.js' %}"></script>
+    <script src="{% static 'js/navbar.js' %}"></script>
+    {% include "components/toast.html" %}
 </body>
 </html>
