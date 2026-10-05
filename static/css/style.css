@@ -93,7 +93,9 @@ nav a:hover {
     border-bottom: 1px solid var(--line);
     scroll-margin-top: 40px; /* sesuaikan dengan tinggi header */
 }
-
+.hero {
+    border-bottom: none;
+}
 section {
     scroll-margin-top: 40px;
 }
@@ -105,8 +107,8 @@ section {
         "identity photo"
         "details photo";
     align-items: center;
-    gap: 2rem 4rem;
-    min-height: 600px;
+    gap: 1.5rem 4rem;
+    min-height: 520px;
 }
 
 .hero-identity {
@@ -155,7 +157,7 @@ h1 {
 
 .avatar {
     width: 100%;
-    max-width: 400px;
+    max-width: 360px;
     border-radius: var(--radius);
     border: 2px solid var(--accent);
     object-fit: cover;
@@ -1268,5 +1270,99 @@ body.page-exiting {
 
     .grid-skill .cover-kartu {
         flex: 0 0 78vw;
+    }
+
+    .marquee-banner {
+        margin-top: 24px;
+    }
+}
+
+.section-heading-reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    filter: blur(5px);
+
+    transition:
+        opacity 0.7s ease,
+        transform 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+        filter 0.7s ease;
+}
+
+.section-heading-reveal.show {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+}
+
+/* =================================
+   INFORMATION SYSTEM MARQUEE
+================================= */
+
+.marquee-banner {
+    width: 110%;
+    margin-left: -5%;
+    overflow: hidden;
+    margin-top: 30px;
+
+    background: #18233f;
+    border-top: 2px solid #62fff0;
+    border-bottom: 2px solid #62fff0;
+
+    padding: 18px 0;
+
+    transform: rotate(-3deg);
+
+    position: relative;
+    z-index: 5;
+}
+
+.marquee-track {
+    display: flex;
+    width: max-content;
+    animation: marquee-scroll 18s linear infinite;
+}
+
+.marquee-item {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+
+    padding-right: 28px;
+
+    white-space: nowrap;
+}
+
+.marquee-item img {
+    width: 28px;
+    height: 28px;
+
+    object-fit: contain;
+}
+
+.marquee-item span {
+    color: #62fff0;
+
+    font-size: 28px;
+    font-weight: 700;
+
+    letter-spacing: 1px;
+}
+
+.marquee-dot {
+    color: #f5d547 !important;
+    font-size: 24px !important;
+}
+@keyframes marquee-scroll {
+    from {
+        transform: translateX(-50%);
+    }
+
+    to {
+        transform: translateX(0);
+    }
+}
+@media (max-width: 768px) {
+    .marquee-track {
+        animation-duration: 14s;
     }
 }

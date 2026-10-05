@@ -5,24 +5,41 @@ document.addEventListener("DOMContentLoaded", function () {
         ".hero-kicker, .hero-identity h1, .hero-details, .hero-contact, .education-heading, .experience-heading, .experience-card, .item-pengalaman"
     );
 
+    const sectionHeadings = document.querySelectorAll(
+        ".education-title, .experience-heading h1, #skill h1"
+    );
+
     const observer = new IntersectionObserver(
         function (entries) {
             entries.forEach(function (entry) {
                 if (entry.isIntersecting) {
-                    entry.target.classList.add("scroll-visible");
+                    if (
+                        entry.target.classList.contains(
+                            "section-heading-reveal"
+                        )
+                    ) {
+                        entry.target.classList.add("show");
+                    } else {
+                        entry.target.classList.add("scroll-visible");
+                    }
                 }
             });
         },
         {
-            threshold: 2
+            threshold: 0.2
         }
     );
 
+    sectionHeadings.forEach(function (heading) {
+        heading.classList.add("section-heading-reveal");
+        observer.observe(heading);
+    });    
+
     elements.forEach(function (element) {
-        element.classList.add("scroll-reveal");
-        observer.observe(element);
+            element.classList.add("scroll-reveal");
+            observer.observe(element);
+        });
     });
-});
 
 // =================================
 // NAME LETTER ANIMATION

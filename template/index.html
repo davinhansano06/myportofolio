@@ -52,16 +52,13 @@
                 </div>
             </div>
         </section>
+        {% include "components/marquee.html" %}
 
         <!-- Section for Skill -->
         <section class="hero-section" id="skill">
             <div class="wadah-konten">
                 <!-- Main Section (Logo, Sub-judul, Judul) -->
                 <div class="identitas-section">
-                    <p class="teks-pembuka">
-                        <img class="logo-ui" src="/static/img/logoui.png" alt="Logo Universitas Indonesia">
-                        <span>Information System &middot; Universitas Indonesia</span>
-                    </p>
                     <h1>My Skill!</h1>
                 </div>
 
@@ -378,7 +375,36 @@
 
 {% block extra_scripts %}
 <script src="{% static 'js/experience.js' %}"></script>
+<script src="{% static 'js/lanyard.js' %}"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const educationCards = document.querySelectorAll(
+        ".item-pengalaman"
+    );
 
+    const educationObserver = new IntersectionObserver(
+        function (entries, observer) {
+            entries.forEach(function (entry) {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add("show");
+                    observer.unobserve(entry.target);
+                }
+            });
+        },
+        {
+            threshold: 0.2
+        }
+    );
+
+    educationCards.forEach(function (card, index) {
+        card.classList.add("education-stagger");
+
+        card.style.transitionDelay = `${index * 120}ms`;
+
+        educationObserver.observe(card);
+    });
+});
+</script>
 <script>
     const EXPERIENCE_ENDPOINT = "{% url 'main:get_experience_json' %}";
 
@@ -521,4 +547,5 @@
     }
     fetchExperiences();
 </script>
+<script src="{% static 'js/page-effects.js' %}"></script>
 {% endblock extra_scripts %}

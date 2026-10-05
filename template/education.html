@@ -228,6 +228,19 @@
 
             modal.showModal();
         }
+        const educationObserver = new IntersectionObserver(
+            function (entries, observer) {
+                entries.forEach(function (entry) {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add("show");
+                        observer.unobserve(entry.target);
+                    }
+                });
+            },
+            {
+                threshold: 0.2
+            }
+        );
         async function fetchEducation(searchQuery = "") {
             const educationList = document.getElementById("education-list");
 
@@ -257,11 +270,11 @@
 
                 educationList.innerHTML = "";
 
-                data.forEach((item) => {
+                data.forEach((item,index) => {
                     const education = item.fields;
 
                     const educationCard = document.createElement("div");
-                    educationCard.className = "item-pengalaman";
+                    educationCard.className = "item-pengalaman education-stagger";
 
                     educationCard.innerHTML = `
                         <img
@@ -341,6 +354,7 @@
                     `;
 
                     educationList.appendChild(educationCard);
+                    educationObserver.observe(educationCard);
                 });
 
             } catch (error) {
@@ -448,6 +462,7 @@
             }
         });
     </script>
+    <script src="{% static 'js/page-effects.js' %}"></script>
     {% include "components/toast.html" %}
 </body>
 </html>
