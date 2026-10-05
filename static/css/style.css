@@ -1095,24 +1095,6 @@ h1 {
 
 
 /* ================================= */
-/* Page Opening                      */
-/* ================================= */
-
-body {
-    opacity: 0;
-    transform: translateY(8px);
-
-    transition:
-        opacity 0.5s ease,
-        transform 0.5s ease;
-}
-
-body.page-loaded {
-    opacity: 1;
-    transform: translateY(0);
-}
-
-/* ================================= */
 /* Global UI Motion                  */
 /* ================================= */
 
