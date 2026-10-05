@@ -1033,7 +1033,7 @@ h1 {
 /* ============================= */
 
 .hero-photo {
-    opacity: 0;
+    opacity: 1;
     transition: opacity 3s ease;
     translate: 0 var(--parallax-y, 10px);
 }
@@ -1047,7 +1047,7 @@ h1 {
 /* ============================= */
 
 .education-stagger {
-    opacity: 0;
+    opacity: 1;
     transform: translateY(30px);
     transition:
         opacity 0.6s ease,
@@ -1060,7 +1060,7 @@ h1 {
 }
 
 .education-stagger {
-    opacity: 0;
+    opacity: 1;
     transform: translateY(30px);
     transition:
         opacity 2s ease,
@@ -1099,7 +1099,7 @@ h1 {
 /* ================================= */
 
 .site-header {
-    opacity: 0;
+    opacity: 1;
     transform: translateY(-18px);
 
     transition:
@@ -1118,7 +1118,7 @@ body.page-loaded .site-header {
 /* ================================= */
 
 .scroll-reveal {
-    opacity: 0;
+    opacity: 1;
     transform: translateY(35px);
     filter: blur(5px);
 
@@ -1140,7 +1140,7 @@ body.page-loaded .site-header {
 /* ================================= */
 
 body {
-    opacity: 0;
+    opacity: 1;
     transform: translateY(8px);
 
     transition:
@@ -1154,7 +1154,7 @@ body.page-loaded {
 }
 
 body.page-exiting {
-    opacity: 0;
+    opacity: 1;
     transform: translateY(-8px);
 }
 
@@ -1169,7 +1169,7 @@ body.page-exiting {
 .name-letter {
     display: inline-block;
 
-    opacity: 0;
+    opacity: 1;
     transform: translateY(25px);
     filter: blur(4px);
 
@@ -1180,7 +1180,7 @@ body.page-exiting {
 
 @keyframes name-letter-in {
     0% {
-        opacity: 0;
+        opacity: 1;
         transform: translateY(25px);
         filter: blur(4px);
     }
