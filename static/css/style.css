@@ -119,8 +119,10 @@ section {
 }
 
 .hero-photo {
+    perspective: 800px;
     grid-area: photo;
     position: relative;
+    translate: 0 var(--parallax-y, 0px);
 }
 
 .identitas-section {
@@ -730,6 +732,7 @@ h1 {
 
     .hero-photo {
         justify-self: start;
+        translate: 0 var(--parallax-y, 0px);
     }
 
     .avatar {
@@ -1006,4 +1009,282 @@ h1 {
 
 .hide {
     display:none !important;
+}
+
+/* ============================= */
+/* Interactive Profile Lanyard   */
+/* ============================= */
+
+.hero-photo {
+    perspective: 800px;
+    margin: 0 auto;
+    translate: 0 var(--parallax-y, 0px);
+}
+
+.avatar {
+    transform-origin: 50% 0%;
+    transition:
+        transform 0.15s cubic-bezier(0.22, 1, 0.36, 1);
+    will-change: transform;
+}
+
+/* ============================= */
+/* Calm Profile Animation        */
+/* ============================= */
+
+.hero-photo {
+    opacity: 0;
+    transition: opacity 3s ease;
+    translate: 0 var(--parallax-y, 10px);
+}
+
+.hero-photo.profile-visible {
+    opacity: 5;
+}
+
+/* ============================= */
+/* Education Stagger Animation   */
+/* ============================= */
+
+.education-stagger {
+    opacity: 0;
+    transform: translateY(30px);
+    transition:
+        opacity 0.6s ease,
+        transform 0.6s ease;
+}
+
+.education-stagger.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.education-stagger {
+    opacity: 0;
+    transform: translateY(30px);
+    transition:
+        opacity 2s ease,
+        transform 3s ease;
+}
+
+.education-stagger.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* ================================= */
+/* Global Page Animations             */
+/* ================================= */
+
+.scroll-reveal {
+    opacity: 0;
+    transform: translateY(35px);
+    filter: blur(4px);
+
+    transition:
+        opacity 0.7s ease,
+        transform 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+        filter 0.7s ease;
+}
+
+.scroll-reveal.scroll-visible {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+}
+
+
+/* ================================= */
+/* Page Opening                      */
+/* ================================= */
+
+body {
+    opacity: 0;
+    transform: translateY(8px);
+
+    transition:
+        opacity 0.5s ease,
+        transform 0.5s ease;
+}
+
+body.page-loaded {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* ================================= */
+/* Global UI Motion                  */
+/* ================================= */
+
+.site-header {
+    opacity: 0;
+    transform: translateY(-18px);
+
+    transition:
+        opacity 0.7s ease,
+        transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+body.page-loaded .site-header {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+
+/* ================================= */
+/* Scroll Text Animation             */
+/* ================================= */
+
+.scroll-reveal {
+    opacity: 0;
+    transform: translateY(35px);
+    filter: blur(5px);
+
+    transition:
+        opacity 0.7s ease,
+        transform 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+        filter 0.7s ease;
+}
+
+.scroll-reveal.scroll-visible {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+}
+
+
+/* ================================= */
+/* Page Transition                   */
+/* ================================= */
+
+body {
+    opacity: 0;
+    transform: translateY(8px);
+
+    transition:
+        opacity 0.5s ease,
+        transform 0.5s ease;
+}
+
+body.page-loaded {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+body.page-exiting {
+    opacity: 0;
+    transform: translateY(-8px);
+}
+
+/* ================================= */
+/* Name Letter Animation             */
+/* ================================= */
+
+.name-animated {
+    overflow: hidden;
+}
+
+.name-letter {
+    display: inline-block;
+
+    opacity: 0;
+    transform: translateY(25px);
+    filter: blur(4px);
+
+    animation: name-letter-in 0.6s
+        cubic-bezier(0.22, 1, 0.36, 1)
+        forwards;
+}
+
+@keyframes name-letter-in {
+    0% {
+        opacity: 0;
+        transform: translateY(25px);
+        filter: blur(4px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+        filter: blur(0);
+    }
+}
+
+/* ================================= */
+/* Interactive Skill Carousel        */
+/* ================================= */
+
+.grid-skill {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 24px;
+
+    overflow: hidden;
+
+    padding: 30px 10px 40px;
+
+    perspective: 1000px;
+
+    cursor: grab;
+}
+
+.grid-skill:active {
+    cursor: grabbing;
+}
+
+.grid-skill .cover-kartu {
+    flex: 0 0 330px;
+
+    transition:
+        transform 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+        opacity 1s ease;
+}
+
+.grid-skill .skill-card {
+    transition:
+        transform 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+        box-shadow 0.45s ease;
+}
+
+.grid-skill .cover-kartu.skill-active .skill-card {
+    transform: translateY(-8px) scale(1.04);
+}
+
+
+/* Card yang bukan fokus */
+
+.grid-skill .cover-kartu:not(.skill-active) {
+    opacity: 0.75;
+}
+
+
+/* Hover */
+
+.grid-skill .cover-kartu:hover {
+    opacity: 1;
+}
+
+.grid-skill .skill-card:hover {
+    transform: translateY(-10px) scale(1.02);
+}
+
+
+/* Mobile */
+
+@media (max-width: 768px) {
+
+    .grid-skill {
+        justify-content: flex-start;
+        gap: 16px;
+        padding-left: 20px;
+        padding-right: 20px;
+
+        overflow-x: auto;
+        overflow-y: visible;
+    }
+
+    .grid-skill .cover-kartu {
+        flex: 0 0 78vw;
+    }
 }
