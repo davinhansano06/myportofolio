@@ -54,75 +54,70 @@
         </section>
         {% include "components/marquee.html" %}
 
-        <!-- Section for Skill -->
+        <!-- Section for Skill (Hanging Lanyard Cards) -->
         <section class="hero-section" id="skill">
             <div class="wadah-konten">
-                <!-- Main Section (Logo, Sub-judul, Judul) -->
                 <div class="identitas-section">
                     <h1>My Skill!</h1>
                 </div>
 
-                <!-- Letak Skill Card -->
+                <!-- Letak Skill Card Gantungan -->
                 <div class="grid-skill">
 
                     <!-- Data Analysis -->
-                    <div class="cover-kartu">
-                        <!-- Menyembunyikan Pop-up -->
-                        <input type="checkbox" id="pemicu-popup-1" class="tombol-pemicu">
-                        <label for="pemicu-popup-1" class="skill-card">
+                    <div class="cover-kartu" data-rest-angle="-2.2">
+                        <div class="hanger-assembly" aria-hidden="true">
+                            <span class="hanger-pin"></span>
+                            <span class="hanger-string"></span>
+                            <span class="hanger-clip"></span>
+                        </div>
+                        <div class="skill-card">
                             <img src="/static/img/image.jpg" alt="Data Analysis" class="gambar-skill">
-                            <h3>Data Analysis</h3>
-                        </label>
-                        <!-- Pop-up Modal 1 -->
-                        <div class="layar-popup">
-                            <div class="isi-popup">
-                                <label for="pemicu-popup-1" class="tombol-tutup">&times;</label>
-                                <h2>Data Analysis</h2>
-                                <p> Ahli dalam mengombinasikan pemikiran analitis dan logika kuantitatif untuk 
-                                    mengubah data kompleks menjadi wawasan bisnis yang strategis. 
-                                    Berbekal latar belakang Sistem Informasi UI dan prestasi Best Team di 
-                                    Ristek Open Class Business Case 2025, saya terbiasa melakukan analisis 
-                                    peluang pasar, pemodelan data, hingga pengambilan keputusan 
-                                    berbasis data.
+                            <div class="skill-card-footer">
+                                <h3>Data Analysis</h3>
+                                <span class="skill-index">01 / 03</span>
                             </div>
+                            <p class="skill-desc">
+                                Ahli dalam mengombinasikan pemikiran analitis dan logika kuantitatif untuk mengubah data kompleks menjadi wawasan bisnis yang strategis.
+                            </p>
                         </div>
                     </div>
 
                     <!-- Business Analysis -->
-                    <div class="cover-kartu">
-                        <input type="checkbox" id="pemicu-popup-2" class="tombol-pemicu">
-                        <label for="pemicu-popup-2" class="skill-card">
+                    <div class="cover-kartu cover-kartu-middle" data-rest-angle="1.8">
+                        <div class="hanger-assembly" aria-hidden="true">
+                            <span class="hanger-pin"></span>
+                            <span class="hanger-string"></span>
+                            <span class="hanger-clip"></span>
+                        </div>
+                        <div class="skill-card">
                             <img src="/static/img/dataanalis.jpg" alt="Business Analysis" class="gambar-skill">
-                            <h3>Business Analysis</h3>
-                        </label>
-                        <!-- Pop-up Modal 2 -->
-                        <div class="layar-popup">
-                            <div class="isi-popup">
-                                <label for="pemicu-popup-2" class="tombol-tutup">&times;</label>
-                                <h2>Business Analysis</h2>
-                                <p>Memiliki kemampuan analisis kasus bisnis,merancang arsitektur 
-                                    proses bisnis yang efisien serta Memiliki rekam jejak kepemimpinan 
-                                    yang teruji dalam mengelola alokasi anggaran, eksekusi proyek, dan koordinasi tim. 
+                            <div class="skill-card-footer">
+                                <h3>Business Analysis</h3>
+                                <span class="skill-index">02 / 03</span>
                             </div>
+                            <p class="skill-desc">
+                                Memiliki kemampuan analisis kasus bisnis, merancang arsitektur proses bisnis yang efisien, serta kepemimpinan dalam eksekusi proyek dan koordinasi tim.
+                            </p>
                         </div>
                     </div>
 
                     <!-- Digital Marketing -->
-                    <div class="cover-kartu">
-                        <input type="checkbox" id="pemicu-popup-3" class="tombol-pemicu">
-                        <label for="pemicu-popup-3" class="skill-card">
+                    <div class="cover-kartu" data-rest-angle="-1.6">
+                        <div class="hanger-assembly" aria-hidden="true">
+                            <span class="hanger-pin"></span>
+                            <span class="hanger-string"></span>
+                            <span class="hanger-clip"></span>
+                        </div>
+                        <div class="skill-card">
                             <img src="/static/img/marketing.jpg" alt="Digital Marketing" class="gambar-skill">
-                            <h3>Digital Marketing</h3>
-                        </label>
-                        <div class="layar-popup">
-                            <div class="isi-popup">
-                                <label for="pemicu-popup-3" class="tombol-tutup">&times;</label>
-                                <h2>Digital Marketing</h2>
-                                <p>Mampu merancang dan melaksanakan strategi pemasaran digital dalam mendorong penjualan produk 
-                                    dan awareness, serta mampu berkomunikasi efektif dengan berbagai stakeholder
-                                    dengan dukungan komunikasi yang persuasif dan kemampuan negosiasi yang kuat.
-                                </p>
+                            <div class="skill-card-footer">
+                                <h3>Digital Marketing</h3>
+                                <span class="skill-index">03 / 03</span>
                             </div>
+                            <p class="skill-desc">
+                                Merancang dan melaksanakan strategi pemasaran digital untuk mendorong penjualan produk, awareness, dan komunikasi persuasif dengan stakeholder.
+                            </p>
                         </div>
                     </div>
 
@@ -334,6 +329,18 @@
         </section>
     </main>
 
+<!-- Pop-up Modal Detail Experience -->
+<div id="experience-detail-popup" class="layar-popup" aria-hidden="true">
+    <div class="isi-popup experience-popup-box">
+        <button type="button" class="tombol-tutup" id="close-experience-popup" aria-label="Tutup">&times;</button>
+        <img id="popup-experience-image" src="" alt="" class="gambar-skill">
+        <h2 id="popup-experience-title"></h2>
+        <p id="popup-experience-institution" class="sub-judul" style="margin-bottom: 0.25rem;"></p>
+        <p id="popup-experience-period" class="periode" style="margin-bottom: 1rem;"></p>
+        <p id="popup-experience-description"></p>
+    </div>
+</div>
+
 {% if user.is_superuser %}
 <dialog id="experience-delete-modal" class="delete-modal">
     <div class="delete-modal-content">
@@ -374,8 +381,8 @@
 {% endblock content %}
 
 {% block extra_scripts %}
-<script src="{% static 'js/experience.js' %}"></script>
-<script src="{% static 'js/lanyard.js' %}"></script>
+<script src="{% static 'js/experience.js' %}?v=7"></script>
+<script src="{% static 'js/lanyard.js' %}?v=7"></script>
 <script>
 document.addEventListener("DOMContentLoaded", function () {
     const educationCards = document.querySelectorAll(
@@ -456,30 +463,35 @@ document.addEventListener("DOMContentLoaded", function () {
                 const experience = item.fields;
 
                 const card = document.createElement("article");
-                card.className = "experience-card";
+                card.className = "experience-card experience-interactive-card";
+                card.dataset.title = experience.title || "";
+                card.dataset.institution = experience.institution || "";
+                card.dataset.period = experience.period || "";
+                card.dataset.description = experience.description || "";
+                card.dataset.image = "{% static '' %}" + (experience.image || "");
 
                 card.innerHTML = `
                     <div class="experience-image-wrapper">
                         <img
-                            src="{% static '' %}${experience.image}"
-                            alt="${experience.title}"
+                            src="{% static '' %}${escapeHtml(experience.image)}"
+                            alt="${escapeHtml(experience.title)}"
                             class="experience-image"
                         >
                     </div>
 
                     <div class="experience-content">
-                        <h2>${experience.title}</h2>
+                        <h2>${escapeHtml(experience.title)}</h2>
 
                         <p class="experience-institution">
-                            ${experience.institution}
+                            ${escapeHtml(experience.institution)}
                         </p>
 
                         <p class="experience-period">
-                            &#128197; ${experience.period}
+                            &#128197; ${escapeHtml(experience.period)}
                         </p>
 
                         <p class="experience-description">
-                            ${experience.description}
+                            ${escapeHtml(experience.description)}
                         </p>
 
                         {% if user.is_authenticated %}
@@ -527,6 +539,9 @@ document.addEventListener("DOMContentLoaded", function () {
             });
 
             initializeExperienceCarousel();
+            if (typeof window.initExperienceInteractiveCards === "function") {
+                window.initExperienceInteractiveCards();
+            }
 
         } catch (error) {
             console.error("Error loading experiences:", error);
@@ -547,5 +562,4 @@ document.addEventListener("DOMContentLoaded", function () {
     }
     fetchExperiences();
 </script>
-<script src="{% static 'js/page-effects.js' %}"></script>
 {% endblock extra_scripts %}

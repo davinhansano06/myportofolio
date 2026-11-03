@@ -1458,3 +1458,603 @@ body.page-exiting {
     color: var(--text-primary);
     z-index: 2000;
 }
+
+
+/* =========================================================
+   UI/UX ROYAL NAVY & DEEP MIDNIGHT GRADIENT DESIGN SYSTEM
+   ========================================================= */
+:root {
+    --bg-main: #0b132b;
+    --bg-navy-top: #1c2541;
+    --bg-navy-mid: #131d3b;
+    --bg-navy-deep: #0b132b;
+    --card-bg: rgba(28, 37, 65, 0.72);
+    --card-bg-hover: rgba(36, 49, 86, 0.85);
+    --accent: #6fffe9;
+    --accent-blue: #5bc0be;
+    --text-primary: #f8fafc;
+    --text-secondary: #a8b8d0;
+    --line: rgba(111, 255, 233, 0.18);
+    --radius: 14px;
+    --danger: #ef4444;
+}
+
+html {
+    background-color: #0b132b;
+}
+
+body {
+    min-height: 100vh;
+    background-color: #0b132b;
+    background-image:
+        radial-gradient(ellipse 90% 460px at 50% 0%, rgba(58, 80, 107, 0.42) 0%, rgba(28, 37, 65, 0.25) 50%, transparent 80%),
+        linear-gradient(180deg, #1b2648 0%, #121c3a 50%, #0b132b 100%);
+    background-attachment: fixed;
+    color: var(--text-primary);
+}
+
+/* Floating Glassmorphic Pill Header (Inspired by GSA Reference) */
+.site-header {
+    position: sticky;
+    top: 14px;
+    width: 90%;
+    max-width: 1280px;
+    margin: 0 auto 1.5rem;
+    border-radius: 999px;
+    background: linear-gradient(135deg, rgba(28, 37, 65, 0.82) 0%, rgba(15, 23, 48, 0.88) 100%);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(111, 255, 233, 0.2);
+    box-shadow:
+        0 12px 32px -4px rgba(6, 11, 26, 0.55),
+        inset 0 1px 0 rgba(255, 255, 255, 0.12);
+    z-index: 100;
+}
+
+.site-header .container {
+    width: 100%;
+    padding: 0.75rem 1.75rem;
+}
+
+.brand {
+    font-size: 1.15rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    color: #ffffff;
+    text-shadow: 0 2px 10px rgba(96, 165, 250, 0.35);
+}
+
+nav a {
+    color: #e2e8f0;
+    font-weight: 500;
+    font-size: 0.95rem;
+    padding: 0.4rem 0.75rem;
+    border-radius: 999px;
+    margin-left: 0.35rem;
+    transition: all 0.25s ease;
+}
+
+nav a:hover {
+    color: #ffffff;
+    background: rgba(96, 165, 250, 0.18);
+    box-shadow: inset 0 0 0 1px rgba(147, 197, 253, 0.25);
+}
+
+.nav-user {
+    display: inline-block;
+    margin-left: 0.75rem;
+    padding: 0.3rem 0.85rem;
+    border-radius: 999px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--accent);
+    background: rgba(111, 255, 233, 0.12);
+    border: 1px solid rgba(111, 255, 233, 0.28);
+}
+
+/* Typography & Hero Polish */
+h1 {
+    letter-spacing: -0.02em;
+    text-shadow: 0 8px 28px rgba(2, 8, 28, 0.6);
+}
+
+.bio {
+    color: #cbd5e1;
+    font-size: 1.02rem;
+}
+
+/* Glassmorphic Surfaces & Cards */
+.meta-list,
+.skill-card,
+.experience-card,
+.isi-popup {
+    background: linear-gradient(165deg, rgba(24, 52, 107, 0.62) 0%, rgba(10, 23, 52, 0.76) 100%);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border: 1px solid rgba(148, 197, 255, 0.18);
+    box-shadow:
+        0 16px 36px -8px rgba(2, 6, 23, 0.6),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.skill-card:hover,
+.experience-card:hover {
+    border-color: rgba(111, 255, 233, 0.5);
+    box-shadow:
+        0 20px 42px -8px rgba(2, 8, 28, 0.75),
+        0 0 24px rgba(56, 189, 248, 0.16);
+}
+
+/* Education Cards (Glassmorphic List Items) */
+.daftar-pengalaman {
+    gap: 1.15rem;
+}
+
+.item-pengalaman {
+    background: linear-gradient(145deg, rgba(22, 48, 100, 0.56) 0%, rgba(9, 21, 48, 0.72) 100%);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(148, 197, 255, 0.18);
+    border-radius: 16px;
+    padding: 1.6rem 1.8rem;
+    box-shadow:
+        0 12px 30px -6px rgba(2, 6, 23, 0.5),
+        inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    transition: transform 0.28s ease, border-color 0.28s ease, box-shadow 0.28s ease;
+}
+
+.item-pengalaman:last-child {
+    border-bottom: 1px solid rgba(148, 197, 255, 0.18);
+}
+
+.item-pengalaman:hover {
+    transform: translateY(-3px);
+    border-color: rgba(111, 255, 233, 0.45);
+    box-shadow:
+        0 18px 38px -6px rgba(2, 8, 28, 0.7),
+        0 0 22px rgba(56, 189, 248, 0.14);
+}
+
+.logo-sekolah {
+    width: 54px;
+    height: 54px;
+    padding: 4px;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+}
+
+/* Form Inputs & Search Bar */
+.education-search input,
+.form-group input,
+.form-group textarea {
+    background: rgba(9, 21, 48, 0.72);
+    color: #f8fafc;
+    border: 1px solid rgba(148, 197, 255, 0.26);
+    border-radius: 999px;
+    padding: 0.65rem 1.1rem;
+    backdrop-filter: blur(8px);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.form-group input,
+.form-group textarea {
+    border-radius: 12px;
+}
+
+.form-group input[type="checkbox"] {
+    width: auto;
+    margin-right: 0.5rem;
+    accent-color: var(--accent);
+}
+
+.education-search input::placeholder,
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+    color: #94a3b8;
+}
+
+.education-search input:focus,
+.form-group input:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(111, 255, 233, 0.18);
+}
+
+/* Buttons */
+.button {
+    border-radius: 999px;
+    padding: 0.65rem 1.25rem;
+    background: linear-gradient(135deg, #6fffe9 0%, #38bdf8 100%);
+    color: #041026;
+    box-shadow: 0 6px 20px -4px rgba(56, 189, 248, 0.45);
+    transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+}
+
+.button:hover {
+    transform: translateY(-1px);
+    filter: brightness(1.06);
+    box-shadow: 0 10px 24px -4px rgba(111, 255, 233, 0.55);
+}
+
+.button-secondary {
+    background: rgba(23, 49, 102, 0.65);
+    color: #f8fafc;
+    border: 1px solid rgba(148, 197, 255, 0.24);
+    box-shadow: none;
+}
+
+.button-secondary:hover {
+    background: rgba(33, 68, 138, 0.8);
+    box-shadow: 0 6px 16px rgba(2, 8, 28, 0.4);
+}
+
+.button-danger {
+    border-radius: 999px;
+    padding: 0.65rem 1.25rem;
+}
+
+/* Modals, Star Button & Toasts */
+.delete-modal {
+    margin: auto;
+    border: 1px solid rgba(148, 197, 255, 0.28);
+    border-radius: 18px;
+    background: linear-gradient(165deg, #132a5c 0%, #081430 100%);
+    color: var(--text-primary);
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.75);
+}
+
+.delete-modal::backdrop {
+    background: rgba(2, 6, 23, 0.72);
+    backdrop-filter: blur(6px);
+}
+
+.education-actions {
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.star-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(20, 44, 92, 0.65);
+    color: #f5d547;
+    border: 1px solid rgba(148, 197, 255, 0.24);
+    border-radius: 999px;
+    padding: 0.45rem 0.85rem;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: border-color 0.2s ease, transform 0.2s ease, background 0.2s ease;
+}
+
+.star-button:hover {
+    border-color: var(--accent);
+    background: rgba(30, 64, 130, 0.85);
+    transform: scale(1.06);
+}
+
+.star-count {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}
+
+.toast-component {
+    background: linear-gradient(145deg, #152f66 0%, #091633 100%);
+    border: 1px solid rgba(148, 197, 255, 0.25);
+    color: var(--text-primary);
+    box-shadow: 0 16px 40px rgba(2, 6, 23, 0.65);
+    z-index: 2000;
+}
+
+@media (max-width: 768px) {
+    .site-header {
+        top: 10px;
+        width: 94%;
+        border-radius: 20px;
+    }
+
+    #main-nav {
+        margin-top: 8px;
+        background: linear-gradient(165deg, rgba(19, 42, 92, 0.96) 0%, rgba(8, 19, 44, 0.98) 100%);
+        backdrop-filter: blur(16px);
+        border: 1px solid rgba(148, 197, 255, 0.24);
+        box-shadow: 0 16px 36px rgba(2, 6, 23, 0.7);
+    }
+}
+
+
+/* =========================================================
+   HANGING LANYARD / POLAROID SKILL CARDS & EXPERIENCE POP-UP
+   ========================================================= */
+.grid-skill {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 2.5rem;
+    padding: 10px 20px 65px;
+    overflow: visible;
+    perspective: 1100px;
+}
+
+.grid-skill .cover-kartu {
+    flex: 0 0 320px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transform-origin: 50% 4px;
+    will-change: transform;
+    transition: none;
+    opacity: 1 !important;
+}
+
+.hanger-assembly {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    pointer-events: none;
+    z-index: 5;
+    margin-bottom: -10px;
+}
+
+.hanger-pin {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 35%, #f8fafc, #94a3b8 70%, #475569 100%);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.55);
+}
+
+.hanger-string {
+    width: 1.5px;
+    height: 62px;
+    background: linear-gradient(180deg, rgba(226, 232, 240, 0.75) 0%, rgba(148, 163, 184, 0.45) 100%);
+}
+
+.hanger-clip {
+    width: 16px;
+    height: 26px;
+    border-radius: 4px;
+    background: linear-gradient(90deg, #94a3b8 0%, #f1f5f9 45%, #64748b 100%);
+    border: 1px solid rgba(255, 255, 255, 0.45);
+    box-shadow:
+        0 4px 10px rgba(0, 0, 0, 0.45),
+        inset 0 1px 1px rgba(255, 255, 255, 0.8);
+}
+
+.grid-skill .skill-card {
+    width: 100%;
+    padding: 1.1rem 1.1rem 1.35rem;
+    border-radius: 10px;
+    text-align: left;
+    background: linear-gradient(165deg, rgba(30, 43, 78, 0.88) 0%, rgba(16, 25, 53, 0.94) 100%);
+    border: 1px solid rgba(148, 197, 255, 0.24);
+    box-shadow:
+        0 20px 40px -12px rgba(4, 9, 24, 0.75),
+        inset 0 1px 0 rgba(255, 255, 255, 0.14);
+}
+
+.grid-skill .gambar-skill {
+    height: 210px;
+    border-radius: 6px;
+    margin-bottom: 0.9rem;
+}
+
+.skill-card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 0.45rem;
+}
+
+.skill-card-footer h3 {
+    font-size: 1.15rem;
+    color: var(--text-primary);
+}
+
+.skill-index {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--text-secondary);
+    letter-spacing: 0.04em;
+}
+
+.skill-desc {
+    font-size: 0.88rem;
+    color: #cbd5e1;
+    line-height: 1.5;
+}
+
+/* Experience Cards Interactive & Pop-up */
+.experience-window {
+    padding: 16px 6px 24px;
+}
+
+.experience-interactive-card {
+    cursor: pointer;
+    transition:
+        transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+        border-color 0.35s ease,
+        box-shadow 0.35s ease;
+    will-change: transform;
+}
+
+.experience-interactive-card.experience-card-active {
+    transform: translateY(-6px) scale(1.015);
+    border-color: rgba(111, 255, 233, 0.45);
+    box-shadow:
+        0 18px 38px -8px rgba(4, 9, 24, 0.75),
+        0 0 22px rgba(111, 255, 233, 0.14);
+}
+
+.experience-interactive-card:hover {
+    border-color: var(--accent);
+    box-shadow:
+        0 22px 44px -8px rgba(4, 9, 24, 0.85),
+        0 0 28px rgba(111, 255, 233, 0.22);
+}
+
+.layar-popup.active {
+    display: flex;
+    backdrop-filter: blur(6px);
+}
+
+.experience-popup-box {
+    max-width: 540px;
+    text-align: left;
+}
+
+.experience-popup-box .tombol-tutup {
+    background: none;
+    border: none;
+    line-height: 1;
+}
+
+@media (max-width: 768px) {
+    .grid-skill {
+        justify-content: flex-start;
+        overflow-x: auto;
+        padding-bottom: 40px;
+    }
+
+    .grid-skill .cover-kartu {
+        flex: 0 0 285px;
+    }
+}
+
+
+/* =========================================================
+   SEAMLESS DARK-TO-BRIGHT NAVY GRADIENT, TEXT REVEAL & SECTION FADE
+   ========================================================= */
+html {
+    background-color: #0b132b;
+    overflow-y: auto;
+}
+
+body {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: clip;
+    transform: none !important;
+    background-color: #0b132b;
+    background-image:
+        /* Bauran pendaran cahaya lembut (tanpa garis batas) di tiap peralihan halaman */
+        radial-gradient(ellipse 110% 340px at 50% 23%, rgba(30, 54, 108, 0.5) 0%, transparent 75%),
+        radial-gradient(ellipse 110% 380px at 50% 48%, rgba(42, 74, 138, 0.48) 0%, transparent 75%),
+        radial-gradient(ellipse 110% 420px at 50% 74%, rgba(58, 98, 168, 0.45) 0%, transparent 75%),
+        radial-gradient(ellipse 100% 560px at 50% 98%, rgba(86, 134, 204, 0.46) 0%, rgba(48, 82, 148, 0.25) 58%, transparent 88%),
+        /* Gradasi utama: Biru dongker gelap asli (#0b132b) di Profile -> bertahap makin muda -> biru terang di halaman terakhir */
+        linear-gradient(
+            180deg,
+            #0b132b 0%,
+            #0c1530 16%,
+            #132147 26%,
+            #162652 40%,
+            #1d3268 51%,
+            #203872 66%,
+            #264282 77%,
+            #2b4a8e 90%,
+            #31549c 100%
+        );
+    background-attachment: scroll;
+}
+
+/* Hapus seluruh garis sekat kaku antar halaman dan gunakan bauran ruang gradasi */
+.hero,
+.hero-section,
+.experience-section,
+main > section,
+.site-footer {
+    border-top: none !important;
+    border-bottom: none !important;
+    background: transparent !important;
+}
+
+.site-footer {
+    color: #cbd5e1;
+    padding: 1.25rem 0 2.25rem;
+}
+
+main > section {
+    position: relative;
+    padding-top: 3.5rem;
+    padding-bottom: 4.5rem;
+    transition: opacity 0.22s ease-out, filter 0.22s ease-out;
+    will-change: opacity, filter;
+}
+
+#profile {
+    padding-top: 1.5rem;
+}
+
+.grid-skill .cover-kartu-middle {
+    margin-top: 22px;
+}
+
+/* Efek Tulisan & Kartu Muncul Perlahan saat di-Scroll */
+.scroll-reveal {
+    opacity: 0;
+    transform: translateY(26px);
+    filter: blur(5px);
+    transition:
+        opacity 0.75s ease,
+        transform 0.75s cubic-bezier(0.22, 1, 0.36, 1),
+        filter 0.75s ease;
+}
+
+.scroll-reveal.scroll-visible {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+}
+
+.section-heading-reveal {
+    opacity: 0;
+    transform: translateY(24px);
+    filter: blur(5px);
+    transition:
+        opacity 0.75s ease,
+        transform 0.75s cubic-bezier(0.22, 1, 0.36, 1),
+        filter 0.75s ease;
+}
+
+.section-heading-reveal.show {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+}
+
+.education-stagger {
+    opacity: 0;
+    transform: translateY(26px);
+    transition:
+        opacity 0.7s ease,
+        transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.education-stagger.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.name-letter {
+    display: inline-block;
+    opacity: 0;
+    transform: translateY(24px);
+    filter: blur(4px);
+    animation: name-letter-reveal 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@keyframes name-letter-reveal {
+    0% {
+        opacity: 0;
+        transform: translateY(24px);
+        filter: blur(4px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+        filter: blur(0);
+    }
+}
