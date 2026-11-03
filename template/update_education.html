@@ -16,7 +16,7 @@
         rel="stylesheet"
     >
 
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}?v=2">
 </head>
 
 <body>
@@ -51,6 +51,7 @@
         <h1 class="education-title">Update Education</h1>
 
         <form
+            id="education-update-form"
             method="POST"
             action="{% url 'main:update_education' education.id %}"
             class="education-form"
@@ -101,6 +102,88 @@
 </footer>
 
 <script src="{% static 'js/navbar.js' %}"></script>
+{% include "components/toast.html" %}
+<script>
+    const educationUpdateForm = document.getElementById("education-update-form");
+    const EDUCATION_DETAIL_API = "/api/v1/educations/{{ education.id }}/";
+
+    if (educationUpdateForm) {
+        educationUpdateForm.addEventListener("submit", async function (event) {
+            event.preventDefault();
+
+            const formData = new FormData(educationUpdateForm);
+            const csrfToken = formData.get("csrfmiddlewaretoken") || "";
+
+            const payload = {
+                institution: formData.get("institution") || "",
+                degree: formData.get("degree") || "",
+                period: formData.get("period") || "",
+                location: formData.get("location") || "",
+                skills: formData.get("skills") || "",
+                logo: formData.get("logo") || "",
+                is_current: formData.has("is_current")
+            };
+
+            try {
+                const response = await fetch(EDUCATION_DETAIL_API, {
+                    method: "PATCH",
+                    headers: {
+                        "Accept": "application/json",
+                        "Content-Type": "application/json",
+                        "X-CSRFToken": csrfToken
+                    },
+                    body: JSON.stringify(payload)
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    showToast(
+                        "Berhasil",
+                        "Education berhasil diperbarui!",
+                        "success"
+                    );
+                    setTimeout(function () {
+                        window.location.href = "{% url 'main:show_education' %}";
+                    }, 600);
+                    return;
+                }
+
+                if (response.status === 400) {
+                    const errorMessages = Object.values(data).flat().join(" ");
+                    showToast(
+                        "Gagal memperbarui education",
+                        errorMessages || "Data tidak valid.",
+                        "error"
+                    );
+                    return;
+                }
+
+                if (response.status === 403 || response.status === 401) {
+                    showToast(
+                        "Akses ditolak",
+                        "Kamu tidak memiliki izin untuk mengubah Education.",
+                        "error"
+                    );
+                    return;
+                }
+
+                showToast(
+                    "Terjadi kesalahan",
+                    `Terjadi kesalahan (status ${response.status}).`,
+                    "error"
+                );
+            } catch (error) {
+                console.error(error);
+                showToast(
+                    "Gagal",
+                    "Gagal menghubungi server.",
+                    "error"
+                );
+            }
+        });
+    }
+</script>
 
 </body>
 </html>

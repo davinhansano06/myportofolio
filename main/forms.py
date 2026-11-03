@@ -99,6 +99,7 @@ class EducationForm(ModelForm):
             "period",
             "location",
             "skills",
+            "is_current",
             "logo",
         ]
 
@@ -108,6 +109,7 @@ class EducationForm(ModelForm):
             "period": "Periode",
             "location": "Lokasi",
             "skills": "Skills",
+            "is_current": "Currently studying",
             "logo": "Logo",
         }
 

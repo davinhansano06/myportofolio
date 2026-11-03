@@ -15,7 +15,7 @@
         rel="stylesheet"
     >
 
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}?v=2">
 </head>
 
 <body>
@@ -35,8 +35,16 @@
                 <a href="{% url 'main:show_main' %}">Profile</a>
                 <a href="{% url 'main:show_main' %}#skill">Skill</a>
                 <a href="{% url 'main:show_education' %}">Education</a>
-                <a href="{% url 'main:show_main' %}#experience">Experience</a>
+                <a href="{% url 'main:show_experience' %}">Experience</a>
                 <a href="{% url 'main:show_main' %}#contact">Contact</a>
+
+                {% if user.is_authenticated %}
+                    <span class="nav-user">{{ user.username }}</span>
+                    <a href="{% url 'main:logout' %}">Logout</a>
+                {% else %}
+                    <a href="{% url 'main:login' %}">Login</a>
+                    <a href="{% url 'main:register' %}">Register</a>
+                {% endif %}
             </nav>
         </div>
     </header>
@@ -67,6 +75,7 @@
                     {% endif %}
 
                     <form id="education-search-form" class="education-search">
+                        {% csrf_token %}
                         <input
                             type="text"
                             id="education-search-input"
@@ -80,7 +89,7 @@
                     </form>
                 </div>
 
-              <!-- Education Content -->
+                <!-- Education Content -->
                 <div class="hero-grid">
                     <div class="hero-details">
                         <div class="daftar-pengalaman" id="education-list">
@@ -93,52 +102,53 @@
             </div>
         </section>
     </main>
+
     {% if user.is_superuser %}
     <dialog id="education-add-modal" class="delete-modal">
         <div class="delete-modal-content">
             <h2>Tambah Education</h2>
 
-            <form id="education-add-form">
+            <form id="education-add-form" class="education-form">
                 {% csrf_token %}
 
-                <div>
+                <div class="form-group">
                     <label for="id_institution">Institution</label>
                     {{ form.institution }}
                 </div>
 
-                <div>
+                <div class="form-group">
                     <label for="id_degree">Degree</label>
                     {{ form.degree }}
                 </div>
 
-                <div>
+                <div class="form-group">
                     <label for="id_period">Period</label>
                     {{ form.period }}
                 </div>
 
-                <div>
+                <div class="form-group">
                     <label for="id_location">Location</label>
                     {{ form.location }}
                 </div>
 
-                <div>
+                <div class="form-group">
                     <label for="id_skills">Skills</label>
                     {{ form.skills }}
                 </div>
 
-                <div>
+                <div class="form-group">
                     <label for="id_logo">Logo</label>
                     {{ form.logo }}
                 </div>
 
-                <div>
+                <div class="form-group">
                     <label for="id_is_current">
                         {{ form.is_current }}
                         Currently studying
                     </label>
                 </div>
 
-                <div>
+                <div style="margin-top: 1rem;">
                     <button
                         type="submit"
                         class="button"
@@ -157,7 +167,7 @@
             </form>
         </div>
     </dialog>
-    {% if user.is_superuser %}
+
     <dialog id="education-delete-modal" class="delete-modal">
         <div class="delete-modal-content">
 
@@ -193,7 +203,6 @@
         </div>
     </dialog>
     {% endif %}
-    {% endif %}
 
     <!-- Footer Section -->
     <footer class="site-footer">
@@ -209,6 +218,7 @@
     <script src="{% static 'js/experience.js' %}"></script>
     <script src="{% static 'js/navbar.js' %}"></script>
 
+
     <script>
         function escapeHtml(value) {
             return String(value ?? "")
@@ -218,16 +228,36 @@
                 .replaceAll('"', "&quot;")
                 .replaceAll("'", "&#39;");
         }
+
+        // CSRF token untuk request POST, PATCH, dan DELETE.
+        function getCsrfToken() {
+            const inputToken = document.querySelector(
+                "[name=csrfmiddlewaretoken]"
+            )?.value;
+            if (inputToken) {
+                return inputToken;
+            }
+            const cookieMatch = document.cookie.match(
+                /(?:^|;\s*)csrftoken=([^;]+)/
+            );
+            return cookieMatch ? decodeURIComponent(cookieMatch[1]) : "";
+        }
+
+        const EDUCATION_API = "/api/v1/educations/";
+
         function openEducationDeleteModal(id, institution) {
             const modal = document.getElementById("education-delete-modal");
-            const form = document.getElementById("education-delete-form");
             const titleElement = document.getElementById("delete-education-title");
 
             titleElement.textContent = institution;
-            form.action = `/education/delete/${id}/`;
+
+            // Simpan UUID Education yang akan dihapus.
+            document.getElementById("education-delete-form").dataset.id = id;
 
             modal.showModal();
         }
+
+        // Animasi ketika kartu Education muncul di layar.
         const educationObserver = new IntersectionObserver(
             function (entries, observer) {
                 entries.forEach(function (entry) {
@@ -241,19 +271,23 @@
                 threshold: 0.2
             }
         );
+
+        // Mengambil Education dari DRF API.
         async function fetchEducation(searchQuery = "") {
             const educationList = document.getElementById("education-list");
 
-            educationList.innerHTML = `
-                <p>Memuat education...</p>
-            `;
+            educationList.innerHTML = "<p>Memuat education...</p>";
 
             try {
                 const url = searchQuery
-                    ? `/api/education/?institution=${encodeURIComponent(searchQuery)}`
-                    : "/api/education/";
+                    ? `${EDUCATION_API}?q=${encodeURIComponent(searchQuery)}`
+                    : EDUCATION_API;
 
-                const response = await fetch(url);
+                const response = await fetch(url, {
+                    headers: {
+                        "Accept": "application/json"
+                    }
+                });
 
                 if (!response.ok) {
                     throw new Error("Gagal mengambil data education.");
@@ -270,9 +304,7 @@
 
                 educationList.innerHTML = "";
 
-                data.forEach((item,index) => {
-                    const education = item.fields;
-
+                data.forEach((education) => {
                     const educationCard = document.createElement("div");
                     educationCard.className = "item-pengalaman education-stagger";
 
@@ -293,7 +325,7 @@
                             </p>
 
                             <p class="periode">
-                                ${escapeHtml(education.period)}
+                                ${escapeHtml(education.period)}${education.is_current ? " · Currently Studying" : ""}
                             </p>
 
                             <p class="lokasi">
@@ -308,49 +340,41 @@
                             </div>
                         </div>
 
-                        {% if user.is_authenticated %}
                         <div class="education-actions">
-
+                            {% if can_edit_education %}
                             <a
-                                href="/education/update/${item.pk}/"
+                                href="/education/update/${education.id}/"
                                 class="button"
                             >
                                 Update
                             </a>
+                            {% endif %}
 
                             {% if user.is_superuser %}
                             <button
                                 type="button"
-                                class="button button-secondary"
-                                onclick="openEducationDeleteModal(
-                                    '${item.pk}',
-                                    '${escapeHtml(education.institution)}'
-                                )"
+                                class="button button-secondary delete-education-button"
+                                data-id="${escapeHtml(education.id)}"
+                                data-institution="${escapeHtml(education.institution)}"
                             >
                                 Delete
                             </button>
                             {% endif %}
 
-                            <form
-                                method="POST"
-                                action="/star/education/${item.pk}/"
+                            {% if user.is_authenticated %}
+                            <button
+                                type="button"
+                                class="star-button education-star-button"
+                                data-id="${escapeHtml(education.id)}"
                             >
-                                {% csrf_token %}
+                                ${education.is_starred ? "★" : "☆"}
+                            </button>
+                            {% endif %}
 
-                                <button
-                                    type="submit"
-                                    class="star-button"
-                                >
-                                    ${education.is_starred ? "★" : "☆"}
-                                </button>
-                            </form>
-
+                            <span class="star-count">
+                                ${education.star_count} Star
+                            </span>
                         </div>
-                        {% endif %}
-
-                        <span>
-                            ${education.star_count} Star
-                        </span>
                     `;
 
                     educationList.appendChild(educationCard);
@@ -358,11 +382,15 @@
                 });
 
             } catch (error) {
+                console.error(error);
+
                 educationList.innerHTML = `
                     <p>Gagal memuat education.</p>
                 `;
             }
         }
+
+        // Search dengan debounce 300 ms.
         const searchForm = document.getElementById("education-search-form");
         const searchInput = document.getElementById("education-search-input");
 
@@ -381,87 +409,217 @@
             event.preventDefault();
 
             clearTimeout(searchDebounceTimer);
-
             fetchEducation(searchInput.value.trim());
         });
 
+        // Load Education pertama kali.
         fetchEducation();
-        const educationAddForm =
-        document.getElementById("education-add-form");
 
-        educationAddForm.addEventListener("submit", async function (event) {event.preventDefault();
+        // Menambahkan Education melalui DRF.
+        const educationAddForm = document.getElementById("education-add-form");
 
-            const formData = new FormData(educationAddForm);
+        if (educationAddForm) {
+            educationAddForm.addEventListener("submit", async function (event) {
+                event.preventDefault();
 
-            try {
-                const response = await fetch(
-                    "/api/education/create/",
-                    {
+                const formData = new FormData(educationAddForm);
+
+                const payload = {
+                    institution: formData.get("institution") || "",
+                    degree: formData.get("degree") || "",
+                    period: formData.get("period") || "",
+                    location: formData.get("location") || "",
+                    skills: formData.get("skills") || "",
+                    logo: formData.get("logo") || "",
+                    is_current: formData.has("is_current")
+                };
+
+                try {
+                    const response = await fetch(EDUCATION_API, {
                         method: "POST",
-                        body: formData,
                         headers: {
-                            "X-CSRFToken": formData.get("csrfmiddlewaretoken")
-                        }
+                            "Accept": "application/json",
+                            "Content-Type": "application/json",
+                            "X-CSRFToken": getCsrfToken()
+                        },
+                        body: JSON.stringify(payload)
+                    });
+
+                    const data = await response.json();
+
+                    if (response.status === 201) {
+                        showToast(
+                            "Berhasil",
+                            "Education berhasil ditambahkan!",
+                            "success"
+                        );
+
+                        educationAddForm.reset();
+
+                        document.getElementById("education-add-modal").close();
+
+                        fetchEducation();
+                        return;
                     }
-                );
 
-                const data = await response.json();
-
-                if (response.status === 201) {
-                    showToast(
-                        "Berhasil",
-                        data.message,
-                        "success"
-                    );
-
-                    educationAddForm.reset();
-
-                    document
-                        .getElementById("education-add-modal")
-                        .close();
-
-                    fetchEducation();
-                    return;
-                }
-
-                if (response.status === 400) {
-                    const errorMessages = data.errors
-                        ? Object.values(data.errors)
+                    if (response.status === 400) {
+                        const errorMessages = Object.values(data)
                             .flat()
-                            .map(error => error.message)
-                        : ["Data yang dimasukkan tidak valid."];
+                            .join(" ");
+
+                        showToast(
+                            "Gagal menambahkan education",
+                            errorMessages || "Data tidak valid.",
+                            "error"
+                        );
+                        return;
+                    }
+
+                    if (response.status === 403 || response.status === 401) {
+                        showToast(
+                            "Akses ditolak",
+                            "Kamu tidak memiliki izin untuk menambahkan Education.",
+                            "error"
+                        );
+                        return;
+                    }
 
                     showToast(
-                        "Gagal menambahkan education",
-                        errorMessages.join(" "),
+                        "Terjadi kesalahan",
+                        `Terjadi kesalahan (status ${response.status}).`,
                         "error"
                     );
 
-                    return;
-                }
+                } catch (error) {
+                    console.error(error);
 
-                if (response.status === 403) {
                     showToast(
-                        "Akses ditolak",
-                        data.message,
+                        "Gagal",
+                        "Gagal menghubungi server.",
                         "error"
                     );
-
-                    return;
                 }
+            });
+        }
 
-                showToast(
-                    "Terjadi kesalahan",
-                    `Terjadi kesalahan (status ${response.status}).`,
-                    "error"
+        // Event delegation untuk tombol Delete dan Star.
+        document.getElementById("education-list").addEventListener(
+            "click",
+            async function (event) {
+
+                // DELETE Education.
+                const deleteButton = event.target.closest(
+                    ".delete-education-button"
                 );
-                
-            } catch (error) {
-                console.error("Error:", error);
-                alert("Gagal menghubungi server.");
+
+                if (deleteButton) {
+                    openEducationDeleteModal(
+                        deleteButton.dataset.id,
+                        deleteButton.dataset.institution
+                    );
+                    return;
+                }
+
+                // STAR / UNSTAR Education.
+                const starButton = event.target.closest(
+                    ".education-star-button"
+                );
+
+                if (starButton) {
+                    const id = starButton.dataset.id;
+
+                    try {
+                        const response = await fetch(
+                            `${EDUCATION_API}${id}/star/`,
+                            {
+                                method: "POST",
+                                headers: {
+                                    "Accept": "application/json",
+                                    "X-CSRFToken": getCsrfToken()
+                                }
+                            }
+                        );
+
+                        if (!response.ok) {
+                            throw new Error("Gagal mengubah star.");
+                        }
+
+                        // Muat ulang agar jumlah dan status star diperbarui.
+                        fetchEducation(searchInput.value.trim());
+
+                    } catch (error) {
+                        console.error(error);
+
+                        showToast(
+                            "Gagal",
+                            "Tidak berhasil mengubah star.",
+                            "error"
+                        );
+                    }
+                }
             }
-        });
+        );
+
+        // Menghapus Education melalui DRF DELETE.
+        const educationDeleteForm = document.getElementById(
+            "education-delete-form"
+        );
+
+        if (educationDeleteForm) {
+            educationDeleteForm.addEventListener(
+                "submit",
+                async function (event) {
+                    event.preventDefault();
+
+                    const id = educationDeleteForm.dataset.id;
+
+                    try {
+                        const response = await fetch(
+                            `${EDUCATION_API}${id}/`,
+                            {
+                                method: "DELETE",
+                                headers: {
+                                    "Accept": "application/json",
+                                    "X-CSRFToken": getCsrfToken()
+                                }
+                            }
+                        );
+
+                        if (response.status === 204) {
+                            document.getElementById(
+                                "education-delete-modal"
+                            ).close();
+
+                            showToast(
+                                "Berhasil",
+                                "Education berhasil dihapus!",
+                                "success"
+                            );
+
+                            fetchEducation(searchInput.value.trim());
+                            return;
+                        }
+
+                        showToast(
+                            "Gagal",
+                            `Gagal menghapus Education (status ${response.status}).`,
+                            "error"
+                        );
+
+                    } catch (error) {
+                        console.error(error);
+
+                        showToast(
+                            "Gagal",
+                            "Gagal menghubungi server.",
+                            "error"
+                        );
+                    }
+                }
+            );
+        }
     </script>
+
     <script src="{% static 'js/page-effects.js' %}"></script>
     {% include "components/toast.html" %}
 </body>

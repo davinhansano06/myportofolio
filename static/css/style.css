@@ -1366,3 +1366,95 @@ body.page-exiting {
         animation-duration: 14s;
     }
 }
+
+
+/* =================================
+   EDUCATION DRF & MODAL ENHANCEMENTS
+================================= */
+.delete-modal {
+    margin: auto;
+    border: 1px solid var(--accent);
+    background: var(--card-bg);
+    color: var(--text-primary);
+}
+
+.education-actions {
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.star-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--card-bg);
+    color: #f5d547;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 0.45rem 0.75rem;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: border-color 0.2s ease, transform 0.2s ease;
+}
+
+.star-button:hover {
+    border-color: var(--accent);
+    transform: scale(1.05);
+}
+
+.star-count {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}
+
+.toast-component {
+    background-color: var(--card-bg);
+    color: var(--text-primary);
+    z-index: 2000;
+}
+
+
+/* =================================
+   EDUCATION DRF & MODAL ENHANCEMENTS
+================================= */
+.delete-modal {
+    margin: auto;
+    border: 1px solid var(--accent);
+    background: var(--card-bg);
+    color: var(--text-primary);
+}
+
+.education-actions {
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.star-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--card-bg);
+    color: #f5d547;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 0.45rem 0.75rem;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: border-color 0.2s ease, transform 0.2s ease;
+}
+
+.star-button:hover {
+    border-color: var(--accent);
+    transform: scale(1.05);
+}
+
+.star-count {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}
+
+.toast-component {
+    background-color: var(--card-bg);
+    color: var(--text-primary);
+    z-index: 2000;
+}

@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.core import serializers
-from django.http import HttpResponse,JsonResponse
+from django.http import HttpResponse, JsonResponse
 from main.models import Experience, Education
 from main.forms import EducationForm, ExperienceForm
 from django.contrib.auth.decorators import login_required
@@ -12,11 +12,18 @@ from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 import datetime
 
 
+def is_editor(user):
+    return user.groups.filter(name="Editor").exists()
+
 
 def show_main(request):
     last_login = request.COOKIES.get(
         "last_login",
         "Belum ada sesi login / Cookie tidak ditemukan"
+    )
+    can_edit_education = (
+        request.user.is_authenticated
+        and (request.user.is_superuser or is_editor(request.user))
     )
     context = {
         "name": "Davin Tristan Hansano",
@@ -30,8 +37,10 @@ def show_main(request):
         "education_list": Education.objects.all(),
         "experience_list": Experience.objects.all(),
         "form": ExperienceForm(),
+        "can_edit_education": can_edit_education,
     }
     return render(request, "index.html", context)
+
 
 def register(request):
     form = UserCreationForm(request.POST or None)
@@ -81,12 +90,14 @@ def logout_user(request):
 
     return response
 
+
 def show_experience(request):
     context = {
         "name": "Davin Tristan Hansano",
         "form": ExperienceForm(),
     }
     return render(request, "experience.html", context)
+
 
 def get_experience_json(request):
     search_query = request.GET.get("title", "")
@@ -127,6 +138,7 @@ def get_experience_json(request):
 
     return JsonResponse(data, safe=False)
 
+
 def show_education(request):
     institution_query = request.GET.get("institution", "")
 
@@ -137,14 +149,21 @@ def show_education(request):
             institution__icontains=institution_query
         )
 
+    can_edit_education = (
+        request.user.is_authenticated
+        and (request.user.is_superuser or is_editor(request.user))
+    )
+
     context = {
         "name": "Davin Tristan Hansano",
         "education_list": education_list,
         "institution_query": institution_query,
         "form": EducationForm(),
+        "can_edit_education": can_edit_education,
     }
 
     return render(request, "education.html", context)
+
 
 def get_education_json(request):
     institution_query = request.GET.get("institution", "")
@@ -186,8 +205,6 @@ def get_education_json(request):
 
     return JsonResponse(data, safe=False)
 
-def is_editor(user):
-    return user.groups.filter(name="Editor").exists()
 
 @login_required
 def create_education(request):
@@ -207,6 +224,7 @@ def create_education(request):
     }
 
     return render(request, "create_education.html", context)
+
 
 @require_POST
 def create_education_ajax(request):
@@ -246,6 +264,7 @@ def create_education_ajax(request):
         status=400,
     )
 
+
 @login_required
 def create_experience(request):
     if not request.user.is_superuser:
@@ -263,6 +282,7 @@ def create_experience(request):
     }
 
     return render(request, "create_experience.html", context)
+
 
 @login_required
 def update_education(request, id):
@@ -289,11 +309,12 @@ def update_education(request, id):
 
     return render(request, "update_education.html", context)
 
+
 @login_required
 def update_experience(request, id):
     if not request.user.is_superuser and not is_editor(request.user):
         raise PermissionDenied
-    
+
     experience = get_object_or_404(Experience, id=id)
 
     form = ExperienceForm(
@@ -314,6 +335,7 @@ def update_experience(request, id):
 
     return render(request, "update_experience.html", context)
 
+
 @login_required
 def delete_education(request, id):
     if not request.user.is_superuser:
@@ -321,6 +343,7 @@ def delete_education(request, id):
     education = get_object_or_404(Education, id=id)
     education.delete()
     return redirect("main:show_education")
+
 
 @login_required
 def delete_experience(request, id):
@@ -330,23 +353,6 @@ def delete_experience(request, id):
     experience.delete()
     return redirect("main:show_experience")
 
-def register(request):
-    form = UserCreationForm()
-
-    if request.method == "POST":
-        form = UserCreationForm(request.POST)
-
-        if form.is_valid():
-            form.save()
-            messages.success(request, "Akun berhasil dibuat!")
-            return redirect("main:login")
-
-    context = {
-        "form": form,
-        "name": "Davin Tristan Hansano",
-    }
-
-    return render(request, "register.html", context)
 
 @login_required
 @require_POST
