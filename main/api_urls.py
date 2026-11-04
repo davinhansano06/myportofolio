@@ -7,6 +7,15 @@ from main.api_views import (
     EducationStarAPIView,
 )
 
+from main.api_views import (
+    EducationListCreateAPIView,
+    EducationDetailAPIView,
+    EducationStarAPIView,
+    experience_list_create,
+    experience_detail,
+    experience_star,
+)
+
 app_name = "api"
 
 urlpatterns = [
@@ -30,4 +39,22 @@ urlpatterns = [
         EducationStarAPIView.as_view(),
         name="education_star",
     ),
+    
+    # Experience API - IA6
+    path(
+        "experiences/",
+        experience_list_create,
+        name="experience_list_create",
+    ),
+    path(
+        "experiences/<uuid:pk>/",
+        experience_detail,
+        name="experience_detail",
+    ),
+    path(
+        "experiences/<uuid:pk>/star/",
+        experience_star,
+        name="experience_star",
+    ),
+
 ]
