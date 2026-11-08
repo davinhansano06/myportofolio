@@ -83,3 +83,58 @@ Saya menggunakan AI sebagai pendamping selama mengerjakan tugas ini, terutama un
 ## Deklarasi Penggunaan AI
 
 Saya menggunakan AI sebagai pendamping selama mengerjakan tugas ini, terutama untuk membantu memahami konsep Django MVT, mencari penyebab error, dan memberikan arahan ketika saya mengalami kesulitan. Saya tetap mengerjakan implementasi project secara langsung dan mempelajari setiap bagian yang digunakan, sehingga AI berperan sebagai alat bantu belajar, bukan sebagai pengganti 
+
+### Tugas 6 — Refleksi Django REST Framework
+
+1. **Apa yang dimaksud dengan REST dan mengapa mengembalikan JSON saja belum cukup untuk menyebut sebuah API sebagai RESTful? Jelaskan perbedaan PUT dan PATCH!**
+
+REST (Representational State Transfer) merupakan sebuah architectural style untuk membangun sistem komunikasi antara client dan server. REST menggunakan resource sebagai pusat interaksi, di mana setiap resource dapat diidentifikasi melalui URI dan dimanipulasi menggunakan HTTP methods seperti GET, POST, PUT, PATCH, dan DELETE.
+
+Mengembalikan data dalam format JSON saja belum cukup untuk menyebut sebuah API sebagai RESTful. JSON hanyalah format pertukaran data, sedangkan REST berkaitan dengan bagaimana API dirancang dan bagaimana client berinteraksi dengan resource. API perlu memperhatikan prinsip-prinsip REST, seperti penggunaan resource-based URI, HTTP methods sesuai fungsinya, stateless communication, serta representasi resource yang konsisten.
+
+Dalam project ini, Experience API menggunakan endpoint `/api/v1/experiences/` untuk mengakses kumpulan data Experience dan `/api/v1/experiences/<id>/` untuk mengakses satu Experience berdasarkan UUID-nya. Setiap HTTP method memiliki fungsi yang berbeda:
+- **GET** digunakan untuk mengambil data Experience.
+- **POST** digunakan untuk menambahkan Experience baru.
+- **PUT** digunakan untuk memperbarui seluruh representasi resource dengan mengirimkan seluruh field yang diperlukan.
+- **PATCH** digunakan untuk memperbarui sebagian field tanpa harus mengirimkan seluruh data.
+- **DELETE** digunakan untuk menghapus Experience.
+
+Perbedaan PUT dan PATCH terletak pada cakupan pembaruannya. PUT digunakan ketika client ingin mengganti representasi resource secara keseluruhan, sedangkan PATCH digunakan ketika hanya beberapa atribut yang perlu diubah. Contohnya, jika hanya ingin mengubah judul Experience, PATCH lebih tepat karena client cukup mengirimkan field `title`, sedangkan PUT memerlukan data lengkap sesuai field yang diwajibkan serializer.
+
+2. **Apa peran serializer pada Django REST Framework? Apa keuntungannya dibandingkan merakit dictionary secara manual dengan JsonResponse seperti pada Tutorial 05?**
+
+Serializer pada Django REST Framework berperan sebagai perantara antara model Django dengan representasi data yang dikirim atau diterima melalui API. Serializer mengubah instance model menjadi data primitif yang dapat dirender menjadi JSON, sekaligus memvalidasi data yang dikirim oleh client sebelum data tersebut disimpan ke database. Dalam project ini, `ExperienceSerializer` menggunakan `ModelSerializer` untuk menentukan field yang dapat diakses melalui API, seperti `id`, `title`, `institution`, `period`, `description`, dan `image`. Serializer juga menyediakan computed fields, yaitu `star_count` dan `is_starred`, untuk menampilkan jumlah star dan status star pengguna yang sedang login.
+
+Dibandingkan membuat dictionary secara manual menggunakan `JsonResponse` seperti pada Tutorial 05, serializer memiliki beberapa keuntungan:
+- **Mengurangi kode berulang:** pemetaan field model ke representasi API dapat dilakukan secara otomatis melalui `ModelSerializer`.
+- **Validasi terstruktur:** validasi input dapat ditempatkan langsung di serializer melalui method seperti `validate_title()` dan `validate_description()`.
+- **Penanganan error yang konsisten:** apabila input tidak valid, serializer menyediakan detail kesalahan yang dapat dikembalikan sebagai HTTP 400 Bad Request.
+- **Read-only fields:** field seperti `id`, `star_count`, dan `is_starred` dapat ditentukan sebagai field yang tidak boleh diubah langsung oleh client.
+- **Lebih mudah dikembangkan:** ketika model atau kebutuhan API berubah, pengelolaan representasi dan validasi data menjadi lebih terpusat.
+
+Dengan demikian, serializer membuat kode API lebih modular, konsisten, dan mudah dipelihara dibandingkan merakit dictionary secara manual pada setiap endpoint.
+
+3. **Apa perbedaan autentikasi dan otorisasi pada Django REST Framework? Mengapa hak akses harus diperiksa dengan permission class di server, bukan hanya dengan menyembunyikan tombol di template?**
+
+Autentikasi (authentication) adalah proses untuk memverifikasi identitas pengguna yang mengakses aplikasi. Sementara itu, otorisasi (authorization) adalah proses untuk menentukan tindakan apa saja yang boleh dilakukan oleh pengguna setelah identitasnya diketahui.
+Dalam project ini, autentikasi menggunakan `SessionAuthentication`, sehingga identitas pengguna dikenali melalui session login Django. Setelah itu, permission class `IsPortfolioOwnerOrEditorOrReadOnly` digunakan untuk menentukan hak akses terhadap Experience API.
+
+Project ini memiliki empat jenis pengguna dengan hak akses berbeda:
+- **Anonymous:** hanya dapat membaca data Experience.
+- **Regular User:** dapat membaca data dan melakukan star/unstar.
+- **Editor:** dapat membaca, melakukan star/unstar, serta memperbarui Experience menggunakan PUT atau PATCH.
+- **Portfolio Owner (Superuser):** memiliki akses penuh untuk membaca, menambahkan, memperbarui, menghapus, dan melakukan star/unstar.
+
+Pemeriksaan permission harus dilakukan di sisi server karena menyembunyikan tombol pada template hanya memengaruhi tampilan antarmuka, bukan keamanan endpoint. Pengguna tetap dapat mengirim HTTP request secara langsung menggunakan browser developer tools, Postman, atau program lain meskipun tombol tertentu tidak ditampilkan. Oleh karena itu, permission class diperlukan untuk memastikan setiap request diperiksa berdasarkan identitas dan hak akses pengguna. Dengan demikian, pengguna yang tidak memiliki izin tetap akan ditolak oleh server meskipun mencoba mengakses endpoint secara langsung.
+
+4. **Mengapa permintaan yang mengubah data tetap memerlukan token CSRF ketika API memakai SessionAuthentication? Mengapa test yang memakai force_authenticate tidak cukup untuk membuktikan bahwa perlindungan CSRF berjalan?**
+
+CSRF (Cross-Site Request Forgery) merupakan jenis serangan yang memanfaatkan autentikasi pengguna yang masih aktif di browser untuk mengirimkan request tanpa persetujuan pengguna. Pada Django, session authentication menggunakan cookie sebagai salah satu mekanisme pengenalan identitas pengguna. Browser dapat mengirimkan cookie tersebut secara otomatis ketika melakukan request ke server. Hal ini menimbulkan risiko apabila aplikasi tidak memeriksa apakah request yang mengubah data benar-benar berasal dari interaksi yang sah. Oleh karena itu, request yang mengubah state, seperti POST, PUT, PATCH, dan DELETE, perlu dilindungi menggunakan CSRF token.
+
+Pada project ini, setiap request yang mengubah data melalui Experience API menyertakan header `X-CSRFToken` yang nilainya diperoleh dari cookie `csrftoken`. Django REST Framework melalui `SessionAuthentication` akan memeriksa token tersebut untuk request dari pengguna yang terautentikasi. Jika token tidak tersedia atau tidak valid, request akan ditolak. Pengujian menggunakan `force_authenticate()` saja tidak cukup untuk membuktikan perlindungan CSRF berjalan karena metode tersebut secara langsung menetapkan pengguna yang telah terautentikasi pada request test. Metode ini melewati proses autentikasi session yang sebenarnya, sehingga tidak menguji mekanisme CSRF sebagaimana yang terjadi pada browser.
+
+Untuk membuktikan perlindungan CSRF berjalan, project ini menggunakan `APIClient(enforce_csrf_checks=True)` dan login melalui mekanisme session. Pengujian dilakukan dengan mengirimkan request POST tanpa CSRF token dan memastikan request ditolak. Selanjutnya, request dikirim kembali dengan CSRF token yang valid dan dipastikan berhasil. Dengan pengujian tersebut, perlindungan CSRF dapat diverifikasi melalui mekanisme session authentication yang sesungguhnya, bukan hanya melalui simulasi identitas pengguna.
+
+## Deklarasi Penggunaan AI
+
+Saya menggunakan AI sebagai pendamping selama mengerjakan tugas ini, terutama untuk membantu memahami konsep Django REST Framework, mencari penyebab error, dan memberikan arahan ketika saya mengalami kesulitan. Saya tetap mengerjakan implementasi project secara langsung dan mempelajari setiap bagian yang digunakan, sehingga AI berperan sebagai alat bantu belajar, bukan sebagai pengganti 

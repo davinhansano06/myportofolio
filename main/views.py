@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
+from django.views.decorators.csrf import ensure_csrf_cookie
 from django.core import serializers
 from django.http import HttpResponse, JsonResponse
 from main.models import Experience, Education
@@ -91,13 +92,25 @@ def logout_user(request):
     return response
 
 
+@ensure_csrf_cookie
 def show_experience(request):
+    can_edit_experience = (
+        request.user.is_authenticated
+        and (
+            request.user.is_superuser
+            or is_editor(request.user)
+        )
+    )
+
     context = {
         "name": "Davin Tristan Hansano",
         "form": ExperienceForm(),
+        "can_edit_experience": can_edit_experience,
+        "can_manage_experience": request.user.is_authenticated
+        and request.user.is_superuser,
     }
-    return render(request, "experience.html", context)
 
+    return render(request, "experience.html", context)
 
 def get_experience_json(request):
     search_query = request.GET.get("title", "")
