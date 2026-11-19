@@ -3,12 +3,16 @@ from django.db.models import Q
 from django.shortcuts import get_object_or_404
 
 from rest_framework import status
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from main.models import Education
-from main.serializers import EducationSerializer
+from main.models import Education, Experience, ContactMessage
+from main.serializers import (
+    EducationSerializer,
+    ExperienceSerializer,
+    ContactMessageSerializer,
+)
 from main.permissions import IsPortfolioOwnerOrEditorOrReadOnly
 
 from rest_framework.decorators import (
@@ -291,3 +295,70 @@ def experience_star(request, pk):
         "is_starred": is_starred,
         "star_count": experience.starred_by.count()
     })
+
+
+class ContactMessageListCreateAPIView(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request):
+        if not (request.user and request.user.is_authenticated and request.user.is_superuser):
+            return Response(
+                {"detail": "Hanya Owner portofolio yang dapat melihat inbox pesan."},
+                status=status.HTTP_403_FORBIDDEN,
+            )
+
+        messages = ContactMessage.objects.all()
+        serializer = ContactMessageSerializer(messages, many=True)
+        return Response(serializer.data)
+
+    def post(self, request):
+        serializer = ContactMessageSerializer(data=request.data)
+        if serializer.is_valid():
+            msg = serializer.save()
+            return Response(
+                ContactMessageSerializer(msg).data,
+                status=status.HTTP_201_CREATED,
+            )
+        return Response(
+            serializer.errors,
+            status=status.HTTP_400_BAD_REQUEST,
+        )
+
+
+class ContactMessageDetailAPIView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def _check_owner(self, request):
+        return bool(
+            request.user
+            and request.user.is_authenticated
+            and request.user.is_superuser
+        )
+
+    def patch(self, request, pk):
+        if not self._check_owner(request):
+            return Response(
+                {"detail": "Hanya Owner portofolio yang dapat mengubah status pesan."},
+                status=status.HTTP_403_FORBIDDEN,
+            )
+        msg = get_object_or_404(ContactMessage, pk=pk)
+        serializer = ContactMessageSerializer(
+            msg, data=request.data, partial=True
+        )
+        if serializer.is_valid():
+            msg = serializer.save()
+            return Response(ContactMessageSerializer(msg).data)
+        return Response(
+            serializer.errors, status=status.HTTP_400_BAD_REQUEST
+        )
+
+    def delete(self, request, pk):
+        if not self._check_owner(request):
+            return Response(
+                {"detail": "Hanya Owner portofolio yang dapat menghapus pesan."},
+                status=status.HTTP_403_FORBIDDEN,
+            )
+        msg = get_object_or_404(ContactMessage, pk=pk)
+        msg.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+

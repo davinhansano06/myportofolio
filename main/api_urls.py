@@ -14,6 +14,8 @@ from main.api_views import (
     experience_list_create,
     experience_detail,
     experience_star,
+    ContactMessageListCreateAPIView,
+    ContactMessageDetailAPIView,
 )
 
 app_name = "api"
@@ -55,6 +57,18 @@ urlpatterns = [
         "experiences/<uuid:pk>/star/",
         experience_star,
         name="experience_star",
+    ),
+
+    # Contact Inbox Messages API (DRF)
+    path(
+        "messages/",
+        ContactMessageListCreateAPIView.as_view(),
+        name="contact_message_list_create",
+    ),
+    path(
+        "messages/<uuid:pk>/",
+        ContactMessageDetailAPIView.as_view(),
+        name="contact_message_detail",
     ),
 
 ]

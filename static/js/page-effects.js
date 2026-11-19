@@ -6,7 +6,7 @@
         // 1. EFEK TULISAN MUNCUL PERLAHAN SAAT DI-SCROLL
         // =================================================
         const revealElements = document.querySelectorAll(
-            ".hero-kicker, .hero-identity h1, .hero-details, .hero-contact, .education-heading, .experience-heading, .item-pengalaman"
+            ".hero-kicker, .hero-identity h1, #contact h1, .hero-details, .hero-contact, .contact-lead, .wa-preview-card, .contact-form-panel, .education-heading, .experience-heading, .item-pengalaman"
         );
 
         const sectionHeadings = document.querySelectorAll(
@@ -376,4 +376,378 @@
             });
         }
     };
+
+    // =========================================================
+    // 6. INTERACTIVE PRIVATE INBOX CONTACT FORM & OWNER INBOX
+    //    (100% Phone Number Hidden from Public HTML/JS)
+    // =========================================================
+    function getCsrfToken() {
+        const tokenInput = document.querySelector(
+            "input[name='csrfmiddlewaretoken']"
+        );
+        if (tokenInput && tokenInput.value) {
+            return tokenInput.value;
+        }
+        const match = document.cookie.match(/(?:^|;\s*)csrftoken=([^;]+)/);
+        return match ? decodeURIComponent(match[1]) : "";
+    }
+
+    function escapeHtmlSafe(value) {
+        return String(value ?? "")
+            .replaceAll("&", "&amp;")
+            .replaceAll("<", "&lt;")
+            .replaceAll(">", "&gt;")
+            .replaceAll('"', "&quot;")
+            .replaceAll("'", "&#39;");
+    }
+
+    function buildReplyLink(contactRaw, senderName, topic) {
+        const cleaned = (contactRaw || "").trim();
+        if (cleaned.includes("@")) {
+            const subject = encodeURIComponent(`Re: ${topic} - Davin Tristan Hansano`);
+            const body = encodeURIComponent(
+                `Halo ${senderName},\n\nTerima kasih telah menghubungi saya melalui website portofolio mengenai "${topic}". `
+            );
+            return {
+                type: "email",
+                label: "✉️ Balas via Email",
+                url: `mailto:${cleaned}?subject=${subject}&body=${body}`
+            };
+        }
+
+        let digits = cleaned.replace(/\D/g, "");
+        if (digits.startsWith("0")) {
+            digits = "62" + digits.slice(1);
+        } else if (digits.startsWith("8")) {
+            digits = "62" + digits;
+        }
+
+        if (digits.length >= 9) {
+            const text = encodeURIComponent(
+                `Halo ${senderName}! 👋 Perkenalkan saya Davin Tristan Hansano. Terima kasih sudah meninggalkan pesan di portofolio saya terkait *${topic}*.`
+            );
+            return {
+                type: "whatsapp",
+                label: "💬 Balas ke WhatsApp Pengunjung",
+                url: `https://wa.me/${digits}?text=${text}`
+            };
+        }
+
+        return null;
+    }
+
+    const ownerInboxSection = document.getElementById("owner-inbox-section");
+    const ownerInboxList = document.getElementById("owner-inbox-list");
+    const ownerInboxCount = document.getElementById("owner-inbox-count");
+
+    async function loadOwnerInbox() {
+        if (!ownerInboxSection || !ownerInboxList) {
+            return;
+        }
+
+        try {
+            const response = await fetch("/api/v1/messages/", {
+                headers: { Accept: "application/json" }
+            });
+
+            if (!response.ok) {
+                ownerInboxList.innerHTML =
+                    '<p class="owner-inbox-empty">Tidak dapat memuat pesan inbox.</p>';
+                return;
+            }
+
+            const messages = await response.json();
+            const unreadCount = messages.filter(function (m) {
+                return !m.is_read;
+            }).length;
+
+            if (ownerInboxCount) {
+                ownerInboxCount.textContent = `${messages.length} Pesan (${unreadCount} Baru)`;
+            }
+
+            if (messages.length === 0) {
+                ownerInboxList.innerHTML =
+                    '<p class="owner-inbox-empty">Belum ada pesan masuk di inbox portofolio Anda.</p>';
+                return;
+            }
+
+            ownerInboxList.innerHTML = "";
+
+            messages.forEach(function (item) {
+                const card = document.createElement("article");
+                card.className = `owner-msg-card ${item.is_read ? "is-read" : "is-unread"}`;
+
+                const replyInfo = buildReplyLink(
+                    item.sender_contact,
+                    item.sender_name,
+                    item.topic
+                );
+
+                const orgLabel = item.sender_org
+                    ? `<span class="owner-msg-org">&middot; ${escapeHtmlSafe(item.sender_org)}</span>`
+                    : "";
+
+                const replyButtonHtml = replyInfo
+                    ? `<a href="${replyInfo.url}" target="_blank" rel="noopener noreferrer" class="button owner-reply-btn">${replyInfo.label}</a>`
+                    : "";
+
+                card.innerHTML = `
+                    <div class="owner-msg-top">
+                        <div class="owner-msg-sender">
+                            <strong>${escapeHtmlSafe(item.sender_name)}</strong>
+                            ${orgLabel}
+                            <span class="owner-msg-topic">${escapeHtmlSafe(item.topic)}</span>
+                        </div>
+                        <span class="owner-msg-time">${escapeHtmlSafe(item.created_at_display)}</span>
+                    </div>
+                    <p class="owner-msg-contact">
+                        Kontak Pengunjung: <strong>${escapeHtmlSafe(item.sender_contact)}</strong>
+                    </p>
+                    <p class="owner-msg-body">${escapeHtmlSafe(item.message)}</p>
+                    <div class="owner-msg-actions">
+                        ${replyButtonHtml}
+                        <button type="button" class="button button-secondary owner-toggle-read-btn" data-id="${item.id}" data-read="${item.is_read}">
+                            ${item.is_read ? "Tandai Belum Dibaca" : "✓ Tandai Dibaca"}
+                        </button>
+                        <button type="button" class="button button-danger owner-delete-msg-btn" data-id="${item.id}">
+                            Hapus
+                        </button>
+                    </div>
+                `;
+
+                ownerInboxList.appendChild(card);
+            });
+
+            ownerInboxList
+                .querySelectorAll(".owner-toggle-read-btn")
+                .forEach(function (btn) {
+                    btn.addEventListener("click", async function () {
+                        const msgId = btn.dataset.id;
+                        const currentlyRead = btn.dataset.read === "true";
+                        await fetch(`/api/v1/messages/${msgId}/`, {
+                            method: "PATCH",
+                            headers: {
+                                "Content-Type": "application/json",
+                                "X-CSRFToken": getCsrfToken()
+                            },
+                            body: JSON.stringify({ is_read: !currentlyRead })
+                        });
+                        loadOwnerInbox();
+                    });
+                });
+
+            ownerInboxList
+                .querySelectorAll(".owner-delete-msg-btn")
+                .forEach(function (btn) {
+                    btn.addEventListener("click", async function () {
+                        const msgId = btn.dataset.id;
+                        await fetch(`/api/v1/messages/${msgId}/`, {
+                            method: "DELETE",
+                            headers: {
+                                "X-CSRFToken": getCsrfToken()
+                            }
+                        });
+                        loadOwnerInbox();
+                    });
+                });
+        } catch (err) {
+            console.error("Failed to load owner inbox:", err);
+        }
+    }
+
+    const waForm = document.getElementById("whatsapp-contact-form");
+    if (waForm && !waForm.dataset.waBound) {
+        waForm.dataset.waBound = "true";
+
+        const nameInput = document.getElementById("wa-sender-name");
+        const contactInput = document.getElementById("wa-sender-contact");
+        const orgInput = document.getElementById("wa-sender-org");
+        const messageInput = document.getElementById("wa-message-input");
+        const charCounter = document.getElementById("wa-char-counter");
+        const livePreviewText = document.getElementById("wa-live-preview-text");
+        const livePreviewBubble = document.getElementById("wa-live-preview-bubble");
+        const previewStatus = document.getElementById("wa-preview-status");
+        const topicChips = Array.from(document.querySelectorAll(".wa-chip"));
+        const feedbackEl = document.getElementById("wa-form-feedback");
+        const submitBtn = document.getElementById("wa-submit-btn");
+        const submitBtnText = document.getElementById("wa-submit-btn-text");
+
+        let selectedTopic = "Kolaborasi Proyek";
+        let lastAutoTemplate = messageInput ? messageInput.value.trim() : "";
+
+        function composePreviewMessage() {
+            const senderName = nameInput ? nameInput.value.trim() : "";
+            const senderContact = contactInput ? contactInput.value.trim() : "";
+            const senderOrg = orgInput ? orgInput.value.trim() : "";
+            const rawMessage = messageInput ? messageInput.value.trim() : "";
+
+            let headerLine = "Halo Davin! 👋";
+            if (senderName && senderOrg) {
+                headerLine += `\nPerkenalkan saya ${senderName} (${senderOrg}).`;
+            } else if (senderName) {
+                headerLine += `\nPerkenalkan saya ${senderName}.`;
+            }
+
+            const contactLine = senderContact
+                ? `\nKontak balasan: ${senderContact}`
+                : "";
+            const topicLine = selectedTopic ? `\nTopik: ${selectedTopic}` : "";
+            const bodyLine = rawMessage ? `\n\n${rawMessage}` : "";
+
+            return `${headerLine}${topicLine}${contactLine}${bodyLine}`;
+        }
+
+        function updateLivePreviewAndCounter() {
+            if (messageInput && charCounter) {
+                const len = messageInput.value.length;
+                charCounter.textContent = `${len} / 500`;
+                charCounter.classList.toggle("wa-char-near-limit", len >= 450);
+            }
+
+            if (livePreviewText) {
+                livePreviewText.textContent = composePreviewMessage();
+                if (livePreviewBubble) {
+                    livePreviewBubble.classList.remove("wa-bubble-pulse");
+                    void livePreviewBubble.offsetWidth;
+                    livePreviewBubble.classList.add("wa-bubble-pulse");
+                }
+            }
+        }
+
+        topicChips.forEach(function (chip) {
+            chip.addEventListener("click", function () {
+                topicChips.forEach(function (c) {
+                    c.classList.remove("active");
+                });
+                chip.classList.add("active");
+                selectedTopic = chip.dataset.topic || "";
+
+                const newTemplate = chip.dataset.template || "";
+                if (
+                    messageInput &&
+                    newTemplate &&
+                    (messageInput.value.trim() === "" ||
+                        messageInput.value.trim() === lastAutoTemplate)
+                ) {
+                    messageInput.value = newTemplate;
+                    lastAutoTemplate = newTemplate;
+                }
+
+                updateLivePreviewAndCounter();
+            });
+        });
+
+        [nameInput, contactInput, orgInput, messageInput].forEach(function (inputEl) {
+            if (inputEl) {
+                inputEl.addEventListener("input", function () {
+                    if (feedbackEl) {
+                        feedbackEl.classList.add("hide");
+                    }
+                    if (previewStatus) {
+                        previewStatus.textContent = "Live Preview ✓✓";
+                    }
+                    updateLivePreviewAndCounter();
+                });
+            }
+        });
+
+        waForm.addEventListener("submit", async function (event) {
+            event.preventDefault();
+
+            const senderName = nameInput ? nameInput.value.trim() : "";
+            const senderContact = contactInput ? contactInput.value.trim() : "";
+            const senderOrg = orgInput ? orgInput.value.trim() : "";
+            const rawMessage = messageInput ? messageInput.value.trim() : "";
+
+            if (!senderName) {
+                if (feedbackEl) {
+                    feedbackEl.textContent = "Mohon isi nama Anda terlebih dahulu.";
+                    feedbackEl.className = "wa-form-feedback wa-feedback-error";
+                }
+                if (nameInput) nameInput.focus();
+                return;
+            }
+
+            if (!senderContact) {
+                if (feedbackEl) {
+                    feedbackEl.textContent =
+                        "Mohon cantumkan nomor WhatsApp atau Email Anda agar Davin dapat membalas pesan Anda.";
+                    feedbackEl.className = "wa-form-feedback wa-feedback-error";
+                }
+                if (contactInput) contactInput.focus();
+                return;
+            }
+
+            if (!rawMessage) {
+                if (feedbackEl) {
+                    feedbackEl.textContent = "Mohon tulis pesan Anda terlebih dahulu.";
+                    feedbackEl.className = "wa-form-feedback wa-feedback-error";
+                }
+                if (messageInput) messageInput.focus();
+                return;
+            }
+
+            if (submitBtn) submitBtn.disabled = true;
+            if (submitBtnText) submitBtnText.textContent = "Mengirim Pesan...";
+
+            try {
+                const response = await fetch("/api/v1/messages/", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        Accept: "application/json",
+                        "X-CSRFToken": getCsrfToken()
+                    },
+                    body: JSON.stringify({
+                        sender_name: senderName,
+                        sender_contact: senderContact,
+                        sender_org: senderOrg,
+                        topic: selectedTopic,
+                        message: rawMessage
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error("Gagal mengirim pesan.");
+                }
+
+                if (feedbackEl) {
+                    feedbackEl.textContent =
+                        "✓ Pesan berhasil terkirim ke inbox pribadi Davin! Davin akan segera menghubungi kontak Anda.";
+                    feedbackEl.className = "wa-form-feedback wa-feedback-success";
+                }
+
+                if (previewStatus) {
+                    previewStatus.textContent = "Terkirim ke Inbox Davin ✓✓";
+                }
+
+                if (nameInput) nameInput.value = "";
+                if (contactInput) contactInput.value = "";
+                if (orgInput) orgInput.value = "";
+
+                if (typeof window.showToast === "function") {
+                    window.showToast(
+                        "Pesan Terkirim!",
+                        "Pesan Anda telah disimpan secara aman di inbox Davin.",
+                        "success"
+                    );
+                }
+
+                loadOwnerInbox();
+            } catch (err) {
+                if (feedbackEl) {
+                    feedbackEl.textContent =
+                        "Terjadi kesalahan saat mengirim pesan. Silakan coba lagi.";
+                    feedbackEl.className = "wa-form-feedback wa-feedback-error";
+                }
+            } finally {
+                if (submitBtn) submitBtn.disabled = false;
+                if (submitBtnText) submitBtnText.textContent = "Kirim ke Inbox Davin";
+            }
+        });
+
+        updateLivePreviewAndCounter();
+    }
+
+    loadOwnerInbox();
 })();

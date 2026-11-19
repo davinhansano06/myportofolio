@@ -314,18 +314,169 @@
         </section>
         <!-- Section for Contact -->
         <section class="hero" id="contact">
-            <div class="container hero-grid">
-                <div class="hero-identity">
-                    <p class="hero-kicker"></p>
+            <div class="container contact-showcase-grid">
+                <!-- Left Column: Info, Social Links & Live WhatsApp Chat Preview -->
+                <div class="contact-info-panel">
+                    <p class="hero-kicker">
+                        <span class="wa-status-dot" aria-hidden="true"></span>
+                        <span>Available for Projects &amp; Collaboration</span>
+                    </p>
                     <h1>Keep on Contact!</h1>
-                    <div class="hero-contact" style="margin-top: 1.5rem;">
-                        <a href="https://github.com/davinhansano06/myportofolio.git" class="social-link">GitHub</a>
-                        <a href="https://www.linkedin.com/in/davin-hansano-030424380" class="social-link">LinkedIn</a>
-                        <a href="mailto:davinhansano06@gmail.com" class="social-link">Email</a>
-                        <a href="https://www.instagram.com/davin_hansano?igsi=aTV1Mm5tMDBsczg0" class="social-link">Instagram</a>
+                    <p class="contact-lead">
+                        Tertarik berdiskusi tentang Data Analysis, Business Case, atau kolaborasi proyek digital? Kirim pesan langsung ke WhatsApp saya atau terhubung lewat kanal sosial di bawah ini.
+                    </p>
+
+                    <div class="hero-contact">
+                        <a href="https://github.com/davinhansano06/myportofolio.git" target="_blank" rel="noopener" class="social-link">
+                            <span>GitHub</span>
+                        </a>
+                        <a href="https://www.linkedin.com/in/davin-hansano-030424380" target="_blank" rel="noopener" class="social-link">
+                            <span>LinkedIn</span>
+                        </a>
+                        <a href="mailto:davinhansano06@gmail.com" class="social-link">
+                            <span>Email</span>
+                        </a>
+                        <a href="https://www.instagram.com/davin_hansano?igsi=aTV1Mm5tMDBsczg0" target="_blank" rel="noopener" class="social-link">
+                            <span>Instagram</span>
+                        </a>
+                    </div>
+
+                    <!-- Live Encrypted Chat Preview Bubble -->
+                    <div class="wa-preview-card scroll-reveal">
+                        <div class="wa-preview-header">
+                            <div class="wa-preview-avatar">DH</div>
+                            <div class="wa-preview-meta">
+                                <strong>Davin Tristan Hansano</strong>
+                                <span><i class="wa-online-indicator"></i> Direct Portfolio Inbox &middot; Privasi Terlindungi</span>
+                            </div>
+                            <span class="wa-privacy-pill" title="Nomor pribadi tidak ditampilkan ke publik">
+                                &#128274; Private Inbox
+                            </span>
+                        </div>
+                        <div class="wa-preview-body">
+                            <div class="wa-bubble-incoming">
+                                Halo! Silakan isi form di samping beserta kontak WhatsApp/Email Anda. Pesan Anda akan langsung masuk ke inbox pribadi saya dan saya akan segera menghubungi Anda kembali &#128075;
+                            </div>
+                            <div class="wa-bubble-outgoing" id="wa-live-preview-bubble">
+                                <span id="wa-live-preview-text">Halo Davin! Saya ingin berdiskusi lebih lanjut...</span>
+                                <span class="wa-bubble-time" id="wa-preview-status">Live Preview &#10003;&#10003;</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column: Interactive Private Inbox Message Form -->
+                <div class="contact-form-panel scroll-reveal">
+                    <form id="whatsapp-contact-form" class="wa-interactive-form" novalidate>
+                        {% csrf_token %}
+                        <div class="wa-form-header">
+                            <span class="wa-badge">&#128274; Direct Message &middot; DRF Protected</span>
+                            <h2>Kirim Pesan Cepat</h2>
+                            <p>Pilih topik diskusi dan cantumkan kontak WhatsApp/Email Anda agar saya dapat membalas pesan Anda secara langsung.</p>
+                        </div>
+
+                        <!-- Quick Topic / Icebreaker Chips -->
+                        <div class="wa-topic-group">
+                            <span class="wa-label">Pilih Topik Diskusi:</span>
+                            <div class="wa-topic-chips" id="wa-topic-chips">
+                                <button type="button" class="wa-chip active" data-topic="Kolaborasi Proyek" data-template="Halo Davin! Saya tertarik untuk mengajak berkolaborasi dalam proyek...">
+                                    &#128188; Kolaborasi Proyek
+                                </button>
+                                <button type="button" class="wa-chip" data-topic="Diskusi Data & Bisnis" data-template="Halo Davin! Saya melihat portofolio Anda dan ingin berdiskusi mengenai Data/Business Analysis...">
+                                    &#128202; Data &amp; Bisnis
+                                </button>
+                                <button type="button" class="wa-chip" data-topic="Tawaran Magang / Kerja" data-template="Halo Davin! Kami tertarik dengan profil Anda dan ingin menginformasikan peluang karier/magang...">
+                                    &#128640; Peluang Karier
+                                </button>
+                                <button type="button" class="wa-chip" data-topic="Networking & Sapaan" data-template="Halo Davin! Salam kenal, saya mengunjungi website portofolio Anda dan ingin terhubung...">
+                                    &#128075; Sekadar Menyapa
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="wa-input-grid">
+                            <div class="form-group wa-field">
+                                <label for="wa-sender-name">Nama Anda <span class="wa-required">*</span></label>
+                                <input
+                                    type="text"
+                                    id="wa-sender-name"
+                                    name="sender_name"
+                                    placeholder="Contoh: Budi Santoso"
+                                    required
+                                    autocomplete="name"
+                                >
+                            </div>
+
+                            <div class="form-group wa-field">
+                                <label for="wa-sender-contact">WhatsApp / Email Anda <span class="wa-required">*</span></label>
+                                <input
+                                    type="text"
+                                    id="wa-sender-contact"
+                                    name="sender_contact"
+                                    placeholder="0812xxxx / email@domain.com"
+                                    required
+                                >
+                            </div>
+                        </div>
+
+                        <div class="form-group wa-field">
+                            <label for="wa-sender-org">Instansi / Peran <span class="wa-optional">(Opsional)</span></label>
+                            <input
+                                type="text"
+                                id="wa-sender-org"
+                                name="sender_org"
+                                placeholder="Contoh: Mahasiswa UI / Recruiter"
+                                autocomplete="organization"
+                            >
+                        </div>
+
+                        <div class="form-group wa-field">
+                            <div class="wa-label-row">
+                                <label for="wa-message-input">Pesan Anda <span class="wa-required">*</span></label>
+                                <span class="wa-char-counter" id="wa-char-counter">0 / 500</span>
+                            </div>
+                            <textarea
+                                id="wa-message-input"
+                                name="message"
+                                rows="4"
+                                maxlength="500"
+                                placeholder="Tulis pesan Anda di sini..."
+                                required
+                            >Halo Davin! Saya tertarik untuk mengajak berkolaborasi dalam proyek...</textarea>
+                        </div>
+
+                        <p class="wa-form-feedback hide" id="wa-form-feedback" role="status"></p>
+
+                        <div class="wa-form-actions">
+                            <button type="submit" class="button wa-submit-btn" id="wa-submit-btn">
+                                <svg class="wa-icon" viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true">
+                                    <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+                                </svg>
+                                <span id="wa-submit-btn-text">Kirim ke Inbox Davin</span>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            {% if user.is_superuser %}
+            <!-- Owner-Only Inbox Dashboard -->
+            <div class="container owner-inbox-wrapper" id="owner-inbox-section">
+                <div class="owner-inbox-panel">
+                    <div class="owner-inbox-header">
+                        <div>
+                            <span class="wa-badge">&#128272; Owner Only &middot; Private Inbox</span>
+                            <h2>Kotak Masuk Pesan Pengunjung</h2>
+                            <p>Hanya Anda (Owner) yang dapat melihat bagian ini. Klik tombol balas untuk langsung menghubungi WhatsApp atau Email pengunjung.</p>
+                        </div>
+                        <span class="owner-inbox-count" id="owner-inbox-count">Memuat...</span>
+                    </div>
+                    <div class="owner-inbox-list" id="owner-inbox-list">
+                        <p class="owner-inbox-empty">Memuat pesan masuk...</p>
                     </div>
                 </div>
             </div>
+            {% endif %}
         </section>
     </main>
 

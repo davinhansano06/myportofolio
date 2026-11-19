@@ -2,7 +2,7 @@
 from django.utils.html import strip_tags
 from rest_framework import serializers
 
-from main.models import Education, Experience
+from main.models import Education, Experience, ContactMessage
 
 
 class EducationSerializer(serializers.ModelSerializer):
@@ -133,3 +133,59 @@ class ExperienceSerializer(serializers.ModelSerializer):
         return obj.starred_by.filter(
             id=request.user.id
         ).exists()
+
+
+class ContactMessageSerializer(serializers.ModelSerializer):
+    created_at_display = serializers.SerializerMethodField()
+
+    class Meta:
+        model = ContactMessage
+        fields = [
+            "id",
+            "sender_name",
+            "sender_org",
+            "sender_contact",
+            "topic",
+            "message",
+            "is_read",
+            "created_at",
+            "created_at_display",
+        ]
+        read_only_fields = [
+            "id",
+            "created_at",
+            "created_at_display",
+        ]
+
+    def validate_sender_name(self, value):
+        value = strip_tags(value).strip()
+        if not value:
+            raise serializers.ValidationError("Nama tidak boleh kosong.")
+        return value
+
+    def validate_sender_org(self, value):
+        return strip_tags(value or "").strip()
+
+    def validate_sender_contact(self, value):
+        value = strip_tags(value).strip()
+        if not value:
+            raise serializers.ValidationError(
+                "Kontak (WhatsApp / Email) tidak boleh kosong."
+            )
+        return value
+
+    def validate_topic(self, value):
+        value = strip_tags(value or "Kolaborasi Proyek").strip()
+        return value or "Kolaborasi Proyek"
+
+    def validate_message(self, value):
+        value = strip_tags(value).strip()
+        if not value:
+            raise serializers.ValidationError("Pesan tidak boleh kosong.")
+        return value
+
+    def get_created_at_display(self, obj):
+        if not obj.created_at:
+            return ""
+        return obj.created_at.strftime("%d %b %Y · %H:%M")
+

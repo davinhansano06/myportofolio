@@ -33,3 +33,24 @@ class Experience(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class ContactMessage(models.Model):
+    id = models.UUIDField(
+        primary_key=True,
+        default=uuid.uuid4,
+        editable=False
+    )
+    sender_name = models.CharField(max_length=120)
+    sender_org = models.CharField(max_length=150, blank=True)
+    sender_contact = models.CharField(max_length=150)
+    topic = models.CharField(max_length=100, default="Kolaborasi Proyek")
+    message = models.TextField()
+    is_read = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["-created_at"]
+
+    def __str__(self):
+        return f"{self.sender_name} - {self.topic}"
