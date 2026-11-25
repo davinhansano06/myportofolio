@@ -167,7 +167,6 @@ class EducationStarAPIView(APIView):
 
 
 @api_view(["GET", "POST"])
-@authentication_classes([SessionAuthentication])
 @permission_classes([IsPortfolioOwnerOrEditorOrReadOnly])
 def experience_list_create(request):
     """
@@ -221,7 +220,6 @@ def experience_list_create(request):
 
 
 @api_view(["GET", "PUT", "PATCH", "DELETE"])
-@authentication_classes([SessionAuthentication])
 @permission_classes([IsPortfolioOwnerOrEditorOrReadOnly])
 def experience_detail(request, pk):
     """
@@ -270,7 +268,6 @@ def experience_detail(request, pk):
 
 
 @api_view(["POST"])
-@authentication_classes([SessionAuthentication])
 @permission_classes([IsAuthenticated])
 def experience_star(request, pk):
     """
