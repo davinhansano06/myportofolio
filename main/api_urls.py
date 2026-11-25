@@ -1,11 +1,5 @@
-
 from django.urls import path
-
-from main.api_views import (
-    EducationListCreateAPIView,
-    EducationDetailAPIView,
-    EducationStarAPIView,
-)
+from rest_framework.authtoken import views as authtoken_views
 
 from main.api_views import (
     EducationListCreateAPIView,
@@ -16,11 +10,23 @@ from main.api_views import (
     experience_star,
     ContactMessageListCreateAPIView,
     ContactMessageDetailAPIView,
+    api_logout,
 )
 
 app_name = "api"
 
 urlpatterns = [
+    # Token Authentication
+    path(
+        "auth/token/",
+        authtoken_views.obtain_auth_token,
+        name="api_token_auth",
+    ),
+    path(
+        "auth/logout/",
+        api_logout,
+        name="api_logout",
+    ),
     # Daftar dan tambah Education
     path(
         "educations/",
